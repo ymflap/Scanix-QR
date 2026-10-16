@@ -9,6 +9,8 @@
 
     <application
         android:allowBackup="false"
+        android:icon="@drawable/scanix_icon"
+        android:roundIcon="@drawable/scanix_icon"
         android:label="Scanix"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
