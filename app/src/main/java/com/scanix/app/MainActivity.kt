@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ScanixApp()
+                    ScanixNavigation()
                 }
             }
         }
@@ -68,9 +68,4 @@ private fun ScanixTheme(
         },
         content = content
     )
-}
-
-@Composable
-private fun ScanixApp() {
-    HomeScreen()
 }
