@@ -3,6 +3,11 @@ package com.scanix.app
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.QrCodeScanner
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,10 +26,6 @@ private enum class ScanixPage {
     SETTINGS
 }
 
-/**
- * Main navigation for Scanix.
- * Keeps navigation state while switching between app pages.
- */
 @Composable
 fun ScanixNavigation() {
     var currentPage by rememberSaveable {
@@ -41,7 +42,12 @@ fun ScanixNavigation() {
                     onClick = {
                         currentPage = ScanixPage.SCAN.name
                     },
-                    icon = {},
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.QrCodeScanner,
+                            contentDescription = "مسح"
+                        )
+                    },
                     label = { Text("مسح") }
                 )
 
@@ -50,7 +56,12 @@ fun ScanixNavigation() {
                     onClick = {
                         currentPage = ScanixPage.HISTORY.name
                     },
-                    icon = {},
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.History,
+                            contentDescription = "السجل"
+                        )
+                    },
                     label = { Text("السجل") }
                 )
 
@@ -59,7 +70,12 @@ fun ScanixNavigation() {
                     onClick = {
                         currentPage = ScanixPage.SETTINGS.name
                     },
-                    icon = {},
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "الإعدادات"
+                        )
+                    },
                     label = { Text("الإعدادات") }
                 )
             }
