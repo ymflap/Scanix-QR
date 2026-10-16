@@ -116,11 +116,37 @@ fun ScanScreen(
 
         if (lastSavedValue != result.value) {
             lastSavedValue = result.value
-            LocalHistoryStore.save(
-                context = context,
-                value = result.value,
-                format = result.format
-            )
+
+            if (ScanixSettingsStore.isSaveHistoryEnabled(context)) {
+                LocalHistoryStore.save(
+                    context = context,
+                    value = result.value,
+                    format = result.format
+                )
+            }
+
+            if (ScanixSettingsStore.isVibrationEnabled(context)) {
+                try {
+                    val vibrator =
+                        context.getSystemService(Vibrator::class.java)
+
+                    if (vibrator != null && vibrator.hasVibrator()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibrator.vibrate(
+                                VibrationEffect.createOneShot(
+                                    100,
+                                    VibrationEffect.DEFAULT_AMPLITUDE
+                                )
+                            )
+                        } else {
+                            @Suppress("DEPRECATION")
+                            vibrator.vibrate(100)
+                        }
+                    }
+                } catch (_: Exception) {
+                    // تجاهل أخطاء الاهتزاز.
+                }
+            }
         }
     }
 
@@ -165,8 +191,7 @@ fun ScanScreen(
                 }
             }
         }
-        
-    
+
     DisposableEffect(
         cameraPermissionGranted,
         lifecycleOwner,
@@ -264,7 +289,7 @@ fun ScanScreen(
             provider?.unbindAll()
         }
     }
-
+    
     LaunchedEffect(camera, flashEnabled) {
         try {
             camera?.cameraControl?.enableTorch(flashEnabled)
