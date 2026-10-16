@@ -41,7 +41,14 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.0")
 
+    // قراءة QR والباركود
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
+    // تشغيل الكاميرا ومعاينتها داخل التطبيق
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+    implementation("androidx.camera:camera-view:1.4.2")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
