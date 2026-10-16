@@ -1,5 +1,6 @@
 package com.scanix.app
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
@@ -39,11 +42,37 @@ private val ScanixDarkColors = darkColorScheme(
 
 class MainActivity : ComponentActivity() {
 
+    private val appearanceState = mutableStateOf(
+        ScanixAppearance.SYSTEM
+    )
+
+    private val appearanceListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == "appearance") {
+                appearanceState.value =
+                    ScanixSettingsStore.getAppearance(this)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        appearanceState.value =
+            ScanixSettingsStore.getAppearance(this)
+
+        getSharedPreferences(
+            "scanix_settings",
+            MODE_PRIVATE
+        ).registerOnSharedPreferenceChangeListener(
+            appearanceListener
+        )
+
         setContent {
-            ScanixTheme {
+            val appearance by appearanceState
+
+            ScanixTheme(
+                appearance = appearance
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -53,13 +82,32 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        getSharedPreferences(
+            "scanix_settings",
+            MODE_PRIVATE
+        ).unregisterOnSharedPreferenceChangeListener(
+            appearanceListener
+        )
+
+        super.onDestroy()
+    }
 }
 
 @Composable
 private fun ScanixTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    appearance: ScanixAppearance,
     content: @Composable () -> Unit
 ) {
+    val systemDarkTheme = isSystemInDarkTheme()
+
+    val darkTheme = when (appearance) {
+        ScanixAppearance.SYSTEM -> systemDarkTheme
+        ScanixAppearance.LIGHT -> false
+        ScanixAppearance.DARK -> true
+    }
+
     MaterialTheme(
         colorScheme = if (darkTheme) {
             ScanixDarkColors
