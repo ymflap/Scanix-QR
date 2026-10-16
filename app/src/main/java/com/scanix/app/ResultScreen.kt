@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ClipData
+import android.content.ClipData
 import androidx.core.content.ContextCompat
 import android.content.ClipboardManager
 import android.widget.Toast
