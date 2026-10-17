@@ -126,7 +126,10 @@ fun SettingsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(
+                horizontal = 20.dp,
+                vertical = 16.dp
+            ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -214,26 +217,66 @@ fun SettingsScreen() {
             )
         }
 
-        SettingsCard(title = "حول التطبيق") {
-            SettingsInfoRow(
-                label = "اسم التطبيق",
-                value = "Scanix"
+        SettingsCard(title = "صفحات التطبيق") {
+            SettingsDestinationCard(
+                title = "اللغة",
+                description = "اختيار العربية أو الإنجليزية"
             )
 
-            SettingsInfoRow(
-                label = "المطور",
-                value = "Mohammed Nasser"
+            SettingsDestinationCard(
+                title = "سياسة الخصوصية",
+                description = "معرفة كيفية التعامل مع بياناتك"
             )
 
-            SettingsInfoRow(
-                label = "الإصدار",
-                value = "1.0.3.6"
+            SettingsDestinationCard(
+                title = "حول التطبيق",
+                description = "معلومات Scanix والمطور والإصدار"
             )
 
-            SettingsInfoRow(
-                label = "المنصة",
-                value = "Android"
+            SettingsDestinationCard(
+                title = "الدعم",
+                description = "التواصل مع المطور والحصول على المساعدة"
             )
+        }
+    }
+}
+@Composable
+private fun SettingsDestinationCard(
+    title: String,
+    description: String
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -320,32 +363,6 @@ private fun SettingsSwitchRow(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange
-        )
-    }
-}
-
-@Composable
-private fun SettingsInfoRow(
-    label: String,
-    value: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
         )
     }
 }
