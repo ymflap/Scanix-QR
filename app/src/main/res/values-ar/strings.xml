@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scanix</string>
+
+    <string name="nav_scan">مسح</string>
+    <string name="nav_history">السجل</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <string name="scan_title">مسح رمز QR أو باركود</string>
+    <string name="scan_camera">المسح بالكاميرا</string>
+    <string name="scan_image">اختيار صورة</string>
+
+    <string name="history_title">سجل المسح</string>
+    <string name="history_empty">لا توجد عناصر ممسوحة بعد</string>
+    <string name="history_clear">مسح السجل</string>
+
+    <string name="result_title">نتيجة المسح</string>
+    <string name="result_copy">نسخ</string>
+    <string name="result_share">مشاركة</string>
+    <string name="result_open_link">فتح الرابط</string>
+
+    <string name="link_warning_title">رابط مشبوه</string>
+    <string name="link_warning_message">يحتوي هذا الرابط على خصائص غير معتادة. تحقق من الوجهة قبل المتابعة.</string>
+    <string name="link_open_anyway">فتح على أي حال</string>
+    <string name="link_cancel">إلغاء</string>
+
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_appearance">المظهر</string>
+    <string name="settings_system">حسب إعدادات النظام</string>
+    <string name="settings_light">فاتح</string>
+    <string name="settings_dark">داكن</string>
+
+    <string name="action_back">رجوع</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_done">تم</string>
+    <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
+</resources>
+  
