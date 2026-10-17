@@ -17,13 +17,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,7 +79,9 @@ fun HomeScreen() {
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
                     )
+
                     Spacer(modifier = Modifier.height(22.dp))
+
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(28.dp),
@@ -101,20 +105,26 @@ fun HomeScreen() {
                                 modifier = Modifier.size(64.dp),
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
+
                             Spacer(modifier = Modifier.height(16.dp))
+
                             Text(
                                 text = "مسح QR والباركود",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
+
                             Spacer(modifier = Modifier.height(8.dp))
+
                             Text(
                                 text = "وجّه الكاميرا نحو الرمز لقراءة محتواه",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
+
                             Spacer(modifier = Modifier.height(20.dp))
+
                             Button(
                                 onClick = { },
                                 modifier = Modifier
@@ -130,7 +140,9 @@ fun HomeScreen() {
                                     imageVector = Icons.Outlined.QrCodeScanner,
                                     contentDescription = null
                                 )
+
                                 Spacer(modifier = Modifier.size(10.dp))
+
                                 Text("ابدأ المسح")
                             }
                         }
@@ -191,7 +203,9 @@ fun HomeScreen() {
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
+
                         Spacer(modifier = Modifier.height(10.dp))
+
                         Text(
                             text = "ستظهر نتائج المسح الأخيرة هنا",
                             style = MaterialTheme.typography.bodyMedium,
@@ -226,12 +240,15 @@ private fun HomeActionCard(
             verticalArrangement = Arrangement.Center
         ) {
             icon()
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
+
             Text(
                 text = description,
                 fontSize = 11.sp,
@@ -243,10 +260,10 @@ private fun HomeActionCard(
 
 @Composable
 private fun HomeBottomBar() {
-    androidx.compose.material3.NavigationBar(
+    NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface
     ) {
-        androidx.compose.material3.NavigationBarItem(
+        NavigationBarItem(
             selected = true,
             onClick = { },
             icon = {
@@ -258,7 +275,7 @@ private fun HomeBottomBar() {
             label = { Text("الرئيسية") }
         )
 
-        androidx.compose.material3.NavigationBarItem(
+        NavigationBarItem(
             selected = false,
             onClick = { },
             icon = {
@@ -270,7 +287,7 @@ private fun HomeBottomBar() {
             label = { Text("السجل") }
         )
 
-        androidx.compose.material3.NavigationBarItem(
+        NavigationBarItem(
             selected = false,
             onClick = { },
             icon = {
@@ -282,7 +299,7 @@ private fun HomeBottomBar() {
             label = { Text("إنشاء") }
         )
 
-        androidx.compose.material3.NavigationBarItem(
+        NavigationBarItem(
             selected = false,
             onClick = { },
             icon = {
