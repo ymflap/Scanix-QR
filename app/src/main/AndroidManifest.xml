@@ -3,7 +3,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -14,6 +14,7 @@
         android:roundIcon="@drawable/scanix_icon"
         android:label="Scanix"
         android:supportsRtl="true"
+        android:localeConfig="@xml/locales_config"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <activity
