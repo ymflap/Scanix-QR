@@ -1,6 +1,7 @@
 package com.scanix.app
 
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -102,7 +103,12 @@ object ScanixSettingsStore {
 }
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onOpenLanguage: () -> Unit = {},
+    onOpenPrivacyPolicy: () -> Unit = {},
+    onOpenAbout: () -> Unit = {},
+    onOpenSupport: () -> Unit = {}
+) {
     val context = LocalContext.current
 
     var appearance by remember {
@@ -220,35 +226,42 @@ fun SettingsScreen() {
         SettingsCard(title = "صفحات التطبيق") {
             SettingsDestinationCard(
                 title = "اللغة",
-                description = "اختيار العربية أو الإنجليزية"
+                description = "اختيار العربية أو الإنجليزية",
+                onClick = onOpenLanguage
             )
 
             SettingsDestinationCard(
                 title = "سياسة الخصوصية",
-                description = "معرفة كيفية التعامل مع بياناتك"
+                description = "معرفة كيفية التعامل مع بياناتك",
+                onClick = onOpenPrivacyPolicy
             )
 
             SettingsDestinationCard(
                 title = "حول التطبيق",
-                description = "معلومات Scanix والمطور والإصدار"
+                description = "معلومات Scanix والمطور والإصدار",
+                onClick = onOpenAbout
             )
 
             SettingsDestinationCard(
                 title = "الدعم",
-                description = "التواصل مع المطور والحصول على المساعدة"
+                description = "التواصل مع المطور والحصول على المساعدة",
+                onClick = onOpenSupport
             )
         }
     }
 }
+
 @Composable
 private fun SettingsDestinationCard(
     title: String,
-    description: String
+    description: String,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 4.dp)
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
