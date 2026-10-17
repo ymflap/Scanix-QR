@@ -1,5 +1,9 @@
 package com.scanix.app
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,22 +13,31 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+private const val ABOUT_SUPPORT_EMAIL = "dhmlpy@gmail.com"
+
 @Composable
 fun AboutScreen() {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(
+                horizontal = 20.dp,
+                vertical = 16.dp
+            ),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -40,8 +53,10 @@ fun AboutScreen() {
             )
         ) {
             Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = "Scanix QR",
@@ -83,15 +98,57 @@ fun AboutScreen() {
             body = "Mohammed Nasser"
         )
 
-        AboutSection(
-            title = "البريد الإلكتروني",
-            body = "dhmlpy@gmail.com"
-        )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = "التواصل والدعم",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
 
-        AboutSection(
-            title = "المصدر على GitHub",
-            body = "https://github.com/ymflap/Scanix-QR"
-        )
+                Text(
+                    text = ABOUT_SUPPORT_EMAIL,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        val intent = Intent(
+                            Intent.ACTION_SENDTO,
+                            Uri.parse("mailto:$ABOUT_SUPPORT_EMAIL")
+                        ).apply {
+                            putExtra(
+                                Intent.EXTRA_SUBJECT,
+                                "استفسار عن Scanix QR"
+                            )
+                        }
+
+                        try {
+                            context.startActivity(intent)
+                        } catch (_: ActivityNotFoundException) {
+                            Toast.makeText(
+                                context,
+                                "لا يوجد تطبيق بريد إلكتروني متاح.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                ) {
+                    Text("التواصل عبر البريد")
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
     }
