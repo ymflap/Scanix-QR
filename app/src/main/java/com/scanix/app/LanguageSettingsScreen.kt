@@ -29,7 +29,7 @@ enum class ScanixLanguage(val code: String) {
         fun fromCode(code: String): ScanixLanguage {
             return entries.firstOrNull {
                 it.code == code
-            } ?: ARABIC
+            } ?: ENGLISH
         }
     }
 }
@@ -78,7 +78,7 @@ fun LanguageSettingsScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "سيتم تفعيل تغيير اللغة وربطه بجميع صفحات التطبيق في مرحلة الربط.",
+            text = "سيتم ربط اختيار اللغة بجميع صفحات التطبيق عند إكمال إعدادات اللغة والتنقل.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
