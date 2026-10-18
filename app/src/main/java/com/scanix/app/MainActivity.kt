@@ -46,10 +46,6 @@ class MainActivity : ComponentActivity() {
         ScanixAppearance.SYSTEM
     )
 
-    private val languageState = mutableStateOf(
-        ScanixLanguage.ENGLISH
-    )
-
     private val settingsListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
@@ -59,9 +55,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 "app_language" -> {
-                    languageState.value =
-                        LanguageSettingsStore.getLanguage(this)
-
                     recreate()
                 }
             }
@@ -77,9 +70,6 @@ class MainActivity : ComponentActivity() {
         appearanceState.value =
             ScanixSettingsStore.getAppearance(this)
 
-        languageState.value =
-            LanguageSettingsStore.getLanguage(this)
-
         getSharedPreferences(
             "scanix_settings",
             MODE_PRIVATE
@@ -89,7 +79,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appearance by appearanceState
-            val language by languageState
 
             ScanixTheme(
                 appearance = appearance
@@ -98,9 +87,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ScanixNavigation(
-                        selectedLanguageCode = language.code
-                    )
+                    ScanixNavigation()
                 }
             }
         }
@@ -140,3 +127,4 @@ private fun ScanixTheme(
         content = content
     )
 }
+
