@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -35,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -108,7 +108,7 @@ fun HistoryScreen() {
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "السجل",
+                    text = stringResource(R.string.history_title),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -116,7 +116,7 @@ fun HistoryScreen() {
                 Spacer(modifier = Modifier.size(4.dp))
 
                 Text(
-                    text = "نتائج عمليات المسح السابقة",
+                    text = stringResource(R.string.history_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -128,7 +128,7 @@ fun HistoryScreen() {
                         showClearConfirmation = true
                     }
                 ) {
-                    Text("مسح الكل")
+                    Text(stringResource(R.string.history_clear))
                 }
             }
         }
@@ -142,10 +142,10 @@ fun HistoryScreen() {
             singleLine = true,
             shape = RoundedCornerShape(16.dp),
             label = {
-                Text("البحث في السجل")
+                Text(stringResource(R.string.history_search_title))
             },
             placeholder = {
-                Text("ابحث عن النص أو نوع الرمز")
+                Text(stringResource(R.string.history_search_hint))
             }
         )
 
@@ -169,16 +169,13 @@ fun HistoryScreen() {
                 Spacer(modifier = Modifier.size(16.dp))
 
                 Text(
-                    text = when {
-                        searchQuery.isNotBlank() ->
-                            "لا توجد نتائج مطابقة للبحث"
-
-                        historyEntries.isEmpty() ->
-                            "لا توجد نتائج محفوظة حتى الآن"
-
-                        else ->
-                            "لا توجد نتائج مطابقة للبحث"
-                    },
+                    text = stringResource(
+                        if (searchQuery.isNotBlank()) {
+                            R.string.history_no_search_results
+                        } else {
+                            R.string.history_empty
+                        }
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center
@@ -187,11 +184,13 @@ fun HistoryScreen() {
                 Spacer(modifier = Modifier.size(8.dp))
 
                 Text(
-                    text = if (searchQuery.isBlank()) {
-                        "ستظهر هنا نتائج المسح المحفوظة على جهازك."
-                    } else {
-                        "جرّب البحث باستخدام كلمات أخرى."
-                    },
+                    text = stringResource(
+                        if (searchQuery.isBlank()) {
+                            R.string.history_empty_description
+                        } else {
+                            R.string.history_search_empty_description
+                        }
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -229,10 +228,10 @@ fun HistoryScreen() {
                 showClearConfirmation = false
             },
             title = {
-                Text("مسح السجل بالكامل؟")
+                Text(stringResource(R.string.history_clear_confirm_title))
             },
             text = {
-                Text("سيتم حذف جميع نتائج المسح المحفوظة على هذا الجهاز.")
+                Text(stringResource(R.string.history_clear_confirm_message))
             },
             confirmButton = {
                 TextButton(
@@ -242,7 +241,7 @@ fun HistoryScreen() {
                         showClearConfirmation = false
                     }
                 ) {
-                    Text("مسح الكل")
+                    Text(stringResource(R.string.history_clear))
                 }
             },
             dismissButton = {
@@ -251,7 +250,7 @@ fun HistoryScreen() {
                         showClearConfirmation = false
                     }
                 ) {
-                    Text("إلغاء")
+                    Text(stringResource(R.string.history_cancel))
                 }
             }
         )
@@ -305,7 +304,9 @@ private fun HistoryEntryCard(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Delete,
-                        contentDescription = "حذف النتيجة",
+                        contentDescription = stringResource(
+                            R.string.history_delete_result
+                        ),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
