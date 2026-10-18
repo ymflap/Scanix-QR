@@ -139,15 +139,15 @@
     <string name="privacy_section_3_title">3. Scan results and history</string>
     <string name="privacy_section_3_body">Scan results can be saved in local history on your device when saving is enabled. The app does not require an account. You can disable saving in Settings. Previously saved results may remain until you delete them from the app history.</string>
     <string name="privacy_section_4_title">4. Sharing results and opening links</string>
-    <string name="privacy_section_4_body">When you copy or share a result or open a link, the app uses the function you selected. Information may be transferred to another app or website you choose, subject to that party's policies.</string>
+    <string name="privacy_section_4_body">When you copy or share a result or open a link, the app uses the function you selected. Information may be transferred to another app or website you choose, subject to that party’s policies.</string>
     <string name="privacy_section_5_title">5. Data collection and transmission</string>
-    <string name="privacy_section_5_body">The current app implementation does not include a dedicated server for receiving scan results and does not require an account. Diagnostic or operational data handled by Android or Google services used for code processing may be subject to those services' policies.</string>
+    <string name="privacy_section_5_body">The current app implementation does not include a dedicated server for receiving scan results and does not require an account. Diagnostic or operational data handled by Android or Google services used for code processing may be subject to those services’ policies.</string>
     <string name="privacy_section_6_title">6. Data security</string>
     <string name="privacy_section_6_body">History results are stored locally on your device. We recommend protecting your device and deleting results you no longer want to keep. No electronic method can guarantee absolute security.</string>
-    <string name="privacy_section_7_title">7. Children's privacy</string>
+    <string name="privacy_section_7_title">7. Children’s privacy</string>
     <string name="privacy_section_7_body">The app is a code-scanning tool and is not designed to collect personal information from children.</string>
     <string name="privacy_section_8_title">8. Changes to this policy</string>
-    <string name="privacy_section_8_body">This policy may be updated when features are added or the app's behavior changes. The last-updated date will be revised when significant changes are made.</string>
+    <string name="privacy_section_8_body">This policy may be updated when features are added or the app’s behavior changes. The last-updated date will be revised when significant changes are made.</string>
     <string name="privacy_section_9_title">9. Contact</string>
     <string name="privacy_section_9_body">For questions about privacy or the app, contact the developer through the Support page in the app.</string>
 
@@ -166,4 +166,3 @@
     <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
-    
