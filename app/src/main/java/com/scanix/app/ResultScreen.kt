@@ -191,7 +191,7 @@ fun ResultScreen(
             OutlinedButton(
                 onClick = {
                     val intent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
+                        setType("text/plain")
                         putExtra(Intent.EXTRA_TEXT, content)
                     }
 
