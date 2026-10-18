@@ -48,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -62,6 +63,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.barcode.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 
@@ -85,11 +87,23 @@ fun ScanScreen(
 
     var flashEnabled by remember { mutableStateOf(false) }
     var camera by remember { mutableStateOf<Camera?>(null) }
-    var decodedResult by remember { mutableStateOf<DecodedBarcode?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var lastSavedValue by remember { mutableStateOf("") }
 
-    val scanner = remember { BarcodeScanning.getClient() }
+    val decodedResults = remember {
+        mutableStateListOf<DecodedBarcode>()
+    }
+
+    val knownResults = remember {
+        mutableSetOf<String>()
+    }
+
+    val savedHistoryKeys = remember {
+        mutableSetOf<String>()
+    }
+
+    val scanner = remember {
+        BarcodeScanning.getClient()
+    }
 
     val previewView = remember {
         PreviewView(context).apply {
@@ -113,43 +127,91 @@ fun ScanScreen(
             }
         }
 
-    fun handleDecodedResult(result: DecodedBarcode) {
-        decodedResult = result
-        errorMessage = null
+    fun saveResultToHistory(result: DecodedBarcode) {
+        val key = "${result.format}:${result.value}"
 
-        if (lastSavedValue != result.value) {
-            lastSavedValue = result.value
+        if (!savedHistoryKeys.add(key)) {
+            return
+        }
 
-            if (ScanixSettingsStore.isSaveHistoryEnabled(context)) {
-                LocalHistoryStore.save(
-                    context = context,
-                    value = result.value,
-                    format = result.format
-                )
-            }
+        if (ScanixSettingsStore.isSaveHistoryEnabled(context)) {
+            LocalHistoryStore.save(
+                context = context,
+                value = result.value,
+                format = result.format
+            )
+        }
+    }
 
-            if (ScanixSettingsStore.isVibrationEnabled(context)) {
-                try {
-                    val vibrator =
-                        context.getSystemService(Vibrator::class.java)
+    fun vibrateIfEnabled() {
+        if (!ScanixSettingsStore.isVibrationEnabled(context)) {
+            return
+        }
 
-                    if (vibrator != null && vibrator.hasVibrator()) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            vibrator.vibrate(
-                                VibrationEffect.createOneShot(
-                                    100,
-                                    VibrationEffect.DEFAULT_AMPLITUDE
-                                )
-                            )
-                        } else {
-                            @Suppress("DEPRECATION")
-                            vibrator.vibrate(100)
-                        }
-                    }
-                } catch (_: Exception) {
-                    // تجاهل أخطاء الاهتزاز.
+        try {
+            val vibrator = context.getSystemService(Vibrator::class.java)
+
+            if (vibrator != null && vibrator.hasVibrator()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(
+                        VibrationEffect.createOneShot(
+                            100,
+                            VibrationEffect.DEFAULT_AMPLITUDE
+                        )
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator.vibrate(100)
                 }
             }
+        } catch (_: Exception) {
+            // تجاهل أخطاء الاهتزاز.
+        }
+    }
+
+    fun convertBarcodes(
+        barcodes: List<Barcode>
+    ): List<DecodedBarcode> {
+        return barcodes.mapNotNull { barcode ->
+            val value = barcode.rawValue
+                ?: barcode.displayValue
+
+            if (value.isNullOrBlank()) {
+                null
+            } else {
+                DecodedBarcode(
+                    value = value,
+                    format = barcode.format
+                )
+            }
+        }.distinctBy {
+            "${it.format}:${it.value}"
+        }
+    }
+
+    fun handleDecodedResults(
+        results: List<DecodedBarcode>
+    ) {
+        if (results.isEmpty()) {
+            return
+        }
+
+        errorMessage = null
+        var foundNewResult = false
+
+        results.forEach { result ->
+            val key = "${result.format}:${result.value}"
+
+            if (knownResults.add(key)) {
+                decodedResults.add(result)
+                foundNewResult = true
+            }
+
+            saveResultToHistory(result)
+        }
+
+        if (foundNewResult) {
+            vibrateIfEnabled()
         }
     }
 
@@ -165,22 +227,10 @@ fun ScanScreen(
 
                     scanner.process(image)
                         .addOnSuccessListener { barcodes ->
-                            val result = barcodes.firstNotNullOfOrNull { barcode ->
-                                val value = barcode.rawValue
-                                    ?: barcode.displayValue
+                            val results = convertBarcodes(barcodes)
 
-                                if (value.isNullOrBlank()) {
-                                    null
-                                } else {
-                                    DecodedBarcode(
-                                        value = value,
-                                        format = barcode.format
-                                    )
-                                }
-                            }
-
-                            if (result != null) {
-                                handleDecodedResult(result)
+                            if (results.isNotEmpty()) {
+                                handleDecodedResults(results)
                             } else {
                                 errorMessage = context.getString(
                                     R.string.scan_image_no_code
@@ -220,7 +270,8 @@ fun ScanScreen(
                         val preview = Preview.Builder()
                             .build()
                             .also {
-                                it.surfaceProvider = previewView.surfaceProvider
+                                it.surfaceProvider =
+                                    previewView.surfaceProvider
                             }
 
                         val analysis = ImageAnalysis.Builder()
@@ -244,23 +295,11 @@ fun ScanScreen(
 
                                 scanner.process(image)
                                     .addOnSuccessListener { barcodes ->
-                                        val result =
-                                            barcodes.firstNotNullOfOrNull { barcode ->
-                                                val value = barcode.rawValue
-                                                    ?: barcode.displayValue
+                                        val results =
+                                            convertBarcodes(barcodes)
 
-                                                if (value.isNullOrBlank()) {
-                                                    null
-                                                } else {
-                                                    DecodedBarcode(
-                                                        value = value,
-                                                        format = barcode.format
-                                                    )
-                                                }
-                                            }
-
-                                        if (result != null) {
-                                            handleDecodedResult(result)
+                                        if (results.isNotEmpty()) {
+                                            handleDecodedResults(results)
                                         }
                                     }
                                     .addOnFailureListener {
@@ -456,7 +495,7 @@ fun ScanScreen(
                 )
             }
         }
-        
+
         if (errorMessage != null) {
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -467,128 +506,148 @@ fun ScanScreen(
                 textAlign = TextAlign.Center
             )
         }
-
-        decodedResult?.let { result ->
+                if (decodedResults.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
+            Text(
+                text = "${decodedResults.size} نتيجة",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            decodedResults.forEach { result ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor =
+                            MaterialTheme.colorScheme.surfaceVariant
+                    )
                 ) {
-                    Text(
-                        text = stringResource(R.string.scan_result_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        text = result.formatName,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = result.value,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                    Column(
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        IconButton(
-                            onClick = {
-                                clipboard.setText(
-                                    AnnotatedString(result.value)
-                                )
-                            }
+                        Text(
+                            text = result.formatName,
+                            style = MaterialTheme.typography.labelMedium,
+                            color =
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = result.value,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
                         ) {
-                            Icon(
-                                imageVector = Icons.Outlined.ContentCopy,
-                                contentDescription = stringResource(
-                                    R.string.scan_result_copy
-                                )
-                            )
-                        }
-
-                        IconButton(
-                            onClick = {
-                                val sendIntent = Intent(
-                                    Intent.ACTION_SEND
-                                ).apply {
-                                    setType("text/plain")
-                                    putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        result.value
-                                    )
-                                }
-
-                                context.startActivity(
-                                    Intent.createChooser(
-                                        sendIntent,
-                                        context.getString(
-                                            R.string.scan_result_share
-                                        )
-                                    )
-                                )
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Share,
-                                contentDescription = stringResource(
-                                    R.string.scan_result_share
-                                )
-                            )
-                        }
-
-                        val isWebLink =
-                            result.value.startsWith("https://", true) ||
-                            result.value.startsWith("http://", true) ||
-                            result.value.startsWith("www.", true)
-
-                        if (isWebLink) {
                             IconButton(
                                 onClick = {
-                                    val url = if (
-                                        result.value.startsWith("www.", true)
-                                    ) {
-                                        "https://${result.value}"
-                                    } else {
-                                        result.value
-                                    }
-
-                                    try {
-                                        context.startActivity(
-                                            Intent(
-                                                Intent.ACTION_VIEW,
-                                                Uri.parse(url)
-                                            )
-                                        )
-                                    } catch (_: Exception) {
-                                        errorMessage = context.getString(
-                                            R.string.scan_open_link_failed
-                                        )
-                                    }
+                                    clipboard.setText(
+                                        AnnotatedString(result.value)
+                                    )
                                 }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.OpenInBrowser,
+                                    imageVector =
+                                        Icons.Outlined.ContentCopy,
                                     contentDescription = stringResource(
-                                        R.string.result_open_link
+                                        R.string.scan_result_copy
                                     )
                                 )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    val sendIntent = Intent(
+                                        Intent.ACTION_SEND
+                                    ).apply {
+                                        type = "text/plain"
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            result.value
+                                        )
+                                    }
+
+                                    context.startActivity(
+                                        Intent.createChooser(
+                                            sendIntent,
+                                            context.getString(
+                                                R.string.scan_result_share
+                                            )
+                                        )
+                                    )
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Share,
+                                    contentDescription = stringResource(
+                                        R.string.scan_result_share
+                                    )
+                                )
+                            }
+
+                            val isWebLink =
+                                result.value.startsWith(
+                                    "https://",
+                                    true
+                                ) ||
+                                result.value.startsWith(
+                                    "http://",
+                                    true
+                                ) ||
+                                result.value.startsWith(
+                                    "www.",
+                                    true
+                                )
+
+                            if (isWebLink) {
+                                IconButton(
+                                    onClick = {
+                                        val url =
+                                            if (result.value.startsWith(
+                                                    "www.",
+                                                    true
+                                                )
+                                            ) {
+                                                "https://${result.value}"
+                                            } else {
+                                                result.value
+                                            }
+
+                                        try {
+                                            context.startActivity(
+                                                Intent(
+                                                    Intent.ACTION_VIEW,
+                                                    Uri.parse(url)
+                                                )
+                                            )
+                                        } catch (_: Exception) {
+                                            errorMessage = context.getString(
+                                                R.string.scan_open_link_failed
+                                            )
+                                        }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector =
+                                            Icons.Outlined.OpenInBrowser,
+                                        contentDescription = stringResource(
+                                            R.string.result_open_link
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
