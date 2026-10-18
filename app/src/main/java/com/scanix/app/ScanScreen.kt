@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -64,7 +63,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.google.mlkit.vision.barcode.Barcode
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 
@@ -172,9 +171,11 @@ fun ScanScreen(
         barcodes: List<Barcode>
     ): List<DecodedBarcode> {
         return barcodes.mapNotNull { barcode ->
-            val value = barcode.rawValue ?: barcode.displayValue
+            val value = barcode.rawValue
+                ?: barcode.displayValue
+                ?: return@mapNotNull null
 
-            if (value.isNullOrBlank()) {
+            if (value.isBlank()) {
                 null
             } else {
                 DecodedBarcode(
@@ -327,6 +328,7 @@ fun ScanScreen(
 
         onDispose {
             camera = null
+            
             provider?.unbindAll()
         }
     }
@@ -498,7 +500,8 @@ fun ScanScreen(
                 textAlign = TextAlign.Center
             )
         }
-                if (decodedResults.isNotEmpty()) {
+
+        if (decodedResults.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
