@@ -10,10 +10,10 @@ import android.os.Vibrator
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.core.CameraSelector
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -74,7 +75,8 @@ fun ScanScreen(
 ) {
     val context = LocalContext.current
     val clipboard = LocalClipboardManager.current
-    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val lifecycleOwner =
+        androidx.lifecycle.compose.LocalLifecycleOwner.current
 
     var cameraPermissionGranted by remember {
         mutableStateOf(
@@ -130,9 +132,7 @@ fun ScanScreen(
     fun saveResultToHistory(result: DecodedBarcode) {
         val key = "${result.format}:${result.value}"
 
-        if (!savedHistoryKeys.add(key)) {
-            return
-        }
+        if (!savedHistoryKeys.add(key)) return
 
         if (ScanixSettingsStore.isSaveHistoryEnabled(context)) {
             LocalHistoryStore.save(
@@ -144,12 +144,11 @@ fun ScanScreen(
     }
 
     fun vibrateIfEnabled() {
-        if (!ScanixSettingsStore.isVibrationEnabled(context)) {
-            return
-        }
+        if (!ScanixSettingsStore.isVibrationEnabled(context)) return
 
         try {
-            val vibrator = context.getSystemService(Vibrator::class.java)
+            val vibrator =
+                context.getSystemService(Vibrator::class.java)
 
             if (vibrator != null && vibrator.hasVibrator()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -173,8 +172,7 @@ fun ScanScreen(
         barcodes: List<Barcode>
     ): List<DecodedBarcode> {
         return barcodes.mapNotNull { barcode ->
-            val value = barcode.rawValue
-                ?: barcode.displayValue
+            val value = barcode.rawValue ?: barcode.displayValue
 
             if (value.isNullOrBlank()) {
                 null
@@ -184,17 +182,11 @@ fun ScanScreen(
                     format = barcode.format
                 )
             }
-        }.distinctBy {
-            "${it.format}:${it.value}"
-        }
+        }.distinctBy { "${it.format}:${it.value}" }
     }
 
-    fun handleDecodedResults(
-        results: List<DecodedBarcode>
-    ) {
-        if (results.isEmpty()) {
-            return
-        }
+    fun handleDecodedResults(results: List<DecodedBarcode>) {
+        if (results.isEmpty()) return
 
         errorMessage = null
         var foundNewResult = false
