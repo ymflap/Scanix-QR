@@ -29,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -74,7 +75,7 @@ fun HomeScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "اقرأ وأنشئ الرموز بسهولة",
+                        text = stringResource(R.string.home_tagline),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
@@ -109,7 +110,7 @@ fun HomeScreen() {
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
-                                text = "مسح QR والباركود",
+                                text = stringResource(R.string.home_scan_title),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold
                             )
@@ -117,7 +118,7 @@ fun HomeScreen() {
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = "وجّه الكاميرا نحو الرمز لقراءة محتواه",
+                                text = stringResource(R.string.home_scan_description),
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -143,7 +144,7 @@ fun HomeScreen() {
 
                                 Spacer(modifier = Modifier.size(10.dp))
 
-                                Text("ابدأ المسح")
+                                Text(stringResource(R.string.home_start_scan))
                             }
                         }
                     }
@@ -156,8 +157,8 @@ fun HomeScreen() {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     HomeActionCard(
-                        title = "إنشاء QR",
-                        description = "أنشئ رمزًا جديدًا",
+                        title = stringResource(R.string.home_create_qr),
+                        description = stringResource(R.string.home_create_description),
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.Add,
@@ -169,8 +170,8 @@ fun HomeScreen() {
                     )
 
                     HomeActionCard(
-                        title = "السجل",
-                        description = "نتائج المسح السابقة",
+                        title = stringResource(R.string.nav_history),
+                        description = stringResource(R.string.home_history_description),
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.History,
@@ -199,7 +200,7 @@ fun HomeScreen() {
                         modifier = Modifier.padding(18.dp)
                     ) {
                         Text(
-                            text = "آخر النتائج",
+                            text = stringResource(R.string.home_recent_results),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -207,7 +208,7 @@ fun HomeScreen() {
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Text(
-                            text = "ستظهر نتائج المسح الأخيرة هنا",
+                            text = stringResource(R.string.home_recent_empty),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -269,10 +270,12 @@ private fun HomeBottomBar() {
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.QrCodeScanner,
-                    contentDescription = "الرئيسية"
+                    contentDescription = stringResource(R.string.nav_home)
                 )
             },
-            label = { Text("الرئيسية") }
+            label = {
+                Text(stringResource(R.string.nav_home))
+            }
         )
 
         NavigationBarItem(
@@ -281,10 +284,12 @@ private fun HomeBottomBar() {
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.History,
-                    contentDescription = "السجل"
+                    contentDescription = stringResource(R.string.nav_history)
                 )
             },
-            label = { Text("السجل") }
+            label = {
+                Text(stringResource(R.string.nav_history))
+            }
         )
 
         NavigationBarItem(
@@ -293,10 +298,12 @@ private fun HomeBottomBar() {
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.Add,
-                    contentDescription = "إنشاء"
+                    contentDescription = stringResource(R.string.nav_create)
                 )
             },
-            label = { Text("إنشاء") }
+            label = {
+                Text(stringResource(R.string.nav_create))
+            }
         )
 
         NavigationBarItem(
@@ -305,10 +312,12 @@ private fun HomeBottomBar() {
             icon = {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
-                    contentDescription = "الإعدادات"
+                    contentDescription = stringResource(R.string.nav_settings)
                 )
             },
-            label = { Text("الإعدادات") }
+            label = {
+                Text(stringResource(R.string.nav_settings))
+            }
         )
     }
 }
