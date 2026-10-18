@@ -8,6 +8,11 @@
     <string name="nav_settings">الإعدادات</string>
     <string name="nav_home">الرئيسية</string>
     <string name="nav_create">إنشاء</string>
+    <string name="nav_back">رجوع</string>
+    <string name="nav_language">اللغة</string>
+    <string name="nav_privacy">سياسة الخصوصية</string>
+    <string name="nav_about">حول التطبيق</string>
+    <string name="nav_support">الدعم</string>
 
     <!-- Home -->
     <string name="home_tagline">اقرأ وأنشئ الرموز بسهولة</string>
@@ -17,24 +22,59 @@
     <string name="home_create_qr">إنشاء QR</string>
     <string name="home_create_description">أنشئ رمزًا جديدًا</string>
     <string name="home_history_description">نتائج المسح السابقة</string>
-    <string name="home_recent_results">آخر النتائج</string>
+    <string name="home_recent_results">أحدث النتائج</string>
     <string name="home_recent_empty">ستظهر نتائج المسح الأخيرة هنا</string>
 
     <!-- Scan -->
     <string name="scan_title">مسح رمز QR أو باركود</string>
     <string name="scan_camera">المسح بالكاميرا</string>
     <string name="scan_image">اختيار صورة</string>
+    <string name="scan_camera_permission_required">يلزم السماح باستخدام الكاميرا لبدء المسح المباشر.</string>
+    <string name="scan_image_no_code">لم يتم العثور على رمز QR أو باركود في الصورة.</string>
+    <string name="scan_image_failed">تعذرت قراءة الصورة. جرّب صورة أخرى.</string>
+    <string name="scan_image_open_failed">تعذر فتح الصورة المحددة.</string>
+    <string name="scan_decode_error">حدث خطأ أثناء قراءة الرمز.</string>
+    <string name="scan_camera_start_failed">تعذر تشغيل الكاميرا. أغلق التطبيقات الأخرى التي تستخدمها ثم حاول مجددًا.</string>
+    <string name="scan_flash_unavailable">المصباح غير متاح في هذه الكاميرا.</string>
+    <string name="scan_permission_prompt">اسمح بالوصول إلى الكاميرا لبدء المسح.</string>
+    <string name="scan_allow_camera">السماح بالكاميرا</string>
+    <string name="scan_flash_on">المصباح</string>
+    <string name="scan_flash_off">إيقاف المصباح</string>
+    <string name="scan_result_title">نتيجة المسح</string>
+    <string name="scan_result_copy">نسخ النتيجة</string>
+    <string name="scan_result_share">مشاركة النتيجة</string>
+    <string name="scan_open_link_failed">تعذر فتح الرابط على هذا الجهاز.</string>
+    <string name="scan_privacy_note">تتم قراءة الرموز على جهازك، وتُحفظ النتائج محليًا.</string>
 
     <!-- History -->
     <string name="history_title">سجل المسح</string>
-    <string name="history_empty">لا توجد عناصر ممسوحة بعد</string>
-    <string name="history_clear">مسح السجل</string>
+    <string name="history_subtitle">نتائج المسح السابقة</string>
+    <string name="history_clear">مسح الكل</string>
+    <string name="history_search_title">البحث في السجل</string>
+    <string name="history_search_hint">ابحث بالنص أو نوع الرمز</string>
+    <string name="history_no_search_results">لم يتم العثور على نتائج مطابقة.</string>
+    <string name="history_empty">لا توجد نتائج محفوظة بعد.</string>
+    <string name="history_empty_description">ستظهر نتائج المسح المحفوظة هنا.</string>
+    <string name="history_search_empty_description">جرّب البحث باستخدام كلمات مختلفة.</string>
+    <string name="history_clear_confirm_title">هل تريد مسح السجل بالكامل؟</string>
+    <string name="history_clear_confirm_message">سيتم حذف جميع نتائج المسح المحفوظة على هذا الجهاز.</string>
+    <string name="history_delete_result">حذف النتيجة</string>
+    <string name="history_cancel">إلغاء</string>
 
     <!-- Results -->
     <string name="result_title">نتيجة المسح</string>
+    <string name="result_type">نوع الرمز</string>
+    <string name="result_content">المحتوى</string>
+    <string name="result_web_link">رابط ويب</string>
+    <string name="result_link_safety_note">تحقق من عنوان الموقع قبل فتحه. صحة الرابط لا تعني بالضرورة أن الموقع آمن.</string>
+    <string name="result_domain">النطاق: %1$s</string>
+    <string name="result_no_app_to_open_link">لا يوجد تطبيق متاح لفتح هذا الرابط.</string>
+    <string name="result_open_link">فتح الرابط</string>
+    <string name="result_copied">تم نسخ النتيجة</string>
     <string name="result_copy">نسخ</string>
     <string name="result_share">مشاركة</string>
-    <string name="result_open_link">فتح الرابط</string>
+    <string name="result_save_history">حفظ في السجل</string>
+    <string name="result_back">رجوع</string>
 
     <!-- Link safety -->
     <string name="link_warning_title">رابط مشبوه</string>
@@ -44,15 +84,85 @@
 
     <!-- Settings -->
     <string name="settings_title">الإعدادات</string>
+    <string name="settings_subtitle">خصّص تجربة استخدام Scanix</string>
     <string name="settings_appearance">المظهر</string>
     <string name="settings_system">حسب إعدادات النظام</string>
     <string name="settings_light">فاتح</string>
     <string name="settings_dark">داكن</string>
+    <string name="settings_scan">المسح</string>
+    <string name="settings_vibration">الاهتزاز عند اكتشاف رمز</string>
+    <string name="settings_vibration_description">الاهتزاز عند قراءة رمز</string>
+    <string name="settings_history_privacy">السجل والخصوصية</string>
+    <string name="settings_save_results">حفظ نتائج المسح</string>
+    <string name="settings_save_results_description">الاحتفاظ بالنتائج على هذا الجهاز</string>
+    <string name="settings_local_storage_note">تُحفظ النتائج محليًا على جهازك ولا تُرسل إلى خادم خارجي.</string>
+    <string name="settings_app_pages">صفحات التطبيق</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_description">اختر العربية أو الإنجليزية</string>
+    <string name="settings_privacy">سياسة الخصوصية</string>
+    <string name="settings_privacy_description">تعرّف على كيفية التعامل مع بياناتك</string>
+    <string name="settings_about">حول التطبيق</string>
+    <string name="settings_about_description">معلومات Scanix والمطور والإصدار</string>
+    <string name="settings_support">الدعم</string>
+    <string name="settings_support_description">تواصل مع المطور واحصل على المساعدة</string>
+
+    <!-- Language -->
+    <string name="language_title">لغة التطبيق</string>
+    <string name="language_subtitle">اختر اللغة التي تريد استخدامها في Scanix</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_english">English</string>
+
+    <!-- About -->
+    <string name="about_title">حول التطبيق</string>
+    <string name="about_version">الإصدار 1.0.3.6</string>
+    <string name="about_description">امسح رموز QR والباركود واقرأ محتواها باستخدام الكاميرا أو الصور المحددة.</string>
+    <string name="about_features_title">ميزات التطبيق</string>
+    <string name="about_feature_camera">• مسح رموز QR والباركود باستخدام الكاميرا.</string>
+    <string name="about_feature_images">• قراءة الرموز من الصور المحددة.</string>
+    <string name="about_feature_history">• مراجعة نتائج المسح في السجل.</string>
+    <string name="about_feature_share">• نسخ النتائج ومشاركتها عند الحاجة.</string>
+    <string name="about_feature_settings">• تخصيص المظهر وإعدادات المسح.</string>
+    <string name="about_privacy_title">الخصوصية</string>
+    <string name="about_privacy_description">يمكنك التحكم في حفظ نتائج المسح من الإعدادات. راجع سياسة الخصوصية لمعرفة تفاصيل التعامل مع البيانات.</string>
+    <string name="about_developer_title">المطور</string>
+    <string name="about_contact_title">التواصل والدعم</string>
+    <string name="about_email_subject">استفسار حول Scanix QR</string>
+    <string name="about_email_button">التواصل عبر البريد الإلكتروني</string>
+
+    <!-- Privacy policy -->
+    <string name="privacy_title">سياسة الخصوصية</string>
+    <string name="privacy_last_updated">آخر تحديث: 17 أكتوبر 2026</string>
+    <string name="privacy_section_1_title">1. المقدمة</string>
+    <string name="privacy_section_1_body">توضح هذه السياسة كيفية تعامل Scanix QR مع المعلومات عند استخدام ميزات مسح رموز QR والباركود.</string>
+    <string name="privacy_section_2_title">2. الكاميرا والصور</string>
+    <string name="privacy_section_2_body">يطلب التطبيق إذن الكاميرا للمسح المباشر. ويمكنك أيضًا اختيار صورة من جهازك لمسح رمز موجود فيها. تُستخدم هذه الصور لقراءة الرمز داخل التطبيق.</string>
+    <string name="privacy_section_3_title">3. نتائج المسح والسجل</string>
+    <string name="privacy_section_3_body">يمكن حفظ نتائج المسح في سجل محلي على جهازك عند تفعيل الحفظ. لا يتطلب التطبيق إنشاء حساب. يمكنك تعطيل الحفظ من الإعدادات. وقد تبقى النتائج المحفوظة سابقًا حتى تحذفها من سجل التطبيق.</string>
+    <string name="privacy_section_4_title">4. مشاركة النتائج وفتح الروابط</string>
+    <string name="privacy_section_4_body">عند نسخ نتيجة أو مشاركتها أو فتح رابط، يستخدم التطبيق الوظيفة التي اخترتها. وقد تُنقل المعلومات إلى تطبيق آخر أو موقع تختاره، وفقًا لسياسات الجهة المستقبلة.</string>
+    <string name="privacy_section_5_title">5. جمع البيانات ونقلها</string>
+    <string name="privacy_section_5_body">لا يتضمن التطبيق في تنفيذه الحالي خادمًا مخصصًا لاستقبال نتائج المسح، ولا يتطلب حسابًا. وقد تخضع البيانات التشخيصية أو التشغيلية التي يتعامل معها Android أو خدمات Google المستخدمة لمعالجة الرموز لسياسات تلك الخدمات.</string>
+    <string name="privacy_section_6_title">6. أمن البيانات</string>
+    <string name="privacy_section_6_body">تُخزّن نتائج السجل محليًا على جهازك. نوصي بحماية جهازك وحذف النتائج التي لم تعد بحاجة إليها. ولا توجد وسيلة إلكترونية تضمن الأمان المطلق.</string>
+    <string name="privacy_section_7_title">7. خصوصية الأطفال</string>
+    <string name="privacy_section_7_body">التطبيق أداة لمسح الرموز، ولم يُصمم لجمع المعلومات الشخصية من الأطفال.</string>
+    <string name="privacy_section_8_title">8. التغييرات على هذه السياسة</string>
+    <string name="privacy_section_8_body">قد تُحدّث هذه السياسة عند إضافة ميزات أو تغيير سلوك التطبيق. وسيُعدّل تاريخ آخر تحديث عند إجراء تغييرات مهمة.</string>
+    <string name="privacy_section_9_title">9. التواصل</string>
+    <string name="privacy_section_9_body">للاستفسارات المتعلقة بالخصوصية أو التطبيق، تواصل مع المطور من خلال صفحة الدعم داخل التطبيق.</string>
+
+    <!-- Support -->
+    <string name="support_title">الدعم والمساعدة</string>
+    <string name="support_description">إذا واجهت مشكلة أو أردت إرسال اقتراح، يمكنك التواصل معنا عبر البريد الإلكتروني.</string>
+    <string name="support_contact_title">التواصل عبر البريد الإلكتروني</string>
+    <string name="support_email_subject">طلب دعم Scanix QR</string>
+    <string name="support_email_unavailable">لا يوجد تطبيق بريد إلكتروني متاح.</string>
+    <string name="support_send_email">إرسال بريد إلكتروني</string>
 
     <!-- Common actions -->
     <string name="action_back">رجوع</string>
     <string name="action_delete">حذف</string>
     <string name="action_done">تم</string>
+    <string name="action_cancel">إلغاء</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
-        
