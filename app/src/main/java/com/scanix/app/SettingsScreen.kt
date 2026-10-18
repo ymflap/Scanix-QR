@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -139,20 +140,22 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "الإعدادات",
+            text = stringResource(R.string.settings_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "خصّص تجربة استخدام Scanix",
+            text = stringResource(R.string.settings_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        SettingsCard(title = "المظهر") {
+        SettingsCard(
+            title = stringResource(R.string.settings_appearance)
+        ) {
             AppearanceOption(
-                title = "حسب إعدادات النظام",
+                title = stringResource(R.string.settings_system),
                 selected = appearance == ScanixAppearance.SYSTEM
             ) {
                 appearance = ScanixAppearance.SYSTEM
@@ -163,7 +166,7 @@ fun SettingsScreen(
             }
 
             AppearanceOption(
-                title = "فاتح",
+                title = stringResource(R.string.settings_light),
                 selected = appearance == ScanixAppearance.LIGHT
             ) {
                 appearance = ScanixAppearance.LIGHT
@@ -174,7 +177,7 @@ fun SettingsScreen(
             }
 
             AppearanceOption(
-                title = "داكن",
+                title = stringResource(R.string.settings_dark),
                 selected = appearance == ScanixAppearance.DARK
             ) {
                 appearance = ScanixAppearance.DARK
@@ -185,10 +188,14 @@ fun SettingsScreen(
             }
         }
 
-        SettingsCard(title = "المسح") {
+        SettingsCard(
+            title = stringResource(R.string.settings_scan)
+        ) {
             SettingsSwitchRow(
-                title = "الاهتزاز عند اكتشاف رمز",
-                description = "تنبيه بالاهتزاز عند قراءة الرمز",
+                title = stringResource(R.string.settings_vibration),
+                description = stringResource(
+                    R.string.settings_vibration_description
+                ),
                 checked = vibrationEnabled,
                 onCheckedChange = { enabled ->
                     vibrationEnabled = enabled
@@ -200,10 +207,14 @@ fun SettingsScreen(
             )
         }
 
-        SettingsCard(title = "السجل والخصوصية") {
+        SettingsCard(
+            title = stringResource(R.string.settings_history_privacy)
+        ) {
             SettingsSwitchRow(
-                title = "حفظ نتائج المسح",
-                description = "الاحتفاظ بالنتائج على الجهاز",
+                title = stringResource(R.string.settings_save_results),
+                description = stringResource(
+                    R.string.settings_save_results_description
+                ),
                 checked = saveHistoryEnabled,
                 onCheckedChange = { enabled ->
                     saveHistoryEnabled = enabled
@@ -217,34 +228,46 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "تُحفظ النتائج محليًا على جهازك، ولا تُرسل إلى خادم خارجي.",
+                text = stringResource(
+                    R.string.settings_local_storage_note
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
-        SettingsCard(title = "صفحات التطبيق") {
+        SettingsCard(
+            title = stringResource(R.string.settings_app_pages)
+        ) {
             SettingsDestinationCard(
-                title = "اللغة",
-                description = "اختيار العربية أو الإنجليزية",
+                title = stringResource(R.string.settings_language),
+                description = stringResource(
+                    R.string.settings_language_description
+                ),
                 onClick = onOpenLanguage
             )
 
             SettingsDestinationCard(
-                title = "سياسة الخصوصية",
-                description = "معرفة كيفية التعامل مع بياناتك",
+                title = stringResource(R.string.settings_privacy),
+                description = stringResource(
+                    R.string.settings_privacy_description
+                ),
                 onClick = onOpenPrivacyPolicy
             )
 
             SettingsDestinationCard(
-                title = "حول التطبيق",
-                description = "معلومات Scanix والمطور والإصدار",
+                title = stringResource(R.string.settings_about),
+                description = stringResource(
+                    R.string.settings_about_description
+                ),
                 onClick = onOpenAbout
             )
 
             SettingsDestinationCard(
-                title = "الدعم",
-                description = "التواصل مع المطور والحصول على المساعدة",
+                title = stringResource(R.string.settings_support),
+                description = stringResource(
+                    R.string.settings_support_description
+                ),
                 onClick = onOpenSupport
             )
         }
