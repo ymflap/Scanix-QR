@@ -8,6 +8,11 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_home">Home</string>
     <string name="nav_create">Create</string>
+    <string name="nav_back">Back</string>
+    <string name="nav_language">Language</string>
+    <string name="nav_privacy">Privacy Policy</string>
+    <string name="nav_about">About</string>
+    <string name="nav_support">Support</string>
 
     <!-- Home -->
     <string name="home_tagline">Read and create codes easily</string>
@@ -35,6 +40,7 @@
     <string name="scan_allow_camera">Allow camera</string>
     <string name="scan_flash_on">Flashlight</string>
     <string name="scan_flash_off">Turn off flashlight</string>
+    <string name="scan_result_title">Scan result</string>
     <string name="scan_result_copy">Copy result</string>
     <string name="scan_result_share">Share result</string>
     <string name="scan_open_link_failed">Could not open the link on this device.</string>
@@ -42,14 +48,33 @@
 
     <!-- History -->
     <string name="history_title">Scan history</string>
-    <string name="history_empty">No scanned items yet</string>
-    <string name="history_clear">Clear history</string>
+    <string name="history_subtitle">Your previous scan results</string>
+    <string name="history_clear">Clear all</string>
+    <string name="history_search_title">Search history</string>
+    <string name="history_search_hint">Search text or code type</string>
+    <string name="history_no_search_results">No matching results found</string>
+    <string name="history_empty">No saved results yet</string>
+    <string name="history_empty_description">Saved scan results will appear here.</string>
+    <string name="history_search_empty_description">Try searching with different words.</string>
+    <string name="history_clear_confirm_title">Clear all history?</string>
+    <string name="history_clear_confirm_message">All saved scan results on this device will be deleted.</string>
+    <string name="history_delete_result">Delete result</string>
+    <string name="history_cancel">Cancel</string>
 
     <!-- Results -->
     <string name="result_title">Scan result</string>
+    <string name="result_type">Code type</string>
+    <string name="result_content">Content</string>
+    <string name="result_web_link">Web link</string>
+    <string name="result_link_safety_note">Check the website address before opening it. A valid URL does not guarantee that a website is safe.</string>
+    <string name="result_domain">Domain: %1$s</string>
+    <string name="result_no_app_to_open_link">No app is available to open this link.</string>
+    <string name="result_open_link">Open link</string>
+    <string name="result_copied">Result copied</string>
     <string name="result_copy">Copy</string>
     <string name="result_share">Share</string>
-    <string name="result_open_link">Open link</string>
+    <string name="result_save_history">Save to history</string>
+    <string name="result_back">Back</string>
 
     <!-- Link safety -->
     <string name="link_warning_title">Suspicious link</string>
@@ -59,14 +84,86 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Customize your Scanix experience</string>
     <string name="settings_appearance">Appearance</string>
-    <string name="settings_system">Follow system</string>
+    <string name="settings_system">Follow system settings</string>
     <string name="settings_light">Light</string>
     <string name="settings_dark">Dark</string>
+    <string name="settings_scan">Scanning</string>
+    <string name="settings_vibration">Vibrate when a code is detected</string>
+    <string name="settings_vibration_description">Vibrate when a code is scanned</string>
+    <string name="settings_history_privacy">History and privacy</string>
+    <string name="settings_save_results">Save scan results</string>
+    <string name="settings_save_results_description">Keep results on this device</string>
+    <string name="settings_local_storage_note">Results are stored locally on your device and are not sent to an external server.</string>
+    <string name="settings_app_pages">App pages</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_description">Choose Arabic or English</string>
+    <string name="settings_privacy">Privacy Policy</string>
+    <string name="settings_privacy_description">Learn how your data is handled</string>
+    <string name="settings_about">About the app</string>
+    <string name="settings_about_description">Scanix, developer and version information</string>
+    <string name="settings_support">Support</string>
+    <string name="settings_support_description">Contact the developer and get help</string>
+
+    <!-- Language -->
+    <string name="language_title">App language</string>
+    <string name="language_subtitle">Choose the language you want to use in Scanix</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_english">English</string>
+
+    <!-- About -->
+    <string name="about_title">About the app</string>
+    <string name="about_version">Version 1.0.3.6</string>
+    <string name="about_description">Scan and read QR codes and barcodes using your camera or selected images.</string>
+    <string name="about_features_title">App features</string>
+    <string name="about_feature_camera">• Scan QR codes and barcodes using the camera.</string>
+    <string name="about_feature_images">• Read codes from selected images.</string>
+    <string name="about_feature_history">• Review scan results in history.</string>
+    <string name="about_feature_share">• Copy and share results when needed.</string>
+    <string name="about_feature_settings">• Customize appearance and scanning settings.</string>
+    <string name="about_privacy_title">Privacy</string>
+    <string name="about_privacy_description">You can control whether scan results are saved in Settings. See the Privacy Policy for details about data handling.</string>
+    <string name="about_developer_title">Developer</string>
+    <string name="about_contact_title">Contact and support</string>
+    <string name="about_email_subject">Question about Scanix QR</string>
+    <string name="about_email_button">Contact by email</string>
+
+    <!-- Privacy policy -->
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="privacy_last_updated">Last updated: October 17, 2026</string>
+    <string name="privacy_section_1_title">1. Introduction</string>
+    <string name="privacy_section_1_body">This policy explains how Scanix QR handles information when you use its QR code and barcode scanning features.</string>
+    <string name="privacy_section_2_title">2. Camera and images</string>
+    <string name="privacy_section_2_body">The app requests camera permission for live scanning. You can also choose an image from your device to scan a code in it. These images are used to read the code within the app.</string>
+    <string name="privacy_section_3_title">3. Scan results and history</string>
+    <string name="privacy_section_3_body">Scan results can be saved in local history on your device when saving is enabled. The app does not require an account. You can disable saving in Settings. Previously saved results may remain until you delete them from the app history.</string>
+    <string name="privacy_section_4_title">4. Sharing results and opening links</string>
+    <string name="privacy_section_4_body">When you copy or share a result or open a link, the app uses the function you selected. Information may be transferred to another app or website you choose, subject to that party's policies.</string>
+    <string name="privacy_section_5_title">5. Data collection and transmission</string>
+    <string name="privacy_section_5_body">The current app implementation does not include a dedicated server for receiving scan results and does not require an account. Diagnostic or operational data handled by Android or Google services used for code processing may be subject to those services' policies.</string>
+    <string name="privacy_section_6_title">6. Data security</string>
+    <string name="privacy_section_6_body">History results are stored locally on your device. We recommend protecting your device and deleting results you no longer want to keep. No electronic method can guarantee absolute security.</string>
+    <string name="privacy_section_7_title">7. Children's privacy</string>
+    <string name="privacy_section_7_body">The app is a code-scanning tool and is not designed to collect personal information from children.</string>
+    <string name="privacy_section_8_title">8. Changes to this policy</string>
+    <string name="privacy_section_8_body">This policy may be updated when features are added or the app's behavior changes. The last-updated date will be revised when significant changes are made.</string>
+    <string name="privacy_section_9_title">9. Contact</string>
+    <string name="privacy_section_9_body">For questions about privacy or the app, contact the developer through the Support page in the app.</string>
+
+    <!-- Support -->
+    <string name="support_title">Support and help</string>
+    <string name="support_description">If you encounter a problem or want to send a suggestion, you can contact us by email.</string>
+    <string name="support_contact_title">Contact by email</string>
+    <string name="support_email_subject">Scanix QR support request</string>
+    <string name="support_email_unavailable">No email app is available.</string>
+    <string name="support_send_email">Send email</string>
 
     <!-- Common actions -->
     <string name="action_back">Back</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
+    <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
+    
