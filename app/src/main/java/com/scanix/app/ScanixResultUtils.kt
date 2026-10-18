@@ -17,7 +17,10 @@ object ScanixResultUtils {
         text: String
     ) {
         if (text.isBlank()) {
-            showMessage(context, "لا يوجد نص لنسخه")
+            showMessage(
+                context,
+                context.getString(R.string.error_generic)
+            )
             return
         }
 
@@ -29,7 +32,10 @@ object ScanixResultUtils {
             ClipData.newPlainText("Scanix result", text)
         )
 
-        showMessage(context, "تم نسخ النتيجة")
+        showMessage(
+            context,
+            context.getString(R.string.result_copied)
+        )
     }
 
     fun shareText(
@@ -37,7 +43,10 @@ object ScanixResultUtils {
         text: String
     ) {
         if (text.isBlank()) {
-            showMessage(context, "لا توجد نتيجة للمشاركة")
+            showMessage(
+                context,
+                context.getString(R.string.error_generic)
+            )
             return
         }
 
@@ -48,13 +57,16 @@ object ScanixResultUtils {
 
         val chooser = Intent.createChooser(
             sendIntent,
-            "مشاركة نتيجة Scanix"
+            context.getString(R.string.result_share)
         ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         try {
             context.startActivity(chooser)
         } catch (_: Exception) {
-            showMessage(context, "تعذرت مشاركة النتيجة")
+            showMessage(
+                context,
+                context.getString(R.string.error_generic)
+            )
         }
     }
 
@@ -65,7 +77,10 @@ object ScanixResultUtils {
         val uri = try {
             Uri.parse(value.trim())
         } catch (_: Exception) {
-            showMessage(context, "الرابط غير صالح")
+            showMessage(
+                context,
+                context.getString(R.string.result_no_app_to_open_link)
+            )
             return
         }
 
@@ -73,7 +88,10 @@ object ScanixResultUtils {
             uri.scheme !in listOf("http", "https") ||
             uri.host.isNullOrBlank()
         ) {
-            showMessage(context, "لا يمكن فتح هذا الرابط")
+            showMessage(
+                context,
+                context.getString(R.string.result_no_app_to_open_link)
+            )
             return
         }
 
@@ -85,7 +103,10 @@ object ScanixResultUtils {
         try {
             context.startActivity(intent)
         } catch (_: Exception) {
-            showMessage(context, "لا يوجد تطبيق لفتح الرابط")
+            showMessage(
+                context,
+                context.getString(R.string.result_no_app_to_open_link)
+            )
         }
     }
 
