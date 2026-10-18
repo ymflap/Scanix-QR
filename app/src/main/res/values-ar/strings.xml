@@ -2,37 +2,57 @@
 <resources>
     <string name="app_name">Scanix</string>
 
+    <!-- Navigation -->
     <string name="nav_scan">مسح</string>
     <string name="nav_history">السجل</string>
     <string name="nav_settings">الإعدادات</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_create">إنشاء</string>
 
+    <!-- Home -->
+    <string name="home_tagline">اقرأ وأنشئ الرموز بسهولة</string>
+    <string name="home_scan_title">مسح QR والباركود</string>
+    <string name="home_scan_description">وجّه الكاميرا نحو الرمز لقراءة محتواه</string>
+    <string name="home_start_scan">ابدأ المسح</string>
+    <string name="home_create_qr">إنشاء QR</string>
+    <string name="home_create_description">أنشئ رمزًا جديدًا</string>
+    <string name="home_history_description">نتائج المسح السابقة</string>
+    <string name="home_recent_results">آخر النتائج</string>
+    <string name="home_recent_empty">ستظهر نتائج المسح الأخيرة هنا</string>
+
+    <!-- Scan -->
     <string name="scan_title">مسح رمز QR أو باركود</string>
     <string name="scan_camera">المسح بالكاميرا</string>
     <string name="scan_image">اختيار صورة</string>
 
+    <!-- History -->
     <string name="history_title">سجل المسح</string>
     <string name="history_empty">لا توجد عناصر ممسوحة بعد</string>
     <string name="history_clear">مسح السجل</string>
 
+    <!-- Results -->
     <string name="result_title">نتيجة المسح</string>
     <string name="result_copy">نسخ</string>
     <string name="result_share">مشاركة</string>
     <string name="result_open_link">فتح الرابط</string>
 
+    <!-- Link safety -->
     <string name="link_warning_title">رابط مشبوه</string>
     <string name="link_warning_message">يحتوي هذا الرابط على خصائص غير معتادة. تحقق من الوجهة قبل المتابعة.</string>
     <string name="link_open_anyway">فتح على أي حال</string>
     <string name="link_cancel">إلغاء</string>
 
+    <!-- Settings -->
     <string name="settings_title">الإعدادات</string>
     <string name="settings_appearance">المظهر</string>
     <string name="settings_system">حسب إعدادات النظام</string>
     <string name="settings_light">فاتح</string>
     <string name="settings_dark">داكن</string>
 
+    <!-- Common actions -->
     <string name="action_back">رجوع</string>
     <string name="action_delete">حذف</string>
     <string name="action_done">تم</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
-  
+        
