@@ -24,6 +24,21 @@
     <string name="scan_title">Scan QR or Barcode</string>
     <string name="scan_camera">Scan with camera</string>
     <string name="scan_image">Choose image</string>
+    <string name="scan_camera_permission_required">Camera permission is required for live scanning.</string>
+    <string name="scan_image_no_code">No QR code or barcode was found in the image.</string>
+    <string name="scan_image_failed">Could not read the image. Try another image.</string>
+    <string name="scan_image_open_failed">Could not open the selected image.</string>
+    <string name="scan_decode_error">An error occurred while reading the code.</string>
+    <string name="scan_camera_start_failed">Could not start the camera. Close other apps using it and try again.</string>
+    <string name="scan_flash_unavailable">The flashlight is unavailable on this camera.</string>
+    <string name="scan_permission_prompt">Allow camera access to start scanning</string>
+    <string name="scan_allow_camera">Allow camera</string>
+    <string name="scan_flash_on">Flashlight</string>
+    <string name="scan_flash_off">Turn off flashlight</string>
+    <string name="scan_result_copy">Copy result</string>
+    <string name="scan_result_share">Share result</string>
+    <string name="scan_open_link_failed">Could not open the link on this device.</string>
+    <string name="scan_privacy_note">Codes are read on your device, and results are stored locally.</string>
 
     <!-- History -->
     <string name="history_title">Scan history</string>
@@ -55,4 +70,3 @@
     <string name="action_done">Done</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
-        
