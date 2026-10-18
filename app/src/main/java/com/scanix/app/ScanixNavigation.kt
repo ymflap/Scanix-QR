@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -86,10 +87,14 @@ fun ScanixNavigation() {
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.QrCodeScanner,
-                                contentDescription = "مسح"
+                                contentDescription = stringResource(
+                                    R.string.nav_scan
+                                )
                             )
                         },
-                        label = { Text("مسح") }
+                        label = {
+                            Text(stringResource(R.string.nav_scan))
+                        }
                     )
 
                     NavigationBarItem(
@@ -100,10 +105,14 @@ fun ScanixNavigation() {
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.History,
-                                contentDescription = "السجل"
+                                contentDescription = stringResource(
+                                    R.string.nav_history
+                                )
                             )
                         },
-                        label = { Text("السجل") }
+                        label = {
+                            Text(stringResource(R.string.nav_history))
+                        }
                     )
 
                     NavigationBarItem(
@@ -114,10 +123,14 @@ fun ScanixNavigation() {
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.Settings,
-                                contentDescription = "الإعدادات"
+                                contentDescription = stringResource(
+                                    R.string.nav_settings
+                                )
                             )
                         },
-                        label = { Text("الإعدادات") }
+                        label = {
+                            Text(stringResource(R.string.nav_settings))
+                        }
                     )
                 }
             }
@@ -145,16 +158,26 @@ fun ScanixNavigation() {
                         Icon(
                             imageVector =
                                 Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = "رجوع"
+                            contentDescription = stringResource(
+                                R.string.nav_back
+                            )
                         )
                     }
 
                     Text(
                         text = when (currentPage) {
-                            ScanixPage.LANGUAGE.name -> "اللغة"
-                            ScanixPage.PRIVACY.name -> "سياسة الخصوصية"
-                            ScanixPage.ABOUT.name -> "حول التطبيق"
-                            ScanixPage.SUPPORT.name -> "الدعم"
+                            ScanixPage.LANGUAGE.name ->
+                                stringResource(R.string.nav_language)
+
+                            ScanixPage.PRIVACY.name ->
+                                stringResource(R.string.nav_privacy)
+
+                            ScanixPage.ABOUT.name ->
+                                stringResource(R.string.nav_about)
+
+                            ScanixPage.SUPPORT.name ->
+                                stringResource(R.string.nav_support)
+
                             else -> ""
                         },
                         style = MaterialTheme.typography.titleLarge,
