@@ -46,13 +46,30 @@ class MainActivity : ComponentActivity() {
         ScanixAppearance.SYSTEM
     )
 
-    private val appearanceListener =
+    private val languageState = mutableStateOf(
+        ScanixLanguage.ENGLISH
+    )
+
+    private val settingsListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == "appearance") {
-                appearanceState.value =
-                    ScanixSettingsStore.getAppearance(this)
+            when (key) {
+                "appearance" -> {
+                    appearanceState.value =
+                        ScanixSettingsStore.getAppearance(this)
+                }
+
+                "app_language" -> {
+                    languageState.value =
+                        LanguageSettingsStore.getLanguage(this)
+
+                    recreate()
+                }
             }
         }
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(ScanixLocale.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +77,19 @@ class MainActivity : ComponentActivity() {
         appearanceState.value =
             ScanixSettingsStore.getAppearance(this)
 
+        languageState.value =
+            LanguageSettingsStore.getLanguage(this)
+
         getSharedPreferences(
             "scanix_settings",
             MODE_PRIVATE
         ).registerOnSharedPreferenceChangeListener(
-            appearanceListener
+            settingsListener
         )
 
         setContent {
             val appearance by appearanceState
+            val language by languageState
 
             ScanixTheme(
                 appearance = appearance
@@ -77,7 +98,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ScanixNavigation()
+                    ScanixNavigation(
+                        selectedLanguageCode = language.code
+                    )
                 }
             }
         }
@@ -88,7 +111,7 @@ class MainActivity : ComponentActivity() {
             "scanix_settings",
             MODE_PRIVATE
         ).unregisterOnSharedPreferenceChangeListener(
-            appearanceListener
+            settingsListener
         )
 
         super.onDestroy()
