@@ -4,10 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -18,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -46,19 +45,19 @@ fun LanguageSettingsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "لغة التطبيق",
+            text = stringResource(R.string.language_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "اختر اللغة التي تريد استخدامها في Scanix",
+            text = stringResource(R.string.language_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         LanguageOption(
-            title = "العربية",
+            title = stringResource(R.string.language_arabic),
             subtitle = "Arabic",
             selected = selectedLanguage == ScanixLanguage.ARABIC,
             onClick = {
@@ -67,20 +66,12 @@ fun LanguageSettingsScreen(
         )
 
         LanguageOption(
-            title = "English",
+            title = stringResource(R.string.language_english),
             subtitle = "English",
             selected = selectedLanguage == ScanixLanguage.ENGLISH,
             onClick = {
                 onLanguageSelected(ScanixLanguage.ENGLISH)
             }
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = "سيتم ربط اختيار اللغة بجميع صفحات التطبيق عند إكمال إعدادات اللغة والتنقل.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
