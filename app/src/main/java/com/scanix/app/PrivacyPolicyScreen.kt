@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -26,80 +27,60 @@ fun PrivacyPolicyScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "سياسة الخصوصية",
+            text = stringResource(R.string.privacy_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "آخر تحديث: 17 أكتوبر 2026",
+            text = stringResource(R.string.privacy_last_updated),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         PrivacySection(
-            title = "1. مقدمة",
-            body = "توضح هذه السياسة كيفية تعامل تطبيق Scanix QR " +
-                "مع المعلومات عند استخدام ميزات مسح رموز QR والباركود."
+            title = stringResource(R.string.privacy_section_1_title),
+            body = stringResource(R.string.privacy_section_1_body)
         )
 
         PrivacySection(
-            title = "2. الكاميرا والصور",
-            body = "يطلب التطبيق إذن الكاميرا لتشغيل المسح المباشر. " +
-                "يمكنك أيضًا اختيار صورة من جهازك لفحص الرمز الموجود فيها. " +
-                "تُستخدم هذه الصور لغرض قراءة الرمز داخل التطبيق."
+            title = stringResource(R.string.privacy_section_2_title),
+            body = stringResource(R.string.privacy_section_2_body)
         )
 
         PrivacySection(
-            title = "3. نتائج المسح وسجل العمليات",
-            body = "يمكن حفظ نتائج المسح في سجل محلي على جهازك إذا كانت " +
-                "ميزة حفظ النتائج مفعّلة. لا يحتاج التطبيق إلى إنشاء حساب. " +
-                "يمكنك إيقاف حفظ النتائج من الإعدادات. وقد تبقى النتائج " +
-                "المحفوظة سابقًا حتى تحذفها من سجل التطبيق."
+            title = stringResource(R.string.privacy_section_3_title),
+            body = stringResource(R.string.privacy_section_3_body)
         )
 
         PrivacySection(
-            title = "4. مشاركة النتائج وفتح الروابط",
-            body = "عندما تختار نسخ نتيجة أو مشاركتها أو فتح رابط، " +
-                "يستخدم التطبيق الوظيفة التي اخترتها. وقد تنتقل المعلومات " +
-                "إلى التطبيق الآخر أو الموقع الذي اخترت فتحه، وفقًا " +
-                "لإجراءك وسياسات ذلك الطرف."
+            title = stringResource(R.string.privacy_section_4_title),
+            body = stringResource(R.string.privacy_section_4_body)
         )
 
         PrivacySection(
-            title = "5. جمع البيانات وإرسالها",
-            body = "وفقًا للتنفيذ الحالي للتطبيق، لا يتضمن التطبيق خادمًا " +
-                "خاصًا لإرسال نتائج المسح إليه، ولا يطلب إنشاء حساب. " +
-                "قد تخضع بيانات التشخيص أو التشغيل التي تتعامل معها " +
-                "خدمات Android أو خدمات Google المستخدمة في معالجة الرموز " +
-                "لسياسات تلك الخدمات."
+            title = stringResource(R.string.privacy_section_5_title),
+            body = stringResource(R.string.privacy_section_5_body)
         )
 
         PrivacySection(
-            title = "6. أمان البيانات",
-            body = "تُحفظ نتائج السجل محليًا على الجهاز. ننصحك بحماية " +
-                "جهازك وحذف النتائج التي لا ترغب في الاحتفاظ بها. " +
-                "لا توجد وسيلة إلكترونية تضمن الأمان المطلق."
+            title = stringResource(R.string.privacy_section_6_title),
+            body = stringResource(R.string.privacy_section_6_body)
         )
 
         PrivacySection(
-            title = "7. خصوصية الأطفال",
-            body = "التطبيق أداة لمسح الرموز، وليس مصممًا لجمع معلومات " +
-                "شخصية من الأطفال."
+            title = stringResource(R.string.privacy_section_7_title),
+            body = stringResource(R.string.privacy_section_7_body)
         )
 
         PrivacySection(
-            title = "8. التغييرات على السياسة",
-            body = "قد يتم تحديث هذه السياسة عند إضافة ميزات جديدة أو " +
-                "تغيير طريقة عمل التطبيق. ستُحدّث خانة آخر تحديث عند إجراء " +
-                "تغييرات جوهرية."
+            title = stringResource(R.string.privacy_section_8_title),
+            body = stringResource(R.string.privacy_section_8_body)
         )
 
         PrivacySection(
-            title = "9. التواصل",
-            body = "للاستفسارات المتعلقة بالخصوصية أو التطبيق، استخدم " +
-                "صفحة المستودع الرسمية للمشروع على GitHub:\n" +
-                "https://github.com/ymflap/Scanix-QR"
+            title = stringResource(R.string.privacy_section_9_title),
+            body = stringResource(R.string.privacy_section_9_body)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
