@@ -55,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -106,7 +107,9 @@ fun ScanScreen(
                 errorMessage = null
                 onPermissionGranted()
             } else {
-                errorMessage = "إذن الكاميرا مطلوب للمسح المباشر."
+                errorMessage = context.getString(
+                    R.string.scan_camera_permission_required
+                )
             }
         }
 
@@ -179,15 +182,20 @@ fun ScanScreen(
                             if (result != null) {
                                 handleDecodedResult(result)
                             } else {
-                                errorMessage =
-                                    "لم يتم العثور على QR أو باركود في الصورة."
+                                errorMessage = context.getString(
+                                    R.string.scan_image_no_code
+                                )
                             }
                         }
                         .addOnFailureListener {
-                            errorMessage = "تعذرت قراءة الصورة. جرّب صورة أخرى."
+                            errorMessage = context.getString(
+                                R.string.scan_image_failed
+                            )
                         }
                 } catch (_: Exception) {
-                    errorMessage = "تعذر فتح الصورة المختارة."
+                    errorMessage = context.getString(
+                        R.string.scan_image_open_failed
+                    )
                 }
             }
         }
@@ -256,8 +264,9 @@ fun ScanScreen(
                                         }
                                     }
                                     .addOnFailureListener {
-                                        errorMessage =
-                                            "حدث خطأ أثناء قراءة الرمز."
+                                        errorMessage = context.getString(
+                                            R.string.scan_decode_error
+                                        )
                                     }
                                     .addOnCompleteListener {
                                         imageProxy.close()
@@ -274,8 +283,9 @@ fun ScanScreen(
                             analysis
                         )
                     } catch (_: Exception) {
-                        errorMessage =
-                            "تعذر تشغيل الكاميرا. أغلق التطبيقات التي تستخدمها ثم حاول مجددًا."
+                        errorMessage = context.getString(
+                            R.string.scan_camera_start_failed
+                        )
                     }
                 },
                 ContextCompat.getMainExecutor(context)
@@ -289,13 +299,15 @@ fun ScanScreen(
             provider?.unbindAll()
         }
     }
-    
+
     LaunchedEffect(camera, flashEnabled) {
         try {
             camera?.cameraControl?.enableTorch(flashEnabled)
         } catch (_: Exception) {
             if (flashEnabled) {
-                errorMessage = "الفلاش غير متاح على هذه الكاميرا."
+                errorMessage = context.getString(
+                    R.string.scan_flash_unavailable
+                )
                 flashEnabled = false
             }
         }
@@ -315,7 +327,7 @@ fun ScanScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Scanix",
+            text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -323,7 +335,7 @@ fun ScanScreen(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "مسح QR والباركود",
+            text = stringResource(R.string.scan_title),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -365,7 +377,9 @@ fun ScanScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = "اسمح باستخدام الكاميرا لبدء المسح",
+                            text = stringResource(
+                                R.string.scan_permission_prompt
+                            ),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.titleMedium
                         )
@@ -379,7 +393,9 @@ fun ScanScreen(
                                 )
                             }
                         ) {
-                            Text("السماح بالكاميرا")
+                            Text(
+                                stringResource(R.string.scan_allow_camera)
+                            )
                         }
                     }
                 }
@@ -406,7 +422,7 @@ fun ScanScreen(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.size(6.dp))
-                Text("اختيار صورة")
+                Text(stringResource(R.string.scan_image))
             }
 
             OutlinedButton(
@@ -429,10 +445,18 @@ fun ScanScreen(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.size(6.dp))
-                Text(if (flashEnabled) "إيقاف الفلاش" else "الفلاش")
+                Text(
+                    stringResource(
+                        if (flashEnabled) {
+                            R.string.scan_flash_off
+                        } else {
+                            R.string.scan_flash_on
+                        }
+                    )
+                )
             }
         }
-
+        
         if (errorMessage != null) {
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -458,7 +482,7 @@ fun ScanScreen(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        text = "نتيجة المسح",
+                        text = stringResource(R.string.scan_result_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -493,7 +517,9 @@ fun ScanScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.ContentCopy,
-                                contentDescription = "نسخ النتيجة"
+                                contentDescription = stringResource(
+                                    R.string.scan_result_copy
+                                )
                             )
                         }
 
@@ -502,7 +528,7 @@ fun ScanScreen(
                                 val sendIntent = Intent(
                                     Intent.ACTION_SEND
                                 ).apply {
-                                    type = "text/plain"
+                                    setType("text/plain")
                                     putExtra(
                                         Intent.EXTRA_TEXT,
                                         result.value
@@ -512,14 +538,18 @@ fun ScanScreen(
                                 context.startActivity(
                                     Intent.createChooser(
                                         sendIntent,
-                                        "مشاركة النتيجة"
+                                        context.getString(
+                                            R.string.scan_result_share
+                                        )
                                     )
                                 )
                             }
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.Share,
-                                contentDescription = "مشاركة النتيجة"
+                                contentDescription = stringResource(
+                                    R.string.scan_result_share
+                                )
                             )
                         }
 
@@ -547,14 +577,17 @@ fun ScanScreen(
                                             )
                                         )
                                     } catch (_: Exception) {
-                                        errorMessage =
-                                            "تعذر فتح الرابط على هذا الجهاز."
+                                        errorMessage = context.getString(
+                                            R.string.scan_open_link_failed
+                                        )
                                     }
                                 }
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.OpenInBrowser,
-                                    contentDescription = "فتح الرابط"
+                                    contentDescription = stringResource(
+                                        R.string.result_open_link
+                                    )
                                 )
                             }
                         }
@@ -566,7 +599,7 @@ fun ScanScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "تتم قراءة الرموز على الجهاز، وتُحفظ النتائج محليًا.",
+            text = stringResource(R.string.scan_privacy_note),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
