@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -47,7 +48,7 @@ fun ResultScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "نتيجة المسح",
+            text = stringResource(R.string.result_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -64,7 +65,7 @@ fun ResultScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "نوع الرمز",
+                    text = stringResource(R.string.result_type),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -76,7 +77,7 @@ fun ResultScreen(
                 )
 
                 Text(
-                    text = "المحتوى",
+                    text = stringResource(R.string.result_content),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -101,17 +102,20 @@ fun ResultScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "رابط ويب",
+                        text = stringResource(R.string.result_web_link),
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "تحقق من عنوان الموقع قبل فتحه. التحقق من صيغة الرابط لا يضمن أن الموقع آمن.",
+                        text = stringResource(R.string.result_link_safety_note),
                         style = MaterialTheme.typography.bodySmall
                     )
 
                     Text(
-                        text = "النطاق: ${safeUri.host.orEmpty()}",
+                        text = stringResource(
+                            R.string.result_domain,
+                            safeUri.host.orEmpty()
+                        ),
                         style = MaterialTheme.typography.bodyMedium
                     )
 
@@ -131,7 +135,9 @@ fun ResultScreen(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "لا يوجد تطبيق لفتح الرابط",
+                                    context.getString(
+                                        R.string.result_no_app_to_open_link
+                                    ),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -145,7 +151,7 @@ fun ResultScreen(
                                 MaterialTheme.colorScheme.surface
                         )
                     ) {
-                        Text("فتح الرابط")
+                        Text(stringResource(R.string.result_open_link))
                     }
                 }
             }
@@ -170,7 +176,7 @@ fun ResultScreen(
 
                     Toast.makeText(
                         context,
-                        "تم نسخ النتيجة",
+                        context.getString(R.string.result_copied),
                         Toast.LENGTH_SHORT
                     ).show()
                 },
@@ -179,20 +185,20 @@ fun ResultScreen(
                     .height(52.dp),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("نسخ")
+                Text(stringResource(R.string.result_copy))
             }
 
             OutlinedButton(
                 onClick = {
                     val intent = Intent(Intent.ACTION_SEND).apply {
-                        this.type = "text/plain"
+                        type = "text/plain"
                         putExtra(Intent.EXTRA_TEXT, content)
                     }
 
                     context.startActivity(
                         Intent.createChooser(
                             intent,
-                            "مشاركة النتيجة"
+                            context.getString(R.string.result_share)
                         )
                     )
                 },
@@ -201,7 +207,7 @@ fun ResultScreen(
                     .height(52.dp),
                 shape = RoundedCornerShape(14.dp)
             ) {
-                Text("مشاركة")
+                Text(stringResource(R.string.result_share))
             }
         }
 
@@ -216,7 +222,7 @@ fun ResultScreen(
                 contentColor = MaterialTheme.colorScheme.surface
             )
         ) {
-            Text("حفظ في السجل")
+            Text(stringResource(R.string.result_save_history))
         }
 
         OutlinedButton(
@@ -226,7 +232,7 @@ fun ResultScreen(
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp)
         ) {
-            Text("رجوع")
+            Text(stringResource(R.string.result_back))
         }
     }
 }
