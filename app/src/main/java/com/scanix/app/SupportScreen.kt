@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -35,14 +36,13 @@ fun SupportScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "الدعم والمساعدة",
+            text = stringResource(R.string.support_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
         Text(
-            text = "إذا واجهت مشكلة أو أردت إرسال اقتراح، " +
-                "يمكنك التواصل معنا عبر البريد الإلكتروني.",
+            text = stringResource(R.string.support_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -60,7 +60,7 @@ fun SupportScreen() {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = "التواصل عبر البريد الإلكتروني",
+                    text = stringResource(R.string.support_contact_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -79,7 +79,7 @@ fun SupportScreen() {
                         ).apply {
                             putExtra(
                                 Intent.EXTRA_SUBJECT,
-                                "طلب دعم - Scanix QR"
+                                context.getString(R.string.support_email_subject)
                             )
                         }
 
@@ -88,13 +88,15 @@ fun SupportScreen() {
                         } catch (_: ActivityNotFoundException) {
                             Toast.makeText(
                                 context,
-                                "لا يوجد تطبيق بريد إلكتروني متاح.",
+                                context.getString(
+                                    R.string.support_email_unavailable
+                                ),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     }
                 ) {
-                    Text("إرسال بريد إلكتروني")
+                    Text(stringResource(R.string.support_send_email))
                 }
             }
         }
