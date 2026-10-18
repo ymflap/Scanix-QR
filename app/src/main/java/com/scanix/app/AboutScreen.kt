@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -29,6 +30,9 @@ private const val ABOUT_SUPPORT_EMAIL = "dhmlpy@gmail.com"
 @Composable
 fun AboutScreen() {
     val context = LocalContext.current
+
+    val emailSubject = stringResource(R.string.about_email_subject)
+    val emailUnavailable = stringResource(R.string.support_email_unavailable)
 
     Column(
         modifier = Modifier
@@ -41,7 +45,7 @@ fun AboutScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "حول التطبيق",
+            text = stringResource(R.string.about_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -65,36 +69,36 @@ fun AboutScreen() {
                 )
 
                 Text(
-                    text = "الإصدار 1.0.3.6",
+                    text = stringResource(R.string.about_version),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
-                    text = "أداة لمسح وقراءة رموز QR والباركود " +
-                        "باستخدام كاميرا جهازك أو الصور التي تختارها.",
+                    text = stringResource(R.string.about_description),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
         }
 
         AboutSection(
-            title = "مميزات التطبيق",
-            body = "• مسح رموز QR والباركود بالكاميرا.\n" +
-                "• قراءة الرموز من الصور المختارة.\n" +
-                "• مراجعة نتائج المسح في السجل.\n" +
-                "• نسخ النتائج ومشاركتها عند الحاجة.\n" +
-                "• تخصيص المظهر وإعدادات المسح."
+            title = stringResource(R.string.about_features_title),
+            body = listOf(
+                stringResource(R.string.about_feature_camera),
+                stringResource(R.string.about_feature_images),
+                stringResource(R.string.about_feature_history),
+                stringResource(R.string.about_feature_share),
+                stringResource(R.string.about_feature_settings)
+            ).joinToString("\n")
         )
 
         AboutSection(
-            title = "الخصوصية",
-            body = "يمكنك التحكم في حفظ نتائج المسح من الإعدادات. " +
-                "راجع سياسة الخصوصية لمعرفة تفاصيل التعامل مع البيانات."
+            title = stringResource(R.string.about_privacy_title),
+            body = stringResource(R.string.about_privacy_description)
         )
 
         AboutSection(
-            title = "المطور",
+            title = stringResource(R.string.about_developer_title),
             body = "Mohammed Nasser"
         )
 
@@ -111,7 +115,7 @@ fun AboutScreen() {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = "التواصل والدعم",
+                    text = stringResource(R.string.about_contact_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -130,7 +134,7 @@ fun AboutScreen() {
                         ).apply {
                             putExtra(
                                 Intent.EXTRA_SUBJECT,
-                                "استفسار عن Scanix QR"
+                                emailSubject
                             )
                         }
 
@@ -139,13 +143,13 @@ fun AboutScreen() {
                         } catch (_: ActivityNotFoundException) {
                             Toast.makeText(
                                 context,
-                                "لا يوجد تطبيق بريد إلكتروني متاح.",
+                                emailUnavailable,
                                 Toast.LENGTH_LONG
                             ).show()
                         }
                     }
                 ) {
-                    Text("التواصل عبر البريد")
+                    Text(stringResource(R.string.about_email_button))
                 }
             }
         }
