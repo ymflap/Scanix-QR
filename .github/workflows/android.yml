@@ -5,6 +5,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      update_channel:
+        description: "Choose the update channel for this APK"
+        required: true
+        type: choice
+        options:
+          - github
+          - uptodown
+        default: github
 
 permissions:
   contents: read
@@ -20,6 +29,7 @@ jobs:
       KEYSTORE_ENCRYPTED_BASE64: ${{ secrets.KEYSTORE_ENCRYPTED_BASE64 }}
       KEY_ALIAS: scanix-release
       KEYSTORE_PATH: ${{ github.workspace }}/scanix-release.keystore
+      UPDATE_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.update_channel || 'github' }}
 
     steps:
       - name: Checkout repository
@@ -79,12 +89,14 @@ jobs:
             -alias "$KEY_ALIAS"
 
       - name: Build signed release APK
-        run: gradle --no-daemon assembleRelease
+        run: |
+          gradle --no-daemon assembleRelease \
+            "-PscanixUpdateChannel=$UPDATE_CHANNEL"
 
       - name: Upload signed release APK only
         uses: actions/upload-artifact@v4
         with:
-          name: Scanix-QR-Release-APK
+          name: Scanix-QR-${{ github.event_name == 'workflow_dispatch' && inputs.update_channel || 'github' }}-Release-APK
           path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 7
@@ -94,4 +106,3 @@ jobs:
         run: |
           rm -f scanix-release.keystore
           rm -f scanix-release.keystore.enc
-          
