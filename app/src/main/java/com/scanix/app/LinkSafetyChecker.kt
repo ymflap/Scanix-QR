@@ -13,7 +13,7 @@ enum class LinkRiskLevel {
 data class LinkSafetyReport(
     val normalizedUrl: String?,
     val riskLevel: LinkRiskLevel,
-    val warnings: List<String>,
+    val warnings: List<Int>,
     val requiresConfirmation: Boolean
 )
 
@@ -39,21 +39,21 @@ object LinkSafetyChecker {
         val input = rawUrl.trim()
 
         if (input.isBlank()) {
-            return blocked("الرابط فارغ أو غير صالح.")
+            return blocked(R.string.link_blocked_empty)
         }
 
         if (
             input.any { it.isWhitespace() || it.isISOControl() } ||
             '\\' in input
         ) {
-            return blocked("يحتوي الرابط على أحرف غير صالحة.")
+            return blocked(R.string.link_blocked_invalid_chars)
         }
 
         val candidate = when {
             input.startsWith("https://", true) -> input
             input.startsWith("http://", true) -> input
             "://" in input -> return blocked(
-                "نوع الرابط غير مدعوم."
+                R.string.link_blocked_unsupported_type
             )
             else -> "https://$input"
         }
@@ -61,62 +61,48 @@ object LinkSafetyChecker {
         val uri = try {
             Uri.parse(candidate)
         } catch (_: Exception) {
-            return blocked("تعذر تحليل الرابط.")
+            return blocked(R.string.link_blocked_invalid_destination)
         }
 
         val scheme = uri.scheme?.lowercase(Locale.ROOT)
         val host = uri.host
 
         if (scheme !in listOf("http", "https")) {
-            return blocked("نوع الرابط غير مسموح.")
+            return blocked(R.string.link_blocked_unsupported_type)
         }
 
         if (host.isNullOrBlank() || uri.userInfo != null) {
-            return blocked(
-                "تعذر التحقق من وجهة الرابط بوضوح."
-            )
+            return blocked(R.string.link_blocked_invalid_destination)
         }
 
         val asciiHost = try {
             IDN.toASCII(host).lowercase(Locale.ROOT)
         } catch (_: Exception) {
-            return blocked("اسم النطاق غير صالح.")
+            return blocked(R.string.link_blocked_invalid_domain)
         }
 
-        val warnings = mutableListOf<String>()
+        val warnings = mutableListOf<Int>()
 
-        // Direct IP addresses deserve additional scrutiny.
         if (isIpAddress(asciiHost)) {
-            warnings.add(
-                "الرابط يستخدم عنوان IP مباشرًا بدل اسم نطاق معتاد."
-            )
+            warnings.add(R.string.link_warning_ip)
         }
 
-        // Internationalized domain names can sometimes imitate other domains.
         if (asciiHost.contains("xn--")) {
-            warnings.add(
-                "اسم النطاق يحتوي على أحرف دولية مشفّرة؛ تحقق من تهجئته."
-            )
+            warnings.add(R.string.link_warning_encoded_domain)
         }
 
-        // Suspicious-looking subdomains, e.g. brand-login.example.com.
         val hostLabels = asciiHost.split(".")
         val suspiciousHostLabels = hostLabels.filter { label ->
-            suspiciousWords.any { word ->
-                label.contains(word)
-            }
+            suspiciousWords.any { word -> label.contains(word) }
         }
 
         if (
             suspiciousHostLabels.isNotEmpty() &&
             hostLabels.size >= 3
         ) {
-            warnings.add(
-                "اسم النطاق يحتوي على كلمات قد تُستخدم في صفحات تسجيل دخول أو تحقق مزيفة."
-            )
+            warnings.add(R.string.link_warning_suspicious_terms)
         }
 
-        // A long URL with many redirect-related parameters may hide its destination.
         val fullUrl = uri.toString().lowercase(Locale.ROOT)
 
         if (
@@ -129,13 +115,8 @@ object LinkSafetyChecker {
                 "target="
             ).count { fullUrl.contains(it) } >= 2
         ) {
-            warnings.add(
-                "الرابط طويل أو يحتوي على مؤشرات تحويل متعددة؛ راجع وجهته قبل المتابعة."
-            )
+            warnings.add(R.string.link_warning_redirect)
         }
-
-        // HTTP alone is not enough to label a URL suspicious.
-        // Ordinary HTTP links are not warned about by this checker.
 
         return if (warnings.isEmpty()) {
             LinkSafetyReport(
@@ -168,10 +149,10 @@ object LinkSafetyChecker {
         return ipv4 || ipv6
     }
 
-    private fun blocked(message: String) = LinkSafetyReport(
+    private fun blocked(messageRes: Int) = LinkSafetyReport(
         normalizedUrl = null,
         riskLevel = LinkRiskLevel.BLOCKED,
-        warnings = listOf(message),
+        warnings = listOf(messageRes),
         requiresConfirmation = true
     )
 }
