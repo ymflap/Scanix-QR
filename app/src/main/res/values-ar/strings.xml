@@ -81,6 +81,15 @@
     <string name="link_warning_message">يحتوي هذا الرابط على خصائص غير معتادة. تحقق من الوجهة قبل المتابعة.</string>
     <string name="link_open_anyway">فتح على أي حال</string>
     <string name="link_cancel">إلغاء</string>
+    <string name="link_blocked_empty">الرابط فارغ ولا يمكن فتحه.</string>
+    <string name="link_blocked_invalid_chars">يحتوي الرابط على أحرف غير صالحة أو غير آمنة.</string>
+    <string name="link_blocked_unsupported_type">نوع الرابط هذا غير مدعوم.</string>
+    <string name="link_blocked_invalid_destination">وجهة الرابط غير صالحة.</string>
+    <string name="link_blocked_invalid_domain">نطاق الرابط غير صالح.</string>
+    <string name="link_warning_ip">يستخدم الرابط عنوان IP بدلًا من اسم النطاق. تحقق من الوجهة قبل المتابعة.</string>
+    <string name="link_warning_encoded_domain">يحتوي الرابط على اسم نطاق مُرمّز. تحقق من الوجهة بعناية.</string>
+    <string name="link_warning_suspicious_terms">يحتوي الرابط على كلمات قد ترتبط بمواقع مشبوهة.</string>
+    <string name="link_warning_redirect">قد يعيد الرابط توجيهك إلى وجهة أخرى. تحقق من الموقع النهائي قبل المتابعة.</string>
 
     <!-- Settings -->
     <string name="settings_title">الإعدادات</string>
