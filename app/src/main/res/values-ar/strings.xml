@@ -13,6 +13,7 @@
     <string name="nav_privacy">سياسة الخصوصية</string>
     <string name="nav_about">حول التطبيق</string>
     <string name="nav_support">الدعم</string>
+    <string name="nav_update">تحديث التطبيق</string>
 
     <!-- Home -->
     <string name="home_tagline">اقرأ وأنشئ الرموز بسهولة</string>
@@ -105,7 +106,7 @@
     <string name="settings_save_results">حفظ نتائج المسح</string>
     <string name="settings_save_results_description">الاحتفاظ بالنتائج على هذا الجهاز</string>
     <string name="settings_local_storage_note">تُحفظ النتائج محليًا على جهازك ولا تُرسل إلى خادم خارجي.</string>
-    <string name="settings_app_pages">صفحات التطبيق</string>
+    <string name="settings_app_pages">معلومات ومساعدة</string>
     <string name="settings_language">اللغة</string>
     <string name="settings_language_description">اختر العربية أو الإنجليزية</string>
     <string name="settings_privacy">سياسة الخصوصية</string>
@@ -114,6 +115,8 @@
     <string name="settings_about_description">معلومات Scanix والمطور والإصدار</string>
     <string name="settings_support">الدعم</string>
     <string name="settings_support_description">تواصل مع المطور واحصل على المساعدة</string>
+    <string name="settings_update">تحديث التطبيق</string>
+    <string name="settings_update_description">التحقق من أحدث إصدار</string>
 
     <!-- Language -->
     <string name="language_title">لغة التطبيق</string>
@@ -168,6 +171,17 @@
     <string name="support_email_unavailable">لا يوجد تطبيق بريد إلكتروني متاح.</string>
     <string name="support_send_email">إرسال بريد إلكتروني</string>
 
+    <!-- App update -->
+    <string name="update_title">تحديث التطبيق</string>
+    <string name="update_current_version">الإصدار المثبت</string>
+    <string name="update_latest_version">أحدث إصدار</string>
+    <string name="update_check">التحقق من وجود تحديث</string>
+    <string name="update_available">يتوفر إصدار أحدث</string>
+    <string name="update_not_available">لديك أحدث إصدار</string>
+    <string name="update_download">تنزيل التحديث</string>
+    <string name="update_checking">جارٍ التحقق من التحديثات…</string>
+    <string name="update_error">تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.</string>
+
     <!-- Common actions -->
     <string name="action_back">رجوع</string>
     <string name="action_delete">حذف</string>
@@ -175,3 +189,4 @@
     <string name="action_cancel">إلغاء</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
+        
