@@ -173,6 +173,7 @@
 
     <!-- App updates -->
     <string name="update_title">App updates</string>
+    <string name="update_current_version">Installed version</string>
     <string name="update_error">Couldn\'t check for updates. Check your internet connection and try again.</string>
     <string name="update_latest_version">Latest version</string>
     <string name="update_check">Check for updates</string>
