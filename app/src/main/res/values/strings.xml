@@ -13,6 +13,7 @@
     <string name="nav_privacy">Privacy Policy</string>
     <string name="nav_about">About</string>
     <string name="nav_support">Support</string>
+    <string name="nav_update">App updates</string>
 
     <!-- Home -->
     <string name="home_tagline">Read and create codes easily</string>
@@ -105,7 +106,7 @@
     <string name="settings_save_results">Save scan results</string>
     <string name="settings_save_results_description">Keep results on this device</string>
     <string name="settings_local_storage_note">Results are stored locally on your device and are not sent to an external server.</string>
-    <string name="settings_app_pages">App pages</string>
+    <string name="settings_app_pages">Information &amp; help</string>
     <string name="settings_language">Language</string>
     <string name="settings_language_description">Choose Arabic or English</string>
     <string name="settings_privacy">Privacy Policy</string>
@@ -114,6 +115,8 @@
     <string name="settings_about_description">Scanix, developer and version information</string>
     <string name="settings_support">Support</string>
     <string name="settings_support_description">Contact the developer and get help</string>
+    <string name="settings_update">App updates</string>
+    <string name="settings_update_description">Check for the latest version</string>
 
     <!-- Language -->
     <string name="language_title">App language</string>
@@ -175,3 +178,4 @@
     <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
+                                                 
