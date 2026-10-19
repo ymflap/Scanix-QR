@@ -2,10 +2,10 @@ package com.scanix.app
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.content.pm.PackageInfo
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -49,17 +49,21 @@ private data class ScanixUpdateInfo(
 @Composable
 fun AppUpdateScreen() {
     val context = LocalContext.current
+
     val isArabic = remember(context) {
-        context.resources.configuration.locales[0]
-            .language == "ar"
+        context.resources.configuration.locales[0].language == "ar"
     }
 
     val currentVersion = remember(context) {
-        getInstalledVersion(context.packageManager.getPackageInfo(
-            context.packageName,
-            0
-        ))
+        getInstalledVersion(
+            context.packageManager.getPackageInfo(
+                context.packageName,
+                0
+            )
+        )
     }
+
+    val updateChannel = BuildConfig.UPDATE_CHANNEL
 
     var isChecking by remember { mutableStateOf(false) }
     var updateInfo by remember {
@@ -72,6 +76,7 @@ fun AppUpdateScreen() {
 
         isChecking = true
         errorMessage = null
+        updateInfo = null
 
         Thread {
             var connection: HttpURLConnection? = null
@@ -87,6 +92,10 @@ fun AppUpdateScreen() {
                     "Accept",
                     "application/json"
                 )
+                connection.setRequestProperty(
+                    "Cache-Control",
+                    "no-cache"
+                )
 
                 val responseCode = connection.responseCode
 
@@ -100,17 +109,37 @@ fun AppUpdateScreen() {
                     .bufferedReader(Charsets.UTF_8)
                     .use { it.readText() }
 
-                val json = JSONObject(response)
+                val root = JSONObject(response)
+                val channels = root.optJSONObject("channels")
+                    ?: throw IllegalStateException(
+                        "Missing update channels"
+                    )
 
-                val versionCode = json.optLong("versionCode", 0L)
-                val versionName = json.optString("versionName", "")
-                val updateUrl = json.optString("updateUrl", "")
-                val releaseNotes = json.optString("releaseNotes", "")
+                val channel = channels.optJSONObject(updateChannel)
+                    ?: throw IllegalStateException(
+                        "Update channel unavailable"
+                    )
+
+                val versionCode = channel.optLong("versionCode", 0L)
+                val versionName = channel.optString("versionName", "")
+                val updateUrl = channel.optString("updateUrl", "")
+                val releaseNotes = channel.optString("releaseNotes", "")
 
                 if (versionCode <= 0L || versionName.isBlank()) {
                     throw IllegalStateException(
                         "Invalid update information"
                     )
+                }
+
+                if (updateUrl.isNotBlank()) {
+                    val parsedUrl = Uri.parse(updateUrl)
+                    if (parsedUrl.scheme != "https" ||
+                        parsedUrl.host.isNullOrBlank()
+                    ) {
+                        throw IllegalStateException(
+                            "Invalid update URL"
+                        )
+                    }
                 }
 
                 val result = ScanixUpdateInfo(
@@ -127,9 +156,9 @@ fun AppUpdateScreen() {
             } catch (_: Exception) {
                 Handler(Looper.getMainLooper()).post {
                     errorMessage = if (isArabic) {
-                        "تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى."
+                        "تعذر التحقق من تحديثات قناة التوزيع الحالية. تحقق من الإنترنت وحاول مرة أخرى."
                     } else {
-                        "Couldn't check for updates. Check your internet connection and try again."
+                        "Couldn't check updates for this distribution channel. Check your internet connection and try again."
                     }
                     isChecking = false
                 }
@@ -139,7 +168,7 @@ fun AppUpdateScreen() {
         }.start()
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(updateChannel) {
         checkForUpdates()
     }
 
@@ -162,9 +191,9 @@ fun AppUpdateScreen() {
 
         Text(
             text = if (isArabic) {
-                "تحقق من توفر أحدث إصدار من Scanix."
+                "يتحقق التطبيق من التحديثات الخاصة بقناة التوزيع الحالية عبر الإنترنت."
             } else {
-                "Check whether a newer version of Scanix is available."
+                "The app checks online for updates belonging to the current distribution channel."
             },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -195,6 +224,15 @@ fun AppUpdateScreen() {
                     style = MaterialTheme.typography.headlineSmall
                 )
 
+                Text(
+                    text = if (isArabic) {
+                        "قناة التوزيع: ${channelDisplayName(updateChannel, true)}"
+                    } else {
+                        "Distribution channel: ${channelDisplayName(updateChannel, false)}"
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
                 Spacer(modifier = Modifier.height(4.dp))
 
                 when {
@@ -202,9 +240,9 @@ fun AppUpdateScreen() {
                         CircularProgressIndicator()
                         Text(
                             text = if (isArabic) {
-                                "جارٍ التحقق من وجود تحديث..."
+                                "جارٍ الاتصال بالإنترنت والتحقق من التحديثات..."
                             } else {
-                                "Checking for updates..."
+                                "Connecting to the internet and checking for updates..."
                             }
                         )
                     }
@@ -230,7 +268,7 @@ fun AppUpdateScreen() {
                             Text(updateInfo!!.releaseNotes)
                         }
 
-                        if (updateInfo!!.updateUrl.startsWith("https://")) {
+                        if (updateInfo!!.updateUrl.isNotBlank()) {
                             Button(
                                 onClick = {
                                     try {
@@ -252,18 +290,18 @@ fun AppUpdateScreen() {
                             ) {
                                 Text(
                                     if (isArabic) {
-                                        "تحديث التطبيق"
+                                        "عرض التحديث"
                                     } else {
-                                        "Update app"
+                                        "View update"
                                     }
                                 )
                             }
                         } else {
                             Text(
                                 text = if (isArabic) {
-                                    "الإصدار الجديد متاح، لكن رابط التحديث لم يُضف بعد."
+                                    "يتوفر إصدار أحدث، لكن رابط التنزيل غير متاح حاليًا."
                                 } else {
-                                    "A new version is available, but its update link hasn't been added yet."
+                                    "A newer version is available, but its download link is not available yet."
                                 }
                             )
                         }
@@ -272,9 +310,9 @@ fun AppUpdateScreen() {
                     updateInfo != null -> {
                         Text(
                             text = if (isArabic) {
-                                "أنت تستخدم أحدث إصدار متاح."
+                                "أنت تستخدم أحدث إصدار متاح لهذه القناة."
                             } else {
-                                "You're using the latest available version."
+                                "You're using the latest available version for this channel."
                             },
                             fontWeight = FontWeight.Medium
                         )
@@ -296,6 +334,18 @@ fun AppUpdateScreen() {
                 }
             )
         }
+    }
+}
+
+private fun channelDisplayName(
+    channel: String,
+    isArabic: Boolean
+): String {
+    return when (channel) {
+        "github" -> if (isArabic) "GitHub" else "GitHub"
+        "google_play" -> if (isArabic) "Google Play" else "Google Play"
+        "other_store" -> if (isArabic) "متجر آخر" else "Other store"
+        else -> if (isArabic) "غير معروف" else "Unknown"
     }
 }
 
