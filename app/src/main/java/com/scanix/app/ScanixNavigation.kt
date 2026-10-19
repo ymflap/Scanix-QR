@@ -181,14 +181,7 @@ fun ScanixNavigation() {
                                 stringResource(R.string.nav_support)
 
                             ScanixPage.UPDATE.name ->
-                                if (
-                                    context.resources.configuration
-                                        .locales[0].language == "ar"
-                                ) {
-                                    "تحديث التطبيق"
-                                } else {
-                                    "App update"
-                                }
+                                stringResource(R.string.nav_update)
 
                             else -> ""
                         },
@@ -220,6 +213,9 @@ fun ScanixNavigation() {
                         },
                         onOpenSupport = {
                             currentPage = ScanixPage.SUPPORT.name
+                        },
+                        onOpenUpdate = {
+                            currentPage = ScanixPage.UPDATE.name
                         }
                     )
 
