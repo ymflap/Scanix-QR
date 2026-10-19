@@ -13,7 +13,7 @@ require(
     scanixUpdateChannel in setOf(
         "github",
         "google_play",
-        "other_store"
+        "uptodown"
     )
 ) {
     "Invalid scanixUpdateChannel: $scanixUpdateChannel"
