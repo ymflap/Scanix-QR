@@ -180,7 +180,6 @@
     <string name="update_not_available">You have the latest version</string>
     <string name="update_download">Download update</string>
     <string name="update_checking">Checking for updates…</string>
-    <string name="update_error">Couldn't check for updates. Check your internet connection and try again.</string>
 
     <!-- Common actions -->
     <string name="action_back">Back</string>
