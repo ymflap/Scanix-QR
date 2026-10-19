@@ -39,7 +39,8 @@ private enum class ScanixPage {
     LANGUAGE,
     PRIVACY,
     ABOUT,
-    SUPPORT
+    SUPPORT,
+    UPDATE
 }
 
 @Composable
@@ -62,7 +63,8 @@ fun ScanixNavigation() {
         ScanixPage.LANGUAGE.name,
         ScanixPage.PRIVACY.name,
         ScanixPage.ABOUT.name,
-        ScanixPage.SUPPORT.name
+        ScanixPage.SUPPORT.name,
+        ScanixPage.UPDATE.name
     )
 
     fun returnToSettings() {
@@ -178,6 +180,16 @@ fun ScanixNavigation() {
                             ScanixPage.SUPPORT.name ->
                                 stringResource(R.string.nav_support)
 
+                            ScanixPage.UPDATE.name ->
+                                if (
+                                    context.resources.configuration
+                                        .locales[0].language == "ar"
+                                ) {
+                                    "تحديث التطبيق"
+                                } else {
+                                    "App update"
+                                }
+
                             else -> ""
                         },
                         style = MaterialTheme.typography.titleLarge,
@@ -231,6 +243,8 @@ fun ScanixNavigation() {
                     ScanixPage.ABOUT.name -> AboutScreen()
 
                     ScanixPage.SUPPORT.name -> SupportScreen()
+
+                    ScanixPage.UPDATE.name -> AppUpdateScreen()
                 }
             }
         }
