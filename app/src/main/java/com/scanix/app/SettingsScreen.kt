@@ -1,7 +1,10 @@
+
 package com.scanix.app
 
 import android.content.Context
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -134,6 +137,7 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(
                 horizontal = 20.dp,
                 vertical = 16.dp
@@ -236,7 +240,7 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         SettingsCard(
             title = stringResource(R.string.settings_language)
         ) {
@@ -248,7 +252,7 @@ fun SettingsScreen(
                 onClick = onOpenLanguage
             )
         }
-
+        
         SettingsCard(
             title = stringResource(R.string.settings_app_pages)
         ) {
