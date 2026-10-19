@@ -108,7 +108,8 @@ fun SettingsScreen(
     onOpenLanguage: () -> Unit = {},
     onOpenPrivacyPolicy: () -> Unit = {},
     onOpenAbout: () -> Unit = {},
-    onOpenSupport: () -> Unit = {}
+    onOpenSupport: () -> Unit = {},
+    onOpenUpdate: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -235,9 +236,9 @@ fun SettingsScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-
+        
         SettingsCard(
-            title = stringResource(R.string.settings_app_pages)
+            title = stringResource(R.string.settings_language)
         ) {
             SettingsDestinationCard(
                 title = stringResource(R.string.settings_language),
@@ -246,7 +247,11 @@ fun SettingsScreen(
                 ),
                 onClick = onOpenLanguage
             )
+        }
 
+        SettingsCard(
+            title = stringResource(R.string.settings_app_pages)
+        ) {
             SettingsDestinationCard(
                 title = stringResource(R.string.settings_privacy),
                 description = stringResource(
@@ -269,6 +274,18 @@ fun SettingsScreen(
                     R.string.settings_support_description
                 ),
                 onClick = onOpenSupport
+            )
+        }
+
+        SettingsCard(
+            title = stringResource(R.string.settings_update)
+        ) {
+            SettingsDestinationCard(
+                title = stringResource(R.string.settings_update),
+                description = stringResource(
+                    R.string.settings_update_description
+                ),
+                onClick = onOpenUpdate
             )
         }
     }
