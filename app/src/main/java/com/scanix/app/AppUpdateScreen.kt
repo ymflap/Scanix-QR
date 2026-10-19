@@ -342,9 +342,9 @@ private fun channelDisplayName(
     isArabic: Boolean
 ): String {
     return when (channel) {
-        "github" -> if (isArabic) "GitHub" else "GitHub"
-        "google_play" -> if (isArabic) "Google Play" else "Google Play"
-        "other_store" -> if (isArabic) "متجر آخر" else "Other store"
+        "github" -> "GitHub"
+        "google_play" -> "Google Play"
+        "uptodown" -> "Uptodown"
         else -> if (isArabic) "غير معروف" else "Unknown"
     }
 }
