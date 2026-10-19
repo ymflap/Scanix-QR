@@ -4,6 +4,21 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+val scanixUpdateChannel = providers
+    .gradleProperty("scanixUpdateChannel")
+    .orElse("github")
+    .get()
+
+require(
+    scanixUpdateChannel in setOf(
+        "github",
+        "google_play",
+        "other_store"
+    )
+) {
+    "Invalid scanixUpdateChannel: $scanixUpdateChannel"
+}
+
 android {
     namespace = "com.scanix.app"
     compileSdk = 36
@@ -14,6 +29,12 @@ android {
         targetSdk = 36
         versionCode = 10306
         versionName = "1.0.3.6"
+
+        buildConfigField(
+            "String",
+            "UPDATE_CHANNEL",
+            "\"$scanixUpdateChannel\""
+        )
     }
 
     signingConfigs {
@@ -24,7 +45,8 @@ android {
             )
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyPassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS") ?: "scanix-release"
+            keyAlias = System.getenv("KEY_ALIAS")
+                ?: "scanix-release"
             storeType = "PKCS12"
         }
     }
@@ -37,6 +59,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     compileOptions {
