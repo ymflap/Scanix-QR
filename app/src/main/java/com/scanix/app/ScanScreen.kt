@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -52,6 +53,8 @@ import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
 fun ScanScreen(
@@ -87,6 +90,7 @@ fun ScanScreen(
     val knownResults = remember { mutableSetOf<String>() }
     val savedHistoryKeys = remember { mutableSetOf<String>() }
     val scanner = remember { BarcodeScanning.getClient() }
+    val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
     val previewView = remember {
         PreviewView(context).apply {
@@ -285,14 +289,23 @@ fun ScanScreen(
                             )
                             .build()
 
-                        analysis.setAnalyzer(
-                            ContextCompat.getMainExecutor(context)
-                        ) { imageProxy ->
-                            val mediaImage = imageProxy.image
+                        analysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                            val imageClosed = AtomicBoolean(false)
 
-                            if (mediaImage == null) {
-                                imageProxy.close()
-                            } else {
+                            fun closeImageProxy() {
+                                if (imageClosed.compareAndSet(false, true)) {
+                                    imageProxy.close()
+                                }
+                            }
+
+                            try {
+                                val mediaImage = imageProxy.image
+
+                                if (mediaImage == null) {
+                                    closeImageProxy()
+                                    return@setAnalyzer
+                                }
+
                                 val image = InputImage.fromMediaImage(
                                     mediaImage,
                                     imageProxy.imageInfo.rotationDegrees
@@ -300,8 +313,7 @@ fun ScanScreen(
 
                                 scanner.process(image)
                                     .addOnSuccessListener { barcodes ->
-                                        val results =
-                                            convertBarcodes(barcodes)
+                                        val results = convertBarcodes(barcodes)
 
                                         if (results.isNotEmpty()) {
                                             handleDecodedResults(results)
@@ -313,8 +325,13 @@ fun ScanScreen(
                                         )
                                     }
                                     .addOnCompleteListener {
-                                        imageProxy.close()
+                                        closeImageProxy()
                                     }
+                            } catch (_: Exception) {
+                                closeImageProxy()
+                                errorMessage = context.getString(
+                                    R.string.scan_decode_error
+                                )
                             }
                         }
 
@@ -355,9 +372,11 @@ fun ScanScreen(
             }
         }
     }
-
-    DisposableEffect(scanner) {
-        onDispose { scanner.close() }
+        DisposableEffect(scanner, cameraExecutor) {
+        onDispose {
+            scanner.close()
+            cameraExecutor.shutdown()
+        }
     }
 
     Column(
@@ -513,7 +532,11 @@ fun ScanScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "${decodedResults.size} نتيجة",
+                text = pluralStringResource(
+                    R.plurals.scan_result_count,
+                    decodedResults.size,
+                    decodedResults.size
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
