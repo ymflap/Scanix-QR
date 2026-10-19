@@ -16,16 +16,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -36,6 +27,7 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,14 +36,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -63,8 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 
 @Composable
@@ -90,25 +76,55 @@ fun ScanScreen(
     var camera by remember { mutableStateOf<Camera?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    // حالة نافذة تحذير الرابط.
+    var linkSafetyReport by remember {
+        mutableStateOf<LinkSafetyReport?>(null)
+    }
+
     val decodedResults = remember {
         mutableStateListOf<DecodedBarcode>()
     }
-
-    val knownResults = remember {
-        mutableSetOf<String>()
-    }
-
-    val savedHistoryKeys = remember {
-        mutableSetOf<String>()
-    }
-
-    val scanner = remember {
-        BarcodeScanning.getClient()
-    }
+    val knownResults = remember { mutableSetOf<String>() }
+    val savedHistoryKeys = remember { mutableSetOf<String>() }
+    val scanner = remember { BarcodeScanning.getClient() }
 
     val previewView = remember {
         PreviewView(context).apply {
             scaleType = PreviewView.ScaleType.FILL_CENTER
+        }
+    }
+
+    fun openCheckedUrl(url: String) {
+        try {
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            )
+        } catch (_: Exception) {
+            errorMessage = context.getString(
+                R.string.scan_open_link_failed
+            )
+        }
+    }
+
+    fun inspectAndOpenLink(rawUrl: String) {
+        val report = LinkSafetyChecker.inspect(rawUrl)
+
+        when {
+            report.riskLevel == LinkRiskLevel.BLOCKED -> {
+                linkSafetyReport = report
+            }
+
+            report.requiresConfirmation -> {
+                linkSafetyReport = report
+            }
+
+            !report.normalizedUrl.isNullOrBlank() -> {
+                openCheckedUrl(report.normalizedUrl)
+            }
+
+            else -> {
+                linkSafetyReport = report
+            }
         }
     }
 
@@ -130,7 +146,6 @@ fun ScanScreen(
 
     fun saveResultToHistory(result: DecodedBarcode) {
         val key = "${result.format}:${result.value}"
-
         if (!savedHistoryKeys.add(key)) return
 
         if (ScanixSettingsStore.isSaveHistoryEnabled(context)) {
@@ -146,8 +161,7 @@ fun ScanScreen(
         if (!ScanixSettingsStore.isVibrationEnabled(context)) return
 
         try {
-            val vibrator =
-                context.getSystemService(Vibrator::class.java)
+            val vibrator = context.getSystemService(Vibrator::class.java)
 
             if (vibrator != null && vibrator.hasVibrator()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -203,9 +217,7 @@ fun ScanScreen(
             saveResultToHistory(result)
         }
 
-        if (foundNewResult) {
-            vibrateIfEnabled()
-        }
+        if (foundNewResult) vibrateIfEnabled()
     }
 
     val imagePickerLauncher =
@@ -307,7 +319,6 @@ fun ScanScreen(
                         }
 
                         cameraProvider.unbindAll()
-
                         camera = cameraProvider.bindToLifecycle(
                             lifecycleOwner,
                             CameraSelector.DEFAULT_BACK_CAMERA,
@@ -328,7 +339,6 @@ fun ScanScreen(
 
         onDispose {
             camera = null
-            
             provider?.unbindAll()
         }
     }
@@ -347,9 +357,7 @@ fun ScanScreen(
     }
 
     DisposableEffect(scanner) {
-        onDispose {
-            scanner.close()
-        }
+        onDispose { scanner.close() }
     }
 
     Column(
@@ -524,9 +532,7 @@ fun ScanScreen(
                             MaterialTheme.colorScheme.surfaceVariant
                     )
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = result.formatName,
                             style = MaterialTheme.typography.labelMedium,
@@ -555,8 +561,7 @@ fun ScanScreen(
                                 }
                             ) {
                                 Icon(
-                                    imageVector =
-                                        Icons.Outlined.ContentCopy,
+                                    imageVector = Icons.Outlined.ContentCopy,
                                     contentDescription = stringResource(
                                         R.string.scan_result_copy
                                     )
@@ -595,25 +600,19 @@ fun ScanScreen(
 
                             val isWebLink =
                                 result.value.startsWith(
-                                    "https://",
-                                    true
+                                    "https://", true
                                 ) ||
                                 result.value.startsWith(
-                                    "http://",
-                                    true
+                                    "http://", true
                                 ) ||
-                                result.value.startsWith(
-                                    "www.",
-                                    true
-                                )
+                                result.value.startsWith("www.", true)
 
                             if (isWebLink) {
                                 IconButton(
                                     onClick = {
                                         val url =
                                             if (result.value.startsWith(
-                                                    "www.",
-                                                    true
+                                                    "www.", true
                                                 )
                                             ) {
                                                 "https://${result.value}"
@@ -621,18 +620,9 @@ fun ScanScreen(
                                                 result.value
                                             }
 
-                                        try {
-                                            context.startActivity(
-                                                Intent(
-                                                    Intent.ACTION_VIEW,
-                                                    Uri.parse(url)
-                                                )
-                                            )
-                                        } catch (_: Exception) {
-                                            errorMessage = context.getString(
-                                                R.string.scan_open_link_failed
-                                            )
-                                        }
+                                        // لا يُفتح الرابط مباشرة.
+                                        // يُفحص أولًا باستخدام LinkSafetyChecker.
+                                        inspectAndOpenLink(url)
                                     }
                                 ) {
                                     Icon(
@@ -657,6 +647,74 @@ fun ScanScreen(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
+        )
+    }
+
+    // نافذة تأكيد أمان الرابط.
+    val report = linkSafetyReport
+
+    if (report != null) {
+        val isBlocked = report.riskLevel == LinkRiskLevel.BLOCKED
+
+        AlertDialog(
+            onDismissRequest = {
+                linkSafetyReport = null
+            },
+            title = {
+                Text(
+                    text = stringResource(
+                        if (isBlocked) {
+                            R.string.link_warning_title
+                        } else {
+                            R.string.link_warning_title
+                        }
+                    )
+                )
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = stringResource(
+                            if (isBlocked) {
+                                R.string.link_warning_message
+                            } else {
+                                R.string.link_warning_message
+                            }
+                        )
+                    )
+
+                    report.warnings.forEach { warningRes ->
+                        Text(
+                            text = context.getString(warningRes),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                if (!isBlocked && !report.normalizedUrl.isNullOrBlank()) {
+                    TextButton(
+                        onClick = {
+                            val url = report.normalizedUrl
+                            linkSafetyReport = null
+                            openCheckedUrl(url)
+                        }
+                    ) {
+                        Text(stringResource(R.string.link_open_anyway))
+                    }
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        linkSafetyReport = null
+                    }
+                ) {
+                    Text(stringResource(R.string.link_cancel))
+                }
+            }
         )
     }
 }
