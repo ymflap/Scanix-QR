@@ -16,6 +16,25 @@ android {
         versionName = "1.0.3.6"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(
+                System.getenv("KEYSTORE_PATH")
+                    ?: "scanix-release.keystore"
+            )
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyPassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS") ?: "scanix-release"
+            storeType = "PKCS12"
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
     buildFeatures {
         compose = true
     }
