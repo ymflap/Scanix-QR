@@ -1,10 +1,7 @@
-name: Scanix Android Build
+name: Scanix Android Release Build
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
   workflow_dispatch:
@@ -14,8 +11,15 @@ permissions:
 
 jobs:
   build:
-    name: Build Scanix APK
+    name: Build Signed Scanix Release APK
     runs-on: ubuntu-latest
+
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEYSTORE_ENCRYPTION_PASSWORD: ${{ secrets.KEYSTORE_ENCRYPTION_PASSWORD }}
+      KEYSTORE_ENCRYPTED_BASE64: ${{ secrets.KEYSTORE_ENCRYPTED_BASE64 }}
+      KEY_ALIAS: scanix-release
+      KEYSTORE_PATH: ${{ github.workspace }}/scanix-release.keystore
 
     steps:
       - name: Checkout repository
@@ -38,13 +42,56 @@ jobs:
         with:
           gradle-version: "8.14"
 
-      - name: Build debug APK
-        run: gradle --no-daemon assembleDebug
+      - name: Restore and decrypt release keystore
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      - name: Upload APK
+          if [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "Missing KEYSTORE_PASSWORD secret."
+            exit 1
+          fi
+
+          if [ -z "$KEYSTORE_ENCRYPTION_PASSWORD" ]; then
+            echo "Missing KEYSTORE_ENCRYPTION_PASSWORD secret."
+            exit 1
+          fi
+
+          if [ -z "$KEYSTORE_ENCRYPTED_BASE64" ]; then
+            echo "Missing KEYSTORE_ENCRYPTED_BASE64 secret."
+            exit 1
+          fi
+
+          printf '%s' "$KEYSTORE_ENCRYPTED_BASE64" \
+            | base64 --decode > scanix-release.keystore.enc
+
+          openssl enc -d -aes-256-cbc \
+            -pbkdf2 \
+            -iter 600000 \
+            -in scanix-release.keystore.enc \
+            -out "$KEYSTORE_PATH" \
+            -pass env:KEYSTORE_ENCRYPTION_PASSWORD
+
+          keytool -list \
+            -keystore "$KEYSTORE_PATH" \
+            -storetype PKCS12 \
+            -storepass "$KEYSTORE_PASSWORD" \
+            -alias "$KEY_ALIAS"
+
+      - name: Build signed release APK
+        run: gradle --no-daemon assembleRelease
+
+      - name: Upload signed release APK only
         uses: actions/upload-artifact@v4
         with:
-          name: Scanix-debug-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Scanix-QR-Release-APK
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
+          retention-days: 7
+
+      - name: Remove temporary signing files
+        if: always()
+        run: |
+          rm -f scanix-release.keystore
+          rm -f scanix-release.keystore.enc
           
