@@ -81,6 +81,15 @@
     <string name="link_warning_message">This link has unusual characteristics. Check the destination before continuing.</string>
     <string name="link_open_anyway">Open anyway</string>
     <string name="link_cancel">Cancel</string>
+    <string name="link_blocked_empty">The link is empty and cannot be opened.</string>
+    <string name="link_blocked_invalid_chars">The link contains invalid or unsafe characters.</string>
+    <string name="link_blocked_unsupported_type">This link type is not supported.</string>
+    <string name="link_blocked_invalid_destination">The link destination is invalid.</string>
+    <string name="link_blocked_invalid_domain">The link domain is invalid.</string>
+    <string name="link_warning_ip">This link uses an IP address instead of a domain name. Verify the destination before continuing.</string>
+    <string name="link_warning_encoded_domain">This link contains an encoded domain name. Verify the destination carefully.</string>
+    <string name="link_warning_suspicious_terms">This link contains terms that may be associated with suspicious websites.</string>
+    <string name="link_warning_redirect">This link may redirect you to another destination. Verify the final website before continuing.</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
