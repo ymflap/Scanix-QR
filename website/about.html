@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8fafc">
+  <meta name="description" content="تعرف على تطبيق Scanix QR وميزاته وطرق التواصل مع المطور.">
+  <title>حول التطبيق | Scanix QR</title>
+  <script>
+    (function () {
+      var language = navigator.language ||
+        (navigator.languages && navigator.languages[0]) || "";
+      var prefersArabic = /^ar(?:-|$)/i.test(language);
+
+      if (!prefersArabic) {
+        window.location.replace(
+          "about-en.html" + window.location.search + window.location.hash
+        );
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .container {
+      width: min(100% - 32px, 820px);
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(18px, 5vw, 28px);
+    }
+
+    .app-name {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .version {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 0 0 10px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      padding-right: 22px;
+      margin: 8px 0 0;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    .link {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(100% - 20px, 820px);
+        padding-top: 20px;
+      }
+
+      .card {
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Scanix QR</div>
+      <h1>حول التطبيق</h1>
+      <p class="subtitle">
+        معلومات عن التطبيق وميزاته والمطور.
+      </p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2 class="app-name">Scanix QR</h2>
+        <p class="version">الإصدار 1.0.3.6</p>
+        <p>
+          Scanix QR هو تطبيق أندرويد لقراءة رموز QR والباركود
+          وإنشاء رموز QR جديدة. يتيح لك قراءة الرموز باستخدام
+          الكاميرا أو من الصور الموجودة على جهازك، والتعامل مع
+          النتائج مباشرة من داخل التطبيق.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>ميزات التطبيق</h2>
+        <ul>
+          <li>مسح رموز QR والباركود باستخدام كاميرا الهاتف.</li>
+          <li>تشغيل المصباح أثناء المسح عند الحاجة، إذا كان مدعومًا.</li>
+          <li>قراءة الرموز من الصور التي تختارها من جهازك.</li>
+          <li>عرض نتائج المسح ونسخها أو مشاركتها.</li>
+          <li>فحص الروابط قبل فتحها وعرض تحذيرات لبعض الروابط المشبوهة.</li>
+          <li>إنشاء رموز QR للنصوص والروابط وبيانات الاتصال وشبكات Wi-Fi.</li>
+          <li>معاينة رموز QR التي تنشئها وحفظ صورها أو مشاركتها.</li>
+          <li>حفظ نتائج المسح في سجل محلي والبحث فيه وحذف النتائج.</li>
+          <li>تخصيص المظهر واختيار العربية أو الإنجليزية من إعدادات التطبيق.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>الخصوصية</h2>
+        <p>
+          صُمم التطبيق لمعالجة الرموز على جهازك وحفظ نتائج السجل
+          محليًا عند تفعيل خيار الحفظ. لا يتطلب استخدامه إنشاء حساب.
+          عند نسخ النتائج أو مشاركتها أو فتح رابط، قد تنتقل المعلومات
+          إلى التطبيق أو الموقع الذي تختاره.
+        </p>
+        <p>
+          لمعرفة مزيد من التفاصيل حول الأذونات والتخزين والاتصال
+          بالإنترنت، يرجى مراجعة سياسة الخصوصية.
+        </p>
+        <a class="link" href="privacy.html">قراءة سياسة الخصوصية</a>
+      </section>
+
+      <section class="card">
+        <h2>المطور</h2>
+        <p>Mohammed Nasser</p>
+      </section>
+
+      <section class="card">
+        <h2>التواصل والدعم</h2>
+        <p>
+          إذا واجهت مشكلة في التطبيق أو كانت لديك أسئلة أو اقتراحات،
+          يمكنك التواصل مع المطور عبر البريد الإلكتروني.
+        </p>
+        <p>
+          <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Support">
+            dhmlpy@gmail.com
+          </a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      Scanix QR · حول التطبيق
+    </footer>
+  </div>
+</body>
+</html>
