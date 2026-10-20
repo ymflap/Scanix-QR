@@ -6,6 +6,19 @@
   <meta name="theme-color" content="#f8fafc">
   <meta name="description" content="سياسة الخصوصية لتطبيق Scanix QR، بما في ذلك الكاميرا والصور ونتائج المسح والتخزين المحلي والاتصال بالإنترنت.">
   <title>سياسة الخصوصية | Scanix QR</title>
+  <script>
+    (function () {
+      var language = navigator.language ||
+        (navigator.languages && navigator.languages[0]) || "";
+      var prefersArabic = /^ar(?:-|$)/i.test(language);
+
+      if (!prefersArabic) {
+        window.location.replace(
+          "privacy-en.html" + window.location.search + window.location.hash
+        );
+      }
+    })();
+  </script>
   <style>
     :root {
       color-scheme: light;
@@ -285,4 +298,3 @@
   </div>
 </body>
 </html>
-
