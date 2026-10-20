@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8fafc">
+  <meta name="description" content="Privacy Policy for Scanix QR, covering camera and image access, scan results, local storage, and internet connectivity.">
+  <title>Privacy Policy | Scanix QR</title>
+  <script>
+    (function () {
+      var languages = navigator.languages || [navigator.language || ""];
+      var prefersArabic = languages.some(function (language) {
+        return /^ar(?:-|$)/i.test(language);
+      });
+      if (prefersArabic) {
+        window.location.replace("privacy.html" + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .container {
+      width: min(100% - 32px, 820px);
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      line-height: 1.4;
+    }
+
+    .updated {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(18px, 5vw, 32px);
+    }
+
+    section + section {
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+      padding-top: 20px;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 0 0 8px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+      margin: 8px 0 0;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 20px;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(100% - 20px, 820px);
+        padding-top: 20px;
+      }
+
+      main {
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Scanix QR</div>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: October 21, 2026</p>
+    </header>
+
+    <main>
+      <section>
+        <h2>1. Introduction</h2>
+        <p>
+          This policy explains how Scanix QR handles information when
+          you use its QR code and barcode scanning features. It describes
+          the permissions used, how scan results are stored, and when
+          information may be transferred to other parties.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Camera and Images</h2>
+        <p>
+          The app requests camera permission when you use live scanning.
+          You can also select an image from your device to read a code
+          contained in it. The camera and selected image are used to
+          perform the code-reading operation.
+        </p>
+        <p>
+          Granting camera permission does not mean that the app requires
+          you to create an account. You can manage camera permission
+          through Android settings.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Scan Results and Local Storage</h2>
+        <p>
+          The app can save scan results in a local history within the
+          app's storage on your device. Saving depends on the history
+          setting, and you can review and delete saved results inside
+          the app.
+        </p>
+        <p>
+          Under the current storage implementation, the history keeps
+          up to 200 results. Using the app does not require a user account.
+        </p>
+        <p>
+          Previously saved results may remain on your device until you
+          delete them, clear the app's data, or uninstall the app,
+          subject to Android's behavior.
+        </p>
+      </section>
+
+      <section>
+        <h2>4. Internet Connection and Updates</h2>
+        <p>
+          The app uses an internet connection to check for available
+          update information.
+        </p>
+        <p>
+          When an update-check request is made, the hosting service may
+          receive ordinary connection data needed to process the request
+          and return a response, in accordance with its own policies.
+        </p>
+        <p>
+          The internet connection used to check for updates does not,
+          by itself, mean that scan history is sent to a server. Based
+          on the code paths reviewed, no dedicated server for receiving
+          scan results was identified.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. Copying, Sharing, and Opening Links</h2>
+        <p>
+          You can copy scan results, share them, or open links contained
+          in them. When you choose one of these actions, information may
+          be transferred to another app or website, depending on your choice.
+        </p>
+        <p>
+          Information you provide to other apps and websites is subject
+          to the privacy policies and terms of the parties operating them.
+          We recommend checking a link's destination before opening it
+          and avoiding sharing sensitive information with untrusted parties.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. Third-Party Services and Technical Data</h2>
+        <p>
+          The app uses libraries to process QR codes and barcodes and
+          operates within Android. Technical or diagnostic data collected
+          by the operating system or any third-party service used may be
+          subject to that service provider's policies.
+        </p>
+        <p>
+          We do not claim that all system components and third-party
+          services refrain from collecting technical data; their behavior
+          and policies are independent.
+        </p>
+      </section>
+
+      <section>
+        <h2>7. Information Security</h2>
+        <p>
+          History results are stored in the app's private storage area.
+          We recommend keeping your device secure, using a screen lock,
+          and deleting results you no longer need.
+        </p>
+        <p>
+          No electronic method can guarantee absolute security in all
+          circumstances.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Children's Privacy</h2>
+        <p>
+          Scanix QR is a code-scanning tool and was not designed to
+          collect children's personal information through an app-specific
+          account system.
+        </p>
+      </section>
+
+      <section>
+        <h2>9. Changes to This Privacy Policy</h2>
+        <p>
+          We may update this policy if the app's features or information
+          handling practices change. We will update the last-updated date
+          when appropriate changes are made to this page.
+        </p>
+      </section>
+
+      <section>
+        <h2>10. Contact</h2>
+        <p>
+          If you have questions about this policy or how Scanix QR handles
+          information, you can contact the developer at the following
+          email address:
+        </p>
+        <p>
+          <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Privacy">
+            dhmlpy@gmail.com
+          </a>
+        </p>
+      </section>
+
+      <div class="notice">
+        <strong>Note:</strong>
+        This policy describes the app behavior that has been reviewed.
+        If new features that handle data or connect to other services are
+        added later, this policy should be reviewed and updated to match
+        the app's actual behavior.
+      </div>
+    </main>
+
+    <footer>
+      Scanix QR · Privacy Policy
+    </footer>
+  </div>
+</body>
+  </html>
+  
