@@ -8,12 +8,14 @@
   <title>Privacy Policy | Scanix QR</title>
   <script>
     (function () {
-      var languages = navigator.languages || [navigator.language || ""];
-      var prefersArabic = languages.some(function (language) {
-        return /^ar(?:-|$)/i.test(language);
-      });
+      var language = navigator.language ||
+        (navigator.languages && navigator.languages[0]) || "";
+      var prefersArabic = /^ar(?:-|$)/i.test(language);
+
       if (prefersArabic) {
-        window.location.replace("privacy.html" + window.location.search + window.location.hash);
+        window.location.replace(
+          "privacy.html" + window.location.search + window.location.hash
+        );
       }
     })();
   </script>
@@ -301,5 +303,4 @@
     </footer>
   </div>
 </body>
-  </html>
-  
+</html>
