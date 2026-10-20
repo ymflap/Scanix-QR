@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8fafc">
+  <meta name="description" content="Learn about Scanix QR, its features, and how to contact the developer.">
+  <title>About the App | Scanix QR</title>
+  <script>
+    (function () {
+      var language = navigator.language ||
+        (navigator.languages && navigator.languages[0]) || "";
+      var prefersArabic = /^ar(?:-|$)/i.test(language);
+
+      if (prefersArabic) {
+        window.location.replace(
+          "about.html" + window.location.search + window.location.hash
+        );
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .container {
+      width: min(100% - 32px, 820px);
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(18px, 5vw, 28px);
+    }
+
+    .app-name {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .version {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 0 0 10px;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+      margin: 8px 0 0;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    .link {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(100% - 20px, 820px);
+        padding-top: 20px;
+      }
+
+      .card {
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Scanix QR</div>
+      <h1>About the App</h1>
+      <p class="subtitle">
+        Information about the app, its features, and its developer.
+      </p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2 class="app-name">Scanix QR</h2>
+        <p class="version">Version 1.0.3.6</p>
+        <p>
+          Scanix QR is an Android app for scanning QR codes and barcodes
+          and creating new QR codes. It lets you scan codes using your
+          camera or images stored on your device, and work with the
+          results directly within the app.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>App Features</h2>
+        <ul>
+          <li>Scan QR codes and barcodes using your phone's camera.</li>
+          <li>Use the flashlight while scanning when needed and supported.</li>
+          <li>Read codes from images you select on your device.</li>
+          <li>View, copy, and share scan results.</li>
+          <li>Check links before opening them and display warnings for some suspicious links.</li>
+          <li>Create QR codes for text, links, contact details, and Wi-Fi networks.</li>
+          <li>Preview created QR codes and save or share their images.</li>
+          <li>Save scan results in local history, search the history, and delete results.</li>
+          <li>Customize the appearance and choose Arabic or English in the app settings.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Privacy</h2>
+        <p>
+          The app is designed to process codes on your device and store
+          scan history locally when saving is enabled. An account is not
+          required. When you copy or share results, or open a link,
+          information may be transferred to the app or website you choose.
+        </p>
+        <p>
+          For more details about permissions, storage, and internet
+          connectivity, please review the Privacy Policy.
+        </p>
+        <a class="link" href="privacy-en.html">Read the Privacy Policy</a>
+      </section>
+
+      <section class="card">
+        <h2>Developer</h2>
+        <p>Mohammed Nasser</p>
+      </section>
+
+      <section class="card">
+        <h2>Contact and Support</h2>
+        <p>
+          If you encounter a problem with the app or have questions
+          or suggestions, you can contact the developer by email.
+        </p>
+        <p>
+          <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Support">
+            dhmlpy@gmail.com
+          </a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      Scanix QR · About the App
+    </footer>
+  </div>
+</body>
+  </html>
