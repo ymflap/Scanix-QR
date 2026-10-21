@@ -1,4 +1,3 @@
-
 package com.scanix.app
 
 import android.content.Intent
@@ -40,6 +39,8 @@ private enum class ScanixPage {
     HISTORY,
     SETTINGS,
     LANGUAGE,
+    APPEARANCE,
+    SCAN_HISTORY_PRIVACY,
     PRIVACY,
     ABOUT,
     SUPPORT,
@@ -70,6 +71,8 @@ fun ScanixNavigation() {
 
     val isSubPage = currentPage in setOf(
         ScanixPage.LANGUAGE.name,
+        ScanixPage.APPEARANCE.name,
+        ScanixPage.SCAN_HISTORY_PRIVACY.name,
         ScanixPage.PRIVACY.name,
         ScanixPage.ABOUT.name,
         ScanixPage.SUPPORT.name,
@@ -180,6 +183,12 @@ fun ScanixNavigation() {
                             ScanixPage.LANGUAGE.name ->
                                 stringResource(R.string.nav_language)
 
+                            ScanixPage.APPEARANCE.name ->
+                                stringResource(R.string.settings_appearance)
+
+                            ScanixPage.SCAN_HISTORY_PRIVACY.name ->
+                                stringResource(R.string.settings_scan)
+
                             ScanixPage.PRIVACY.name ->
                                 stringResource(R.string.nav_privacy)
 
@@ -211,6 +220,13 @@ fun ScanixNavigation() {
                     ScanixPage.HISTORY.name -> HistoryScreen()
 
                     ScanixPage.SETTINGS.name -> SettingsScreen(
+                        onOpenAppearance = {
+                            currentPage = ScanixPage.APPEARANCE.name
+                        },
+                        onOpenScanHistoryPrivacy = {
+                            currentPage =
+                                ScanixPage.SCAN_HISTORY_PRIVACY.name
+                        },
                         onOpenLanguage = {
                             currentPage = ScanixPage.LANGUAGE.name
                         },
@@ -237,6 +253,12 @@ fun ScanixNavigation() {
                             currentPage = ScanixPage.UPDATE.name
                         }
                     )
+
+                    ScanixPage.APPEARANCE.name ->
+                        AppearanceSettingsScreen()
+
+                    ScanixPage.SCAN_HISTORY_PRIVACY.name ->
+                        ScanHistoryPrivacySettingsScreen()
 
                     ScanixPage.LANGUAGE.name -> {
                         LanguageSettingsScreen(
