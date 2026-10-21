@@ -176,11 +176,11 @@
     <!-- App updates -->
     <string name="update_title">App updates</string>
     <string name="update_current_version">Installed version</string>
-    <string name="update_error">Couldn't check for updates. Check your internet connection and try again.</string>
-    <string name="update_latest_version">You're using the latest version.</string>
+    <string name="update_error">Unable to check for updates. Check your internet connection and try again.</string>
+    <string name="update_latest_version">You are using the latest version.</string>
     <string name="update_check">Check for updates</string>
     <string name="update_available">A newer version is available</string>
-    <string name="update_not_available">You're using the latest version.</string>
+    <string name="update_not_available">You are using the latest version.</string>
     <string name="update_download">View update</string>
     <string name="update_checking">Connecting to the internet and checking for updates...</string>
 
@@ -191,4 +191,3 @@
     <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
-        
