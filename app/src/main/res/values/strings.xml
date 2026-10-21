@@ -99,10 +99,12 @@
     <string name="settings_system">Follow system settings</string>
     <string name="settings_light">Light</string>
     <string name="settings_dark">Dark</string>
+    <string name="settings_controls">Controls</string>
+    <string name="settings_controls_description">Scanning and saved results settings</string>
     <string name="settings_scan">Scanning</string>
     <string name="settings_vibration">Vibrate when a code is detected</string>
     <string name="settings_vibration_description">Vibrate when a code is scanned</string>
-    <string name="settings_history_privacy">History and privacy</string>
+    <string name="settings_history_privacy">Save results</string>
     <string name="settings_save_results">Save scan results</string>
     <string name="settings_save_results_description">Keep results on this device</string>
     <string name="settings_local_storage_note">Results are stored locally on your device and are not sent to an external server.</string>
@@ -174,11 +176,11 @@
     <!-- App updates -->
     <string name="update_title">App updates</string>
     <string name="update_current_version">Installed version</string>
-    <string name="update_error">Couldn\'t check for updates. Check your internet connection and try again.</string>
-    <string name="update_latest_version">You\'re using the latest version.</string>
+    <string name="update_error">Couldn't check for updates. Check your internet connection and try again.</string>
+    <string name="update_latest_version">You're using the latest version.</string>
     <string name="update_check">Check for updates</string>
     <string name="update_available">A newer version is available</string>
-    <string name="update_not_available">You\'re using the latest version.</string>
+    <string name="update_not_available">You're using the latest version.</string>
     <string name="update_download">View update</string>
     <string name="update_checking">Connecting to the internet and checking for updates...</string>
 
@@ -189,3 +191,4 @@
     <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
+        
