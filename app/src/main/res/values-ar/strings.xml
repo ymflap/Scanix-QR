@@ -99,10 +99,12 @@
     <string name="settings_system">حسب إعدادات النظام</string>
     <string name="settings_light">فاتح</string>
     <string name="settings_dark">داكن</string>
+    <string name="settings_controls">التحكم</string>
+    <string name="settings_controls_description">إعدادات المسح والنتائج المحفوظة</string>
     <string name="settings_scan">المسح</string>
     <string name="settings_vibration">الاهتزاز عند اكتشاف رمز</string>
     <string name="settings_vibration_description">الاهتزاز عند قراءة رمز</string>
-    <string name="settings_history_privacy">السجل والخصوصية</string>
+    <string name="settings_history_privacy">حفظ النتائج</string>
     <string name="settings_save_results">حفظ نتائج المسح</string>
     <string name="settings_save_results_description">الاحتفاظ بالنتائج على هذا الجهاز</string>
     <string name="settings_local_storage_note">تُحفظ النتائج محليًا على جهازك ولا تُرسل إلى خادم خارجي.</string>
