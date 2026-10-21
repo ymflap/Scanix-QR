@@ -1,4 +1,3 @@
-
 package com.scanix.app
 
 import android.content.Context
@@ -68,80 +67,44 @@ object ScanixSettingsStore {
     }
 
     fun isVibrationEnabled(context: Context): Boolean {
-        return preferences(context).getBoolean(
-            KEY_VIBRATION,
-            true
-        )
+        return preferences(context).getBoolean(KEY_VIBRATION, true)
     }
 
-    fun setVibrationEnabled(
-        context: Context,
-        enabled: Boolean
-    ) {
+    fun setVibrationEnabled(context: Context, enabled: Boolean) {
         preferences(context).edit()
             .putBoolean(KEY_VIBRATION, enabled)
             .apply()
     }
 
     fun isSaveHistoryEnabled(context: Context): Boolean {
-        return preferences(context).getBoolean(
-            KEY_SAVE_HISTORY,
-            true
-        )
+        return preferences(context).getBoolean(KEY_SAVE_HISTORY, true)
     }
 
-    fun setSaveHistoryEnabled(
-        context: Context,
-        enabled: Boolean
-    ) {
+    fun setSaveHistoryEnabled(context: Context, enabled: Boolean) {
         preferences(context).edit()
             .putBoolean(KEY_SAVE_HISTORY, enabled)
             .apply()
     }
 
     private fun preferences(context: Context) =
-        context.getSharedPreferences(
-            PREFS_NAME,
-            Context.MODE_PRIVATE
-        )
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 }
 
 @Composable
 fun SettingsScreen(
+    onOpenAppearance: () -> Unit = {},
+    onOpenScanHistoryPrivacy: () -> Unit = {},
     onOpenLanguage: () -> Unit = {},
     onOpenPrivacyPolicy: () -> Unit = {},
     onOpenAbout: () -> Unit = {},
     onOpenSupport: () -> Unit = {},
     onOpenUpdate: () -> Unit = {}
 ) {
-    val context = LocalContext.current
-
-    var appearance by remember {
-        mutableStateOf(
-            ScanixSettingsStore.getAppearance(context)
-        )
-    }
-
-    var vibrationEnabled by remember {
-        mutableStateOf(
-            ScanixSettingsStore.isVibrationEnabled(context)
-        )
-    }
-
-    var saveHistoryEnabled by remember {
-        mutableStateOf(
-            ScanixSettingsStore.isSaveHistoryEnabled(context)
-        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(
-                horizontal = 20.dp,
-                vertical = 16.dp
-            ),
+            .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -156,18 +119,76 @@ fun SettingsScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
+        SettingsDestinationCard(
+            title = stringResource(R.string.settings_appearance),
+            description = stringResource(R.string.settings_appearance),
+            onClick = onOpenAppearance
+        )
+
+        SettingsDestinationCard(
+            title = stringResource(R.string.settings_scan),
+            description = stringResource(R.string.settings_history_privacy),
+            onClick = onOpenScanHistoryPrivacy
+        )
+
+        SettingsDestinationCard(
+            title = stringResource(R.string.settings_language),
+            description = stringResource(R.string.settings_language_description),
+            onClick = onOpenLanguage
+        )
+
         SettingsCard(
-            title = stringResource(R.string.settings_appearance)
+            title = stringResource(R.string.settings_app_pages)
         ) {
+            SettingsDestinationCard(
+                title = stringResource(R.string.settings_privacy),
+                description = stringResource(R.string.settings_privacy_description),
+                onClick = onOpenPrivacyPolicy
+            )
+
+            SettingsDestinationCard(
+                title = stringResource(R.string.settings_about),
+                description = stringResource(R.string.settings_about_description),
+                onClick = onOpenAbout
+            )
+
+            SettingsDestinationCard(
+                title = stringResource(R.string.settings_support),
+                description = stringResource(R.string.settings_support_description),
+                onClick = onOpenSupport
+            )
+        }
+
+        SettingsDestinationCard(
+            title = stringResource(R.string.settings_update),
+            description = stringResource(R.string.settings_update_description),
+            onClick = onOpenUpdate
+        )
+    }
+}
+
+@Composable
+fun AppearanceSettingsScreen() {
+    val context = LocalContext.current
+
+    var appearance by remember {
+        mutableStateOf(ScanixSettingsStore.getAppearance(context))
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        SettingsCard(title = stringResource(R.string.settings_appearance)) {
             AppearanceOption(
                 title = stringResource(R.string.settings_system),
                 selected = appearance == ScanixAppearance.SYSTEM
             ) {
                 appearance = ScanixAppearance.SYSTEM
-                ScanixSettingsStore.setAppearance(
-                    context,
-                    appearance
-                )
+                ScanixSettingsStore.setAppearance(context, appearance)
             }
 
             AppearanceOption(
@@ -175,10 +196,7 @@ fun SettingsScreen(
                 selected = appearance == ScanixAppearance.LIGHT
             ) {
                 appearance = ScanixAppearance.LIGHT
-                ScanixSettingsStore.setAppearance(
-                    context,
-                    appearance
-                )
+                ScanixSettingsStore.setAppearance(context, appearance)
             }
 
             AppearanceOption(
@@ -186,16 +204,32 @@ fun SettingsScreen(
                 selected = appearance == ScanixAppearance.DARK
             ) {
                 appearance = ScanixAppearance.DARK
-                ScanixSettingsStore.setAppearance(
-                    context,
-                    appearance
-                )
+                ScanixSettingsStore.setAppearance(context, appearance)
             }
         }
+    }
+}
 
-        SettingsCard(
-            title = stringResource(R.string.settings_scan)
-        ) {
+@Composable
+fun ScanHistoryPrivacySettingsScreen() {
+    val context = LocalContext.current
+
+    var vibrationEnabled by remember {
+        mutableStateOf(ScanixSettingsStore.isVibrationEnabled(context))
+    }
+
+    var saveHistoryEnabled by remember {
+        mutableStateOf(ScanixSettingsStore.isSaveHistoryEnabled(context))
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        SettingsCard(title = stringResource(R.string.settings_scan)) {
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_vibration),
                 description = stringResource(
@@ -204,10 +238,7 @@ fun SettingsScreen(
                 checked = vibrationEnabled,
                 onCheckedChange = { enabled ->
                     vibrationEnabled = enabled
-                    ScanixSettingsStore.setVibrationEnabled(
-                        context,
-                        enabled
-                    )
+                    ScanixSettingsStore.setVibrationEnabled(context, enabled)
                 }
             )
         }
@@ -223,73 +254,16 @@ fun SettingsScreen(
                 checked = saveHistoryEnabled,
                 onCheckedChange = { enabled ->
                     saveHistoryEnabled = enabled
-                    ScanixSettingsStore.setSaveHistoryEnabled(
-                        context,
-                        enabled
-                    )
+                    ScanixSettingsStore.setSaveHistoryEnabled(context, enabled)
                 }
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = stringResource(
-                    R.string.settings_local_storage_note
-                ),
+                text = stringResource(R.string.settings_local_storage_note),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        SettingsCard(
-            title = stringResource(R.string.settings_language)
-        ) {
-            SettingsDestinationCard(
-                title = stringResource(R.string.settings_language),
-                description = stringResource(
-                    R.string.settings_language_description
-                ),
-                onClick = onOpenLanguage
-            )
-        }
-        
-        SettingsCard(
-            title = stringResource(R.string.settings_app_pages)
-        ) {
-            SettingsDestinationCard(
-                title = stringResource(R.string.settings_privacy),
-                description = stringResource(
-                    R.string.settings_privacy_description
-                ),
-                onClick = onOpenPrivacyPolicy
-            )
-
-            SettingsDestinationCard(
-                title = stringResource(R.string.settings_about),
-                description = stringResource(
-                    R.string.settings_about_description
-                ),
-                onClick = onOpenAbout
-            )
-
-            SettingsDestinationCard(
-                title = stringResource(R.string.settings_support),
-                description = stringResource(
-                    R.string.settings_support_description
-                ),
-                onClick = onOpenSupport
-            )
-        }
-
-        SettingsCard(
-            title = stringResource(R.string.settings_update)
-        ) {
-            SettingsDestinationCard(
-                title = stringResource(R.string.settings_update),
-                description = stringResource(
-                    R.string.settings_update_description
-                ),
-                onClick = onOpenUpdate
             )
         }
     }
@@ -317,9 +291,7 @@ private fun SettingsDestinationCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
@@ -350,9 +322,7 @@ private fun SettingsCard(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
@@ -373,7 +343,10 @@ private fun AppearanceOption(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
@@ -401,9 +374,7 @@ private fun SettingsSwitchRow(
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
