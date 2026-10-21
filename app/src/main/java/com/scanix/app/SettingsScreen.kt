@@ -1,4 +1,3 @@
-
 package com.scanix.app
 
 import android.content.Context
@@ -67,9 +66,8 @@ object ScanixSettingsStore {
             .apply()
     }
 
-    fun isVibrationEnabled(context: Context): Boolean {
-        return preferences(context).getBoolean(KEY_VIBRATION, true)
-    }
+    fun isVibrationEnabled(context: Context): Boolean =
+        preferences(context).getBoolean(KEY_VIBRATION, true)
 
     fun setVibrationEnabled(context: Context, enabled: Boolean) {
         preferences(context).edit()
@@ -77,9 +75,8 @@ object ScanixSettingsStore {
             .apply()
     }
 
-    fun isSaveHistoryEnabled(context: Context): Boolean {
-        return preferences(context).getBoolean(KEY_SAVE_HISTORY, true)
-    }
+    fun isSaveHistoryEnabled(context: Context): Boolean =
+        preferences(context).getBoolean(KEY_SAVE_HISTORY, true)
 
     fun setSaveHistoryEnabled(context: Context, enabled: Boolean) {
         preferences(context).edit()
@@ -106,7 +103,7 @@ fun SettingsScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = stringResource(R.string.settings_title),
@@ -127,7 +124,7 @@ fun SettingsScreen(
         )
 
         SettingsDestinationCard(
-            title = stringResource(R.string.settings_scan),
+            title = stringResource(R.string.settings_history_privacy),
             description = stringResource(
                 R.string.settings_vibration_description
             ),
@@ -245,7 +242,7 @@ fun ScanHistoryPrivacySettingsScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         SettingsCard(
-            title = stringResource(R.string.settings_scan)
+            title = stringResource(R.string.settings_history_privacy)
         ) {
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_vibration),
@@ -261,11 +258,9 @@ fun ScanHistoryPrivacySettingsScreen() {
                     )
                 }
             )
-        }
 
-        SettingsCard(
-            title = stringResource(R.string.settings_history_privacy)
-        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_save_results),
                 description = stringResource(
@@ -297,7 +292,7 @@ fun ScanHistoryPrivacySettingsScreen() {
 @Composable
 private fun SettingsDestinationCard(
     title: String,
-    description: String,
+    description: String? = null,
     onClick: () -> Unit
 ) {
     Card(
@@ -325,13 +320,15 @@ private fun SettingsDestinationCard(
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                if (description != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
