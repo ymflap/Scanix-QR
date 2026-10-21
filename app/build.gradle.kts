@@ -27,8 +27,8 @@ android {
         applicationId = "com.scanix.app"
         minSdk = 23
         targetSdk = 36
-        versionCode = 10306
-        versionName = "1.0.3.6"
+        versionCode = 10400
+        versionName = "1.0.4.0"
 
         buildConfigField(
             "String",
