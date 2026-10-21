@@ -1,4 +1,3 @@
-
 package com.scanix.app
 
 import android.content.Context
@@ -99,6 +98,9 @@ fun SettingsScreen(
     onOpenSupport: () -> Unit = {},
     onOpenUpdate: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val currentAppearance = ScanixSettingsStore.getAppearance(context)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,7 +122,13 @@ fun SettingsScreen(
 
         SettingsDestinationCard(
             title = stringResource(R.string.settings_appearance),
-            description = stringResource(R.string.settings_system),
+            description = stringResource(
+                when (currentAppearance) {
+                    ScanixAppearance.SYSTEM -> R.string.settings_system
+                    ScanixAppearance.LIGHT -> R.string.settings_light
+                    ScanixAppearance.DARK -> R.string.settings_dark
+                }
+            ),
             onClick = onOpenAppearance
         )
 
