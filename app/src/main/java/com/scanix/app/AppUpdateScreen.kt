@@ -1,8 +1,8 @@
 package com.scanix.app
 
 import android.content.Intent
-import android.net.Uri
 import android.content.pm.PackageInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -112,12 +112,12 @@ fun AppUpdateScreen() {
                 val root = JSONObject(response)
                 val channels = root.optJSONObject("channels")
                     ?: throw IllegalStateException(
-                        "Missing update channels"
+                        "Missing update information"
                     )
 
                 val channel = channels.optJSONObject(updateChannel)
                     ?: throw IllegalStateException(
-                        "Update channel unavailable"
+                        "Update information unavailable"
                     )
 
                 val versionCode = channel.optLong("versionCode", 0L)
@@ -133,7 +133,9 @@ fun AppUpdateScreen() {
 
                 if (updateUrl.isNotBlank()) {
                     val parsedUrl = Uri.parse(updateUrl)
-                    if (parsedUrl.scheme != "https" ||
+
+                    if (
+                        parsedUrl.scheme != "https" ||
                         parsedUrl.host.isNullOrBlank()
                     ) {
                         throw IllegalStateException(
@@ -156,9 +158,9 @@ fun AppUpdateScreen() {
             } catch (_: Exception) {
                 Handler(Looper.getMainLooper()).post {
                     errorMessage = if (isArabic) {
-                        "تعذر التحقق من تحديثات قناة التوزيع الحالية. تحقق من الإنترنت وحاول مرة أخرى."
+                        "تعذّر التحقق من وجود تحديثات. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى."
                     } else {
-                        "Couldn't check updates for this distribution channel. Check your internet connection and try again."
+                        "Couldn't check for updates. Check your internet connection and try again."
                     }
                     isChecking = false
                 }
@@ -189,16 +191,6 @@ fun AppUpdateScreen() {
             fontWeight = FontWeight.Bold
         )
 
-        Text(
-            text = if (isArabic) {
-                "يتحقق التطبيق من التحديثات الخاصة بقناة التوزيع الحالية عبر الإنترنت."
-            } else {
-                "The app checks online for updates belonging to the current distribution channel."
-            },
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -224,20 +216,12 @@ fun AppUpdateScreen() {
                     style = MaterialTheme.typography.headlineSmall
                 )
 
-                Text(
-                    text = if (isArabic) {
-                        "قناة التوزيع: ${channelDisplayName(updateChannel, true)}"
-                    } else {
-                        "Distribution channel: ${channelDisplayName(updateChannel, false)}"
-                    },
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
                 Spacer(modifier = Modifier.height(4.dp))
 
                 when {
                     isChecking -> {
                         CircularProgressIndicator()
+
                         Text(
                             text = if (isArabic) {
                                 "جارٍ الاتصال بالإنترنت والتحقق من التحديثات..."
@@ -280,7 +264,7 @@ fun AppUpdateScreen() {
                                         )
                                     } catch (_: Exception) {
                                         errorMessage = if (isArabic) {
-                                            "تعذر فتح رابط التحديث على هذا الجهاز."
+                                            "تعذّر فتح رابط التحديث على هذا الجهاز."
                                         } else {
                                             "Couldn't open the update link on this device."
                                         }
@@ -310,9 +294,9 @@ fun AppUpdateScreen() {
                     updateInfo != null -> {
                         Text(
                             text = if (isArabic) {
-                                "أنت تستخدم أحدث إصدار متاح لهذه القناة."
+                                "أنت تستخدم أحدث إصدار حاليًا."
                             } else {
-                                "You're using the latest available version for this channel."
+                                "You're using the latest version."
                             },
                             fontWeight = FontWeight.Medium
                         )
@@ -334,18 +318,6 @@ fun AppUpdateScreen() {
                 }
             )
         }
-    }
-}
-
-private fun channelDisplayName(
-    channel: String,
-    isArabic: Boolean
-): String {
-    return when (channel) {
-        "github" -> "GitHub"
-        "google_play" -> "Google Play"
-        "uptodown" -> "Uptodown"
-        else -> if (isArabic) "غير معروف" else "Unknown"
     }
 }
 
