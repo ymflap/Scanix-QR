@@ -1,3 +1,4 @@
+
 package com.scanix.app
 
 import android.content.Context
@@ -124,9 +125,9 @@ fun SettingsScreen(
         )
 
         SettingsDestinationCard(
-            title = stringResource(R.string.settings_history_privacy),
+            title = stringResource(R.string.settings_controls),
             description = stringResource(
-                R.string.settings_vibration_description
+                R.string.settings_controls_description
             ),
             onClick = onOpenScanHistoryPrivacy
         )
@@ -242,7 +243,7 @@ fun ScanHistoryPrivacySettingsScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         SettingsCard(
-            title = stringResource(R.string.settings_history_privacy)
+            title = stringResource(R.string.settings_scan)
         ) {
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_vibration),
@@ -258,9 +259,11 @@ fun ScanHistoryPrivacySettingsScreen() {
                     )
                 }
             )
+        }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
+        SettingsCard(
+            title = stringResource(R.string.settings_save_results)
+        ) {
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_save_results),
                 description = stringResource(
