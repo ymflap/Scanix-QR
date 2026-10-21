@@ -41,17 +41,21 @@ private enum class ScanixPage {
     LANGUAGE,
     APPEARANCE,
     SCAN_HISTORY_PRIVACY,
-    PRIVACY,
-    ABOUT,
     SUPPORT,
     UPDATE
 }
 
-private const val PRIVACY_POLICY_URL =
+private const val PRIVACY_POLICY_URL_AR =
     "https://scanix-qr.pages.dev/privacy.html"
 
-private const val ABOUT_PAGE_URL =
+private const val PRIVACY_POLICY_URL_EN =
+    "https://scanix-qr.pages.dev/privacy-en.html"
+
+private const val ABOUT_PAGE_URL_AR =
     "https://scanix-qr.pages.dev/about.html"
+
+private const val ABOUT_PAGE_URL_EN =
+    "https://scanix-qr.pages.dev/about-en.html"
 
 @Composable
 fun ScanixNavigation() {
@@ -73,8 +77,6 @@ fun ScanixNavigation() {
         ScanixPage.LANGUAGE.name,
         ScanixPage.APPEARANCE.name,
         ScanixPage.SCAN_HISTORY_PRIVACY.name,
-        ScanixPage.PRIVACY.name,
-        ScanixPage.ABOUT.name,
         ScanixPage.SUPPORT.name,
         ScanixPage.UPDATE.name
     )
@@ -189,12 +191,6 @@ fun ScanixNavigation() {
                             ScanixPage.SCAN_HISTORY_PRIVACY.name ->
                                 stringResource(R.string.settings_scan)
 
-                            ScanixPage.PRIVACY.name ->
-                                stringResource(R.string.nav_privacy)
-
-                            ScanixPage.ABOUT.name ->
-                                stringResource(R.string.nav_about)
-
                             ScanixPage.SUPPORT.name ->
                                 stringResource(R.string.nav_support)
 
@@ -231,18 +227,40 @@ fun ScanixNavigation() {
                             currentPage = ScanixPage.LANGUAGE.name
                         },
                         onOpenPrivacyPolicy = {
+                            val url = if (
+                                selectedLanguage.equals(
+                                    "ar",
+                                    ignoreCase = true
+                                )
+                            ) {
+                                PRIVACY_POLICY_URL_AR
+                            } else {
+                                PRIVACY_POLICY_URL_EN
+                            }
+
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse(PRIVACY_POLICY_URL)
+                                    Uri.parse(url)
                                 )
                             )
                         },
                         onOpenAbout = {
+                            val url = if (
+                                selectedLanguage.equals(
+                                    "ar",
+                                    ignoreCase = true
+                                )
+                            ) {
+                                ABOUT_PAGE_URL_AR
+                            } else {
+                                ABOUT_PAGE_URL_EN
+                            }
+
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse(ABOUT_PAGE_URL)
+                                    Uri.parse(url)
                                 )
                             )
                         },
@@ -267,6 +285,7 @@ fun ScanixNavigation() {
                             ),
                             onLanguageSelected = { language ->
                                 selectedLanguage = language.code
+
                                 LanguageSettingsStore.setLanguage(
                                     context,
                                     language
@@ -274,10 +293,6 @@ fun ScanixNavigation() {
                             }
                         )
                     }
-
-                    ScanixPage.PRIVACY.name -> PrivacyPolicyScreen()
-
-                    ScanixPage.ABOUT.name -> AboutScreen()
 
                     ScanixPage.SUPPORT.name -> SupportScreen()
 
