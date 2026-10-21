@@ -1,9 +1,10 @@
+
 {
   "channels": {
     "github": {
-      "versionCode": 10306,
-      "versionName": "1.0.3.6",
-      "updateUrl": "https://github.com/ymflap/Scanix-QR/releases/download/1.0.3.6/app-release.apk",
+      "versionCode": 10400,
+      "versionName": "1.0.4.0",
+      "updateUrl": "https://github.com/ymflap/Scanix-QR/releases/latest/download/app-release.apk",
       "releaseNotes": ""
     },
     "uptodown": {
