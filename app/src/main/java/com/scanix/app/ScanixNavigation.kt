@@ -1,5 +1,8 @@
+
 package com.scanix.app
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +45,12 @@ private enum class ScanixPage {
     SUPPORT,
     UPDATE
 }
+
+private const val PRIVACY_POLICY_URL =
+    "https://scanix-qr.pages.dev/privacy.html"
+
+private const val ABOUT_PAGE_URL =
+    "https://scanix-qr.pages.dev/about.html"
 
 @Composable
 fun ScanixNavigation() {
@@ -206,10 +215,20 @@ fun ScanixNavigation() {
                             currentPage = ScanixPage.LANGUAGE.name
                         },
                         onOpenPrivacyPolicy = {
-                            currentPage = ScanixPage.PRIVACY.name
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(PRIVACY_POLICY_URL)
+                                )
+                            )
                         },
                         onOpenAbout = {
-                            currentPage = ScanixPage.ABOUT.name
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(ABOUT_PAGE_URL)
+                                )
+                            )
                         },
                         onOpenSupport = {
                             currentPage = ScanixPage.SUPPORT.name
