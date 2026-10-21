@@ -1,5 +1,7 @@
 package com.scanix.app
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,6 +71,38 @@ fun ScanixNavigation() {
 
     fun returnToSettings() {
         currentPage = ScanixPage.SETTINGS.name
+    }
+
+    fun openWebsite(url: String) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(url)
+        )
+        context.startActivity(intent)
+    }
+
+    fun openPrivacyPolicy() {
+        val url = if (
+            selectedLanguage == ScanixLanguage.ARABIC.code
+        ) {
+            "https://scanix-qr.pages.dev/privacy.html"
+        } else {
+            "https://scanix-qr.pages.dev/privacy-en.html"
+        }
+
+        openWebsite(url)
+    }
+
+    fun openAboutPage() {
+        val url = if (
+            selectedLanguage == ScanixLanguage.ARABIC.code
+        ) {
+            "https://scanix-qr.pages.dev/about.html"
+        } else {
+            "https://scanix-qr.pages.dev/about-en.html"
+        }
+
+        openWebsite(url)
     }
 
     BackHandler(enabled = isSubPage) {
@@ -206,10 +240,10 @@ fun ScanixNavigation() {
                             currentPage = ScanixPage.LANGUAGE.name
                         },
                         onOpenPrivacyPolicy = {
-                            currentPage = ScanixPage.PRIVACY.name
+                            openPrivacyPolicy()
                         },
                         onOpenAbout = {
-                            currentPage = ScanixPage.ABOUT.name
+                            openAboutPage()
                         },
                         onOpenSupport = {
                             currentPage = ScanixPage.SUPPORT.name
