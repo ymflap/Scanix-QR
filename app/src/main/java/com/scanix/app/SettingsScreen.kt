@@ -1,3 +1,4 @@
+
 package com.scanix.app
 
 import android.content.Context
@@ -121,19 +122,23 @@ fun SettingsScreen(
 
         SettingsDestinationCard(
             title = stringResource(R.string.settings_appearance),
-            description = stringResource(R.string.settings_appearance),
+            description = stringResource(R.string.settings_system),
             onClick = onOpenAppearance
         )
 
         SettingsDestinationCard(
             title = stringResource(R.string.settings_scan),
-            description = stringResource(R.string.settings_history_privacy),
+            description = stringResource(
+                R.string.settings_vibration_description
+            ),
             onClick = onOpenScanHistoryPrivacy
         )
 
         SettingsDestinationCard(
             title = stringResource(R.string.settings_language),
-            description = stringResource(R.string.settings_language_description),
+            description = stringResource(
+                R.string.settings_language_description
+            ),
             onClick = onOpenLanguage
         )
 
@@ -142,26 +147,34 @@ fun SettingsScreen(
         ) {
             SettingsDestinationCard(
                 title = stringResource(R.string.settings_privacy),
-                description = stringResource(R.string.settings_privacy_description),
+                description = stringResource(
+                    R.string.settings_privacy_description
+                ),
                 onClick = onOpenPrivacyPolicy
             )
 
             SettingsDestinationCard(
                 title = stringResource(R.string.settings_about),
-                description = stringResource(R.string.settings_about_description),
+                description = stringResource(
+                    R.string.settings_about_description
+                ),
                 onClick = onOpenAbout
             )
 
             SettingsDestinationCard(
                 title = stringResource(R.string.settings_support),
-                description = stringResource(R.string.settings_support_description),
+                description = stringResource(
+                    R.string.settings_support_description
+                ),
                 onClick = onOpenSupport
             )
         }
 
         SettingsDestinationCard(
             title = stringResource(R.string.settings_update),
-            description = stringResource(R.string.settings_update_description),
+            description = stringResource(
+                R.string.settings_update_description
+            ),
             onClick = onOpenUpdate
         )
     }
@@ -182,7 +195,9 @@ fun AppearanceSettingsScreen() {
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        SettingsCard(title = stringResource(R.string.settings_appearance)) {
+        SettingsCard(
+            title = stringResource(R.string.settings_appearance)
+        ) {
             AppearanceOption(
                 title = stringResource(R.string.settings_system),
                 selected = appearance == ScanixAppearance.SYSTEM
@@ -229,7 +244,9 @@ fun ScanHistoryPrivacySettingsScreen() {
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        SettingsCard(title = stringResource(R.string.settings_scan)) {
+        SettingsCard(
+            title = stringResource(R.string.settings_scan)
+        ) {
             SettingsSwitchRow(
                 title = stringResource(R.string.settings_vibration),
                 description = stringResource(
@@ -238,7 +255,10 @@ fun ScanHistoryPrivacySettingsScreen() {
                 checked = vibrationEnabled,
                 onCheckedChange = { enabled ->
                     vibrationEnabled = enabled
-                    ScanixSettingsStore.setVibrationEnabled(context, enabled)
+                    ScanixSettingsStore.setVibrationEnabled(
+                        context,
+                        enabled
+                    )
                 }
             )
         }
@@ -254,14 +274,19 @@ fun ScanHistoryPrivacySettingsScreen() {
                 checked = saveHistoryEnabled,
                 onCheckedChange = { enabled ->
                     saveHistoryEnabled = enabled
-                    ScanixSettingsStore.setSaveHistoryEnabled(context, enabled)
+                    ScanixSettingsStore.setSaveHistoryEnabled(
+                        context,
+                        enabled
+                    )
                 }
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = stringResource(R.string.settings_local_storage_note),
+                text = stringResource(
+                    R.string.settings_local_storage_note
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -291,7 +316,9 @@ private fun SettingsDestinationCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
@@ -322,7 +349,9 @@ private fun SettingsCard(
             containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
@@ -374,7 +403,9 @@ private fun SettingsSwitchRow(
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
