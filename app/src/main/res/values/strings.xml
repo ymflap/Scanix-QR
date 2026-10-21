@@ -126,45 +126,6 @@
     <string name="language_arabic">العربية</string>
     <string name="language_english">English</string>
 
-    <!-- About -->
-    <string name="about_title">About the app</string>
-    <string name="about_version">Version 1.0.3.6</string>
-    <string name="about_description">Scan and read QR codes and barcodes using your camera or selected images.</string>
-    <string name="about_features_title">App features</string>
-    <string name="about_feature_camera">• Scan QR codes and barcodes using the camera.</string>
-    <string name="about_feature_images">• Read codes from selected images.</string>
-    <string name="about_feature_history">• Review scan results in history.</string>
-    <string name="about_feature_share">• Copy and share results when needed.</string>
-    <string name="about_feature_settings">• Customize appearance and scanning settings.</string>
-    <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_description">You can control whether scan results are saved in Settings. See the Privacy Policy for details about data handling.</string>
-    <string name="about_developer_title">Developer</string>
-    <string name="about_contact_title">Contact and support</string>
-    <string name="about_email_subject">Question about Scanix QR</string>
-    <string name="about_email_button">Contact by email</string>
-
-    <!-- Privacy policy -->
-    <string name="privacy_title">Privacy Policy</string>
-    <string name="privacy_last_updated">Last updated: October 17, 2026</string>
-    <string name="privacy_section_1_title">1. Introduction</string>
-    <string name="privacy_section_1_body">This policy explains how Scanix QR handles information when you use its QR code and barcode scanning features.</string>
-    <string name="privacy_section_2_title">2. Camera and images</string>
-    <string name="privacy_section_2_body">The app requests camera permission for live scanning. You can also choose an image from your device to scan a code in it. These images are used to read the code within the app.</string>
-    <string name="privacy_section_3_title">3. Scan results and history</string>
-    <string name="privacy_section_3_body">Scan results can be saved in local history on your device when saving is enabled. The app does not require an account. You can disable saving in Settings. Previously saved results may remain until you delete them from the app history.</string>
-    <string name="privacy_section_4_title">4. Sharing results and opening links</string>
-    <string name="privacy_section_4_body">When you copy or share a result or open a link, the app uses the function you selected. Information may be transferred to another app or website you choose, subject to that party’s policies.</string>
-    <string name="privacy_section_5_title">5. Data collection and transmission</string>
-    <string name="privacy_section_5_body">The current app implementation does not include a dedicated server for receiving scan results and does not require an account. Diagnostic or operational data handled by Android or Google services used for code processing may be subject to those services’ policies.</string>
-    <string name="privacy_section_6_title">6. Data security</string>
-    <string name="privacy_section_6_body">History results are stored locally on your device. We recommend protecting your device and deleting results you no longer want to keep. No electronic method can guarantee absolute security.</string>
-    <string name="privacy_section_7_title">7. Children’s privacy</string>
-    <string name="privacy_section_7_body">The app is a code-scanning tool and is not designed to collect personal information from children.</string>
-    <string name="privacy_section_8_title">8. Changes to this policy</string>
-    <string name="privacy_section_8_body">This policy may be updated when features are added or the app’s behavior changes. The last-updated date will be revised when significant changes are made.</string>
-    <string name="privacy_section_9_title">9. Contact</string>
-    <string name="privacy_section_9_body">For questions about privacy or the app, contact the developer through the Support page in the app.</string>
-
     <!-- Support -->
     <string name="support_title">Support and help</string>
     <string name="support_description">If you encounter a problem or want to send a suggestion, you can contact us by email.</string>
@@ -191,3 +152,4 @@
     <string name="action_cancel">Cancel</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
 </resources>
+        
