@@ -126,45 +126,6 @@
     <string name="language_arabic">العربية</string>
     <string name="language_english">English</string>
 
-    <!-- About -->
-    <string name="about_title">حول التطبيق</string>
-    <string name="about_version">الإصدار 1.0.3.6</string>
-    <string name="about_description">امسح رموز QR والباركود واقرأ محتواها باستخدام الكاميرا أو الصور المحددة.</string>
-    <string name="about_features_title">ميزات التطبيق</string>
-    <string name="about_feature_camera">• مسح رموز QR والباركود باستخدام الكاميرا.</string>
-    <string name="about_feature_images">• قراءة الرموز من الصور المحددة.</string>
-    <string name="about_feature_history">• مراجعة نتائج المسح في السجل.</string>
-    <string name="about_feature_share">• نسخ النتائج ومشاركتها عند الحاجة.</string>
-    <string name="about_feature_settings">• تخصيص المظهر وإعدادات المسح.</string>
-    <string name="about_privacy_title">الخصوصية</string>
-    <string name="about_privacy_description">يمكنك التحكم في حفظ نتائج المسح من الإعدادات. راجع سياسة الخصوصية لمعرفة تفاصيل التعامل مع البيانات.</string>
-    <string name="about_developer_title">المطور</string>
-    <string name="about_contact_title">التواصل والدعم</string>
-    <string name="about_email_subject">استفسار حول Scanix QR</string>
-    <string name="about_email_button">التواصل عبر البريد الإلكتروني</string>
-
-    <!-- Privacy policy -->
-    <string name="privacy_title">سياسة الخصوصية</string>
-    <string name="privacy_last_updated">آخر تحديث: 17 أكتوبر 2026</string>
-    <string name="privacy_section_1_title">1. المقدمة</string>
-    <string name="privacy_section_1_body">توضح هذه السياسة كيفية تعامل Scanix QR مع المعلومات عند استخدام ميزات مسح رموز QR والباركود.</string>
-    <string name="privacy_section_2_title">2. الكاميرا والصور</string>
-    <string name="privacy_section_2_body">يطلب التطبيق إذن الكاميرا للمسح المباشر. ويمكنك أيضًا اختيار صورة من جهازك لمسح رمز موجود فيها. تُستخدم هذه الصور لقراءة الرمز داخل التطبيق.</string>
-    <string name="privacy_section_3_title">3. نتائج المسح والسجل</string>
-    <string name="privacy_section_3_body">يمكن حفظ نتائج المسح في سجل محلي على جهازك عند تفعيل الحفظ. لا يتطلب التطبيق إنشاء حساب. يمكنك تعطيل الحفظ من الإعدادات. وقد تبقى النتائج المحفوظة سابقًا حتى تحذفها من سجل التطبيق.</string>
-    <string name="privacy_section_4_title">4. مشاركة النتائج وفتح الروابط</string>
-    <string name="privacy_section_4_body">عند نسخ نتيجة أو مشاركتها أو فتح رابط، يستخدم التطبيق الوظيفة التي اخترتها. وقد تُنقل المعلومات إلى تطبيق آخر أو موقع تختاره، وفقًا لسياسات الجهة المستقبلة.</string>
-    <string name="privacy_section_5_title">5. جمع البيانات ونقلها</string>
-    <string name="privacy_section_5_body">لا يتضمن التطبيق في تنفيذه الحالي خادمًا مخصصًا لاستقبال نتائج المسح، ولا يتطلب حسابًا. وقد تخضع البيانات التشخيصية أو التشغيلية التي يتعامل معها Android أو خدمات Google المستخدمة لمعالجة الرموز لسياسات تلك الخدمات.</string>
-    <string name="privacy_section_6_title">6. أمن البيانات</string>
-    <string name="privacy_section_6_body">تُخزّن نتائج السجل محليًا على جهازك. نوصي بحماية جهازك وحذف النتائج التي لم تعد بحاجة إليها. ولا توجد وسيلة إلكترونية تضمن الأمان المطلق.</string>
-    <string name="privacy_section_7_title">7. خصوصية الأطفال</string>
-    <string name="privacy_section_7_body">التطبيق أداة لمسح الرموز، ولم يُصمم لجمع المعلومات الشخصية من الأطفال.</string>
-    <string name="privacy_section_8_title">8. التغييرات على هذه السياسة</string>
-    <string name="privacy_section_8_body">قد تُحدّث هذه السياسة عند إضافة ميزات أو تغيير سلوك التطبيق. وسيُعدّل تاريخ آخر تحديث عند إجراء تغييرات مهمة.</string>
-    <string name="privacy_section_9_title">9. التواصل</string>
-    <string name="privacy_section_9_body">للاستفسارات المتعلقة بالخصوصية أو التطبيق، تواصل مع المطور من خلال صفحة الدعم داخل التطبيق.</string>
-
     <!-- Support -->
     <string name="support_title">الدعم والمساعدة</string>
     <string name="support_description">إذا واجهت مشكلة أو أردت إرسال اقتراح، يمكنك التواصل معنا عبر البريد الإلكتروني.</string>
@@ -191,4 +152,4 @@
     <string name="action_cancel">إلغاء</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
-        
+    
