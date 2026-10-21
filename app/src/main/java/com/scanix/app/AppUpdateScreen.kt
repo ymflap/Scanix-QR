@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
@@ -49,10 +50,6 @@ private data class ScanixUpdateInfo(
 @Composable
 fun AppUpdateScreen() {
     val context = LocalContext.current
-
-    val isArabic = remember(context) {
-        context.resources.configuration.locales[0].language == "ar"
-    }
 
     val currentVersion = remember(context) {
         getInstalledVersion(
@@ -157,11 +154,9 @@ fun AppUpdateScreen() {
                 }
             } catch (_: Exception) {
                 Handler(Looper.getMainLooper()).post {
-                    errorMessage = if (isArabic) {
-                        "تعذّر التحقق من وجود تحديثات. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى."
-                    } else {
-                        "Couldn't check for updates. Check your internet connection and try again."
-                    }
+                    errorMessage = context.getString(
+                        R.string.update_error
+                    )
                     isChecking = false
                 }
             } finally {
@@ -186,7 +181,7 @@ fun AppUpdateScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = if (isArabic) "تحديث التطبيق" else "App updates",
+            text = stringResource(R.string.update_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -202,11 +197,7 @@ fun AppUpdateScreen() {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = if (isArabic) {
-                        "الإصدار المثبّت"
-                    } else {
-                        "Installed version"
-                    },
+                    text = stringResource(R.string.update_current_version),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -223,11 +214,7 @@ fun AppUpdateScreen() {
                         CircularProgressIndicator()
 
                         Text(
-                            text = if (isArabic) {
-                                "جارٍ الاتصال بالإنترنت والتحقق من التحديثات..."
-                            } else {
-                                "Connecting to the internet and checking for updates..."
-                            }
+                            text = stringResource(R.string.update_checking)
                         )
                     }
 
@@ -240,12 +227,15 @@ fun AppUpdateScreen() {
 
                     updateInfo != null && updateAvailable -> {
                         Text(
-                            text = if (isArabic) {
-                                "يتوفر إصدار أحدث: ${updateInfo!!.versionName}"
-                            } else {
-                                "A newer version is available: ${updateInfo!!.versionName}"
-                            },
+                            text = stringResource(
+                                R.string.update_available
+                            ),
                             fontWeight = FontWeight.Bold
+                        )
+
+                        Text(
+                            text = updateInfo!!.versionName,
+                            style = MaterialTheme.typography.titleMedium
                         )
 
                         if (updateInfo!!.releaseNotes.isNotBlank()) {
@@ -263,41 +253,25 @@ fun AppUpdateScreen() {
                                             )
                                         )
                                     } catch (_: Exception) {
-                                        errorMessage = if (isArabic) {
-                                            "تعذّر فتح رابط التحديث على هذا الجهاز."
-                                        } else {
-                                            "Couldn't open the update link on this device."
-                                        }
+                                        errorMessage = context.getString(
+                                            R.string.scan_open_link_failed
+                                        )
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    if (isArabic) {
-                                        "عرض التحديث"
-                                    } else {
-                                        "View update"
-                                    }
+                                    stringResource(R.string.update_download)
                                 )
                             }
-                        } else {
-                            Text(
-                                text = if (isArabic) {
-                                    "يتوفر إصدار أحدث، لكن رابط التنزيل غير متاح حاليًا."
-                                } else {
-                                    "A newer version is available, but its download link is not available yet."
-                                }
-                            )
                         }
                     }
 
                     updateInfo != null -> {
                         Text(
-                            text = if (isArabic) {
-                                "أنت تستخدم أحدث إصدار حاليًا."
-                            } else {
-                                "You're using the latest version."
-                            },
+                            text = stringResource(
+                                R.string.update_not_available
+                            ),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -311,11 +285,7 @@ fun AppUpdateScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                if (isArabic) {
-                    "التحقق من التحديثات"
-                } else {
-                    "Check for updates"
-                }
+                stringResource(R.string.update_check)
             )
         }
     }
