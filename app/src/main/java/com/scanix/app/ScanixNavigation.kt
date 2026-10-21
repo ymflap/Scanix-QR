@@ -189,7 +189,7 @@ fun ScanixNavigation() {
                                 stringResource(R.string.settings_appearance)
 
                             ScanixPage.SCAN_HISTORY_PRIVACY.name ->
-                                stringResource(R.string.settings_scan)
+                                stringResource(R.string.settings_controls)
 
                             ScanixPage.SUPPORT.name ->
                                 stringResource(R.string.nav_support)
