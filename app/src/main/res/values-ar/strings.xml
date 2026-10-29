@@ -16,7 +16,7 @@
     <string name="nav_update">تحديث التطبيق</string>
 
     <!-- Home -->
-    <string name="home_tagline">اقرأ وأنشئ الرموز بسهولة</string>
+    <string name="home_tagline">اقرأ الرموز واستخرج النصوص بسهولة</string>
     <string name="home_scan_title">مسح QR والباركود</string>
     <string name="home_scan_description">وجّه الكاميرا نحو الرمز لقراءة محتواه</string>
     <string name="home_start_scan">ابدأ المسح</string>
@@ -25,6 +25,9 @@
     <string name="home_history_description">نتائج المسح السابقة</string>
     <string name="home_recent_results">أحدث النتائج</string>
     <string name="home_recent_empty">ستظهر نتائج المسح الأخيرة هنا</string>
+    <string name="home_ocr_title">استخراج النص</string>
+    <string name="home_ocr_description">استخراج النص من الصور</string>
+    <string name="home_new">جديد</string>
 
     <!-- Scan -->
     <string name="scan_title">مسح رمز QR أو باركود</string>
@@ -145,6 +148,46 @@
     <string name="update_checking">جارٍ التحقق من التحديثات…</string>
     <string name="update_error">تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.</string>
 
+    <!-- OCR - Text Extraction -->
+    <string name="ocr_title">استخراج النص من الصور</string>
+    <string name="ocr_choose_language">لغة التعرف على النص</string>
+    <string name="ocr_language_arabic">العربية</string>
+    <string name="ocr_language_english">الإنجليزية</string>
+    <string name="ocr_language_both">العربية والإنجليزية</string>
+    <string name="ocr_take_photo">التقاط صورة</string>
+    <string name="ocr_capture_document">تصوير المستند</string>
+    <string name="ocr_allow_camera">السماح باستخدام الكاميرا</string>
+    <string name="ocr_choose_image">اختيار صورة</string>
+    <string name="ocr_image_ready">الصورة جاهزة للاستخراج</string>
+    <string name="ocr_capture_or_choose">التقط صورة أو اختر صورة من جهازك</string>
+    <string name="ocr_extract">استخراج النص</string>
+    <string name="ocr_downloading_progress">جارٍ تنزيل بيانات اللغة...</string>
+    <string name="ocr_downloading_language">جارٍ تنزيل بيانات اللغة المطلوبة</string>
+    <string name="ocr_preparing">جارٍ تجهيز محرك التعرف على النص...</string>
+    <string name="ocr_recognizing">جارٍ التعرف على النص...</string>
+    <string name="ocr_no_text">لم يتم العثور على نص في الصورة</string>
+    <string name="ocr_completed">اكتمل استخراج النص</string>
+    <string name="ocr_failed">تعذر استخراج النص</string>
+    <string name="ocr_extracted_text">النص المستخرج</string>
+    <string name="ocr_text_placeholder">سيظهر النص المستخرج هنا</string>
+    <string name="ocr_copy">نسخ النص</string>
+    <string name="ocr_share">مشاركة النص</string>
+    <string name="ocr_share_title">مشاركة النص المستخرج</string>
+    <string name="ocr_clear_text">مسح النص</string>
+    <string name="ocr_text_copied">تم نسخ النص</string>
+    <string name="ocr_camera_permission_denied">يجب السماح باستخدام الكاميرا لالتقاط الصور</string>
+    <string name="ocr_image_selected">تم اختيار الصورة بنجاح</string>
+    <string name="ocr_image_read_failed">تعذرت قراءة الصورة</string>
+    <string name="ocr_image_open_failed">تعذر فتح الصورة</string>
+    <string name="ocr_camera_not_ready">الكاميرا غير جاهزة</string>
+    <string name="ocr_photo_captured">تم التقاط الصورة</string>
+    <string name="ocr_camera_start_failed">تعذر تشغيل الكاميرا</string>
+    <string name="ocr_camera_init_failed">تعذر تهيئة الكاميرا</string>
+    <string name="ocr_photo_decode_failed">تعذر معالجة الصورة الملتقطة</string>
+    <string name="ocr_photo_read_failed">تعذرت قراءة الصورة الملتقطة</string>
+    <string name="ocr_photo_capture_failed">فشل التقاط الصورة</string>
+    <string name="ocr_unknown_error">حدث خطأ غير متوقع</string>
+
     <!-- Common actions -->
     <string name="action_back">رجوع</string>
     <string name="action_delete">حذف</string>
@@ -152,4 +195,4 @@
     <string name="action_cancel">إلغاء</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
-    
+        
