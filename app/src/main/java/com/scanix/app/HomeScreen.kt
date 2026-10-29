@@ -11,209 +11,129 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.QrCodeScanner
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material.icons.outlined.Settings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onScanClick: () -> Unit = {},
+    onHistoryClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+    onOcrClick: () -> Unit = {}
+) {
+    val isArabic =
+        LocalConfiguration.current.locales[0].language == "ar"
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Scanix",
+                        text = stringResource(R.string.app_name),
                         fontWeight = FontWeight.Bold,
                         fontSize = 25.sp
                     )
                 }
             )
-        },
-        bottomBar = {
-            HomeBottomBar()
         }
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            contentPadding = PaddingValues(
-                horizontal = 20.dp,
-                vertical = 18.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(R.string.home_tagline),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center
-                    )
+            Text(
+                text = stringResource(R.string.home_tagline),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 28.dp)
+            )
 
-                    Spacer(modifier = Modifier.height(22.dp))
-
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(28.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        border = BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.outline
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.QrCodeScanner,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text(
-                                text = stringResource(R.string.home_scan_title),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Text(
-                                text = stringResource(R.string.home_scan_description),
-                                style = MaterialTheme.typography.bodyMedium,
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-
-                            Spacer(modifier = Modifier.height(20.dp))
-
-                            Button(
-                                onClick = { },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(54.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.onSurface,
-                                    contentColor = MaterialTheme.colorScheme.surface
-                                )
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.QrCodeScanner,
-                                    contentDescription = null
-                                )
-
-                                Spacer(modifier = Modifier.size(10.dp))
-
-                                Text(stringResource(R.string.home_start_scan))
-                            }
-                        }
-                    }
-                }
-            }
-
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    HomeActionCard(
-                        title = stringResource(R.string.home_create_qr),
-                        description = stringResource(R.string.home_create_description),
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Add,
-                                contentDescription = null,
-                                modifier = Modifier.size(30.dp)
-                            )
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    HomeActionCard(
-                        title = stringResource(R.string.nav_history),
-                        description = stringResource(R.string.home_history_description),
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.History,
-                                contentDescription = null,
-                                modifier = Modifier.size(30.dp)
-                            )
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
-            item {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(22.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                HomeActionCard(
+                    title = stringResource(R.string.home_scan_title),
+                    description = stringResource(
+                        R.string.home_scan_description
                     ),
-                    border = BorderStroke(
-                        1.dp,
-                        MaterialTheme.colorScheme.outline
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(18.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.home_recent_results),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                    icon = Icons.Outlined.QrCodeScanner,
+                    onClick = onScanClick,
+                    modifier = Modifier.weight(1f)
+                )
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                HomeActionCard(
+                    title = stringResource(R.string.nav_history),
+                    description = stringResource(
+                        R.string.home_history_description
+                    ),
+                    icon = Icons.Outlined.History,
+                    onClick = onHistoryClick,
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
-                        Text(
-                            text = stringResource(R.string.home_recent_empty),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                HomeActionCard(
+                    title = stringResource(R.string.nav_settings),
+                    description = stringResource(
+                        R.string.settings_subtitle
+                    ),
+                    icon = Icons.Outlined.Settings,
+                    onClick = onSettingsClick,
+                    modifier = Modifier.weight(1f)
+                )
+
+                HomeActionCard(
+                    title = "OCR",
+                    description = if (isArabic) {
+                        "استخراج النص من الصور والمستندات"
+                    } else {
+                        "Extract text from images and documents"
+                    },
+                    icon = Icons.Outlined.TextFields,
+                    onClick = onOcrClick,
+                    isNew = true,
+                    newLabel = if (isArabic) "جديد" else "NEW",
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -223,101 +143,77 @@ fun HomeScreen() {
 private fun HomeActionCard(
     title: String,
     description: String,
-    icon: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isNew: Boolean = false,
+    newLabel: String = "NEW"
 ) {
     OutlinedButton(
-        onClick = { },
-        modifier = modifier.height(128.dp),
+        onClick = onClick,
+        modifier = modifier.height(164.dp),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(
             1.dp,
             MaterialTheme.colorScheme.outline
         ),
-        contentPadding = PaddingValues(12.dp)
+        contentPadding = PaddingValues(10.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            icon()
+            icon.let {
+                androidx.compose.material3.Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier.size(34.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleSmall
             )
+
+            if (isNew) {
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Surface(
+                    shape = CircleShape,
+                    color = Color(0xFF2E7D32),
+                    contentColor = Color.White
+                ) {
+                    Text(
+                        text = newLabel,
+                        modifier = Modifier.padding(
+                            horizontal = 10.dp,
+                            vertical = 3.dp
+                        ),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = description,
                 fontSize = 11.sp,
-                textAlign = TextAlign.Center
+                lineHeight = 15.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 3
             )
         }
-    }
-}
-
-@Composable
-private fun HomeBottomBar() {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surface
-    ) {
-        NavigationBarItem(
-            selected = true,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.QrCodeScanner,
-                    contentDescription = stringResource(R.string.nav_home)
-                )
-            },
-            label = {
-                Text(stringResource(R.string.nav_home))
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.History,
-                    contentDescription = stringResource(R.string.nav_history)
-                )
-            },
-            label = {
-                Text(stringResource(R.string.nav_history))
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = stringResource(R.string.nav_create)
-                )
-            },
-            label = {
-                Text(stringResource(R.string.nav_create))
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = stringResource(R.string.nav_settings)
-                )
-            },
-            label = {
-                Text(stringResource(R.string.nav_settings))
-            }
-        )
     }
 }
