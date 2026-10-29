@@ -11,8 +11,8 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/scanix_icon"
-        android:roundIcon="@drawable/scanix_icon"
+        android:icon="@drawable/scanix_icon_compressed"
+        android:roundIcon="@drawable/scanix_icon_compressed"
         android:label="Scanix"
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
