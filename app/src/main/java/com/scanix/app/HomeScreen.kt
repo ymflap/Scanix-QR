@@ -19,7 +19,6 @@ import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -80,6 +79,7 @@ fun HomeScreen(
                     .padding(bottom = 28.dp)
             )
 
+            // الصف العلوي: الماسح و OCR
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -95,33 +95,6 @@ fun HomeScreen(
                 )
 
                 HomeActionCard(
-                    title = stringResource(R.string.nav_history),
-                    description = stringResource(
-                        R.string.home_history_description
-                    ),
-                    icon = Icons.Outlined.History,
-                    onClick = onHistoryClick,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                HomeActionCard(
-                    title = stringResource(R.string.nav_settings),
-                    description = stringResource(
-                        R.string.settings_subtitle
-                    ),
-                    icon = Icons.Outlined.Settings,
-                    onClick = onSettingsClick,
-                    modifier = Modifier.weight(1f)
-                )
-
-                HomeActionCard(
                     title = "OCR",
                     description = if (isArabic) {
                         "استخراج النص من الصور والمستندات"
@@ -132,6 +105,34 @@ fun HomeScreen(
                     onClick = onOcrClick,
                     isNew = true,
                     newLabel = if (isArabic) "جديد" else "NEW",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // الصف السفلي: السجل والإعدادات
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                HomeActionCard(
+                    title = stringResource(R.string.nav_history),
+                    description = stringResource(
+                        R.string.home_history_description
+                    ),
+                    icon = Icons.Outlined.History,
+                    onClick = onHistoryClick,
+                    modifier = Modifier.weight(1f)
+                )
+
+                HomeActionCard(
+                    title = stringResource(R.string.nav_settings),
+                    description = stringResource(
+                        R.string.settings_subtitle
+                    ),
+                    icon = Icons.Outlined.Settings,
+                    onClick = onSettingsClick,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -167,13 +168,11 @@ private fun HomeActionCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            icon.let {
-                androidx.compose.material3.Icon(
-                    imageVector = it,
-                    contentDescription = null,
-                    modifier = Modifier.size(34.dp)
-                )
-            }
+            androidx.compose.material3.Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(34.dp)
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
