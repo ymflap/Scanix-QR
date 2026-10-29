@@ -16,7 +16,7 @@
     <string name="nav_update">App updates</string>
 
     <!-- Home -->
-    <string name="home_tagline">Read and create codes easily</string>
+    <string name="home_tagline">Read codes and extract text easily</string>
     <string name="home_scan_title">Scan QR and Barcode</string>
     <string name="home_scan_description">Point the camera at a code to read its content</string>
     <string name="home_start_scan">Start scanning</string>
@@ -25,6 +25,49 @@
     <string name="home_history_description">Previous scan results</string>
     <string name="home_recent_results">Recent results</string>
     <string name="home_recent_empty">Your recent scan results will appear here</string>
+    <string name="home_ocr_title">OCR</string>
+    <string name="home_ocr_description">Extract text from images and documents</string>
+    <string name="home_new">NEW</string>
+
+    <!-- OCR text extraction -->
+    <string name="ocr_title">Extract text from document</string>
+    <string name="ocr_choose_language">Choose a language</string>
+    <string name="ocr_language_arabic">العربية</string>
+    <string name="ocr_language_english">English</string>
+    <string name="ocr_language_both">العربية + English</string>
+    <string name="ocr_take_photo">Take a document photo</string>
+    <string name="ocr_capture_document">Capture document</string>
+    <string name="ocr_allow_camera">Allow camera access</string>
+    <string name="ocr_choose_image">Choose image from phone</string>
+    <string name="ocr_image_ready">Image ready for text extraction.</string>
+    <string name="ocr_capture_or_choose">Capture or choose an image first.</string>
+    <string name="ocr_extract">Extract text</string>
+    <string name="ocr_downloading_progress">Downloading language data: %1$d%%</string>
+    <string name="ocr_downloading_language">Downloading language data...</string>
+    <string name="ocr_preparing">Preparing text recognition...</string>
+    <string name="ocr_recognizing">Recognizing text...</string>
+    <string name="ocr_no_text">No text was detected.</string>
+    <string name="ocr_completed">Text extraction completed.</string>
+    <string name="ocr_failed">Text extraction failed: %1$s</string>
+    <string name="ocr_extracted_text">Extracted text</string>
+    <string name="ocr_text_placeholder">Extracted text appears here</string>
+    <string name="ocr_copy">Copy</string>
+    <string name="ocr_share">Share</string>
+    <string name="ocr_share_title">Share extracted text</string>
+    <string name="ocr_clear_text">Clear text</string>
+    <string name="ocr_text_copied">Text copied.</string>
+    <string name="ocr_camera_permission_denied">Camera permission was denied.</string>
+    <string name="ocr_image_selected">Image selected.</string>
+    <string name="ocr_image_read_failed">Could not read this image.</string>
+    <string name="ocr_image_open_failed">Could not open this image.</string>
+    <string name="ocr_camera_not_ready">Camera is not ready.</string>
+    <string name="ocr_photo_captured">Photo captured.</string>
+    <string name="ocr_camera_start_failed">Could not start camera.</string>
+    <string name="ocr_camera_init_failed">Could not initialize camera.</string>
+    <string name="ocr_photo_decode_failed">Could not decode captured photo.</string>
+    <string name="ocr_photo_read_failed">Could not read captured photo.</string>
+    <string name="ocr_photo_capture_failed">Photo capture failed.</string>
+    <string name="ocr_unknown_error">Unknown error</string>
 
     <!-- Scan -->
     <string name="scan_title">Scan QR or Barcode</string>
