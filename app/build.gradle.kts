@@ -86,6 +86,9 @@ dependencies {
     // قراءة QR والباركود
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
 
+    // محرك OCR لاستخراج النصوص العربية والإنجليزية محليًا
+    implementation("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
+
     // تشغيل الكاميرا ومعاينتها داخل التطبيق
     implementation("androidx.camera:camera-core:1.4.2")
     implementation("androidx.camera:camera-camera2:1.4.2")
