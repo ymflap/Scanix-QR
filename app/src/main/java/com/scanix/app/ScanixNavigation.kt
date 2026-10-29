@@ -12,14 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 private enum class ScanixPage {
+    HOME,
     SCAN,
     HISTORY,
     SETTINGS,
+    OCR,
     LANGUAGE,
     APPEARANCE,
     SCAN_HISTORY_PRIVACY,
@@ -62,7 +59,7 @@ fun ScanixNavigation() {
     val context = LocalContext.current
 
     var currentPage by rememberSaveable {
-        mutableStateOf(ScanixPage.SCAN.name)
+        mutableStateOf(ScanixPage.HOME.name)
     }
 
     var selectedLanguage by rememberSaveable {
@@ -73,7 +70,7 @@ fun ScanixNavigation() {
         )
     }
 
-    val isSubPage = currentPage in setOf(
+    val isSettingsSubPage = currentPage in setOf(
         ScanixPage.LANGUAGE.name,
         ScanixPage.APPEARANCE.name,
         ScanixPage.SCAN_HISTORY_PRIVACY.name,
@@ -81,83 +78,28 @@ fun ScanixNavigation() {
         ScanixPage.UPDATE.name
     )
 
-    fun returnToSettings() {
-        currentPage = ScanixPage.SETTINGS.name
+    fun returnFromCurrentPage() {
+        currentPage = if (isSettingsSubPage) {
+            ScanixPage.SETTINGS.name
+        } else {
+            ScanixPage.HOME.name
+        }
     }
 
-    BackHandler(enabled = isSubPage) {
-        returnToSettings()
+    BackHandler(enabled = currentPage != ScanixPage.HOME.name) {
+        returnFromCurrentPage()
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
-        bottomBar = {
-            if (!isSubPage) {
-                NavigationBar {
-                    NavigationBarItem(
-                        selected = currentPage == ScanixPage.SCAN.name,
-                        onClick = {
-                            currentPage = ScanixPage.SCAN.name
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.QrCodeScanner,
-                                contentDescription = stringResource(
-                                    R.string.nav_scan
-                                )
-                            )
-                        },
-                        label = {
-                            Text(stringResource(R.string.nav_scan))
-                        }
-                    )
-
-                    NavigationBarItem(
-                        selected = currentPage == ScanixPage.HISTORY.name,
-                        onClick = {
-                            currentPage = ScanixPage.HISTORY.name
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.History,
-                                contentDescription = stringResource(
-                                    R.string.nav_history
-                                )
-                            )
-                        },
-                        label = {
-                            Text(stringResource(R.string.nav_history))
-                        }
-                    )
-
-                    NavigationBarItem(
-                        selected = currentPage == ScanixPage.SETTINGS.name,
-                        onClick = {
-                            currentPage = ScanixPage.SETTINGS.name
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Settings,
-                                contentDescription = stringResource(
-                                    R.string.nav_settings
-                                )
-                            )
-                        },
-                        label = {
-                            Text(stringResource(R.string.nav_settings))
-                        }
-                    )
-                }
-            }
-        }
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (isSubPage) {
+            if (currentPage != ScanixPage.HOME.name) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -169,7 +111,7 @@ fun ScanixNavigation() {
                     horizontalArrangement = Arrangement.Start
                 ) {
                     IconButton(
-                        onClick = { returnToSettings() }
+                        onClick = { returnFromCurrentPage() }
                     ) {
                         Icon(
                             imageVector =
@@ -182,6 +124,17 @@ fun ScanixNavigation() {
 
                     Text(
                         text = when (currentPage) {
+                            ScanixPage.SCAN.name ->
+                                stringResource(R.string.nav_scan)
+
+                            ScanixPage.HISTORY.name ->
+                                stringResource(R.string.nav_history)
+
+                            ScanixPage.SETTINGS.name ->
+                                stringResource(R.string.nav_settings)
+
+                            ScanixPage.OCR.name -> "OCR"
+
                             ScanixPage.LANGUAGE.name ->
                                 stringResource(R.string.nav_language)
 
@@ -197,7 +150,7 @@ fun ScanixNavigation() {
                             ScanixPage.UPDATE.name ->
                                 stringResource(R.string.nav_update)
 
-                            else -> ""
+                            else -> stringResource(R.string.app_name)
                         },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
@@ -211,9 +164,26 @@ fun ScanixNavigation() {
                     .weight(1f)
             ) {
                 when (currentPage) {
+                    ScanixPage.HOME.name -> HomeScreen(
+                        onScanClick = {
+                            currentPage = ScanixPage.SCAN.name
+                        },
+                        onHistoryClick = {
+                            currentPage = ScanixPage.HISTORY.name
+                        },
+                        onSettingsClick = {
+                            currentPage = ScanixPage.SETTINGS.name
+                        },
+                        onOcrClick = {
+                            currentPage = ScanixPage.OCR.name
+                        }
+                    )
+
                     ScanixPage.SCAN.name -> ScanScreen()
 
                     ScanixPage.HISTORY.name -> HistoryScreen()
+
+                    ScanixPage.OCR.name -> TextExtractionScreen()
 
                     ScanixPage.SETTINGS.name -> SettingsScreen(
                         onOpenAppearance = {
