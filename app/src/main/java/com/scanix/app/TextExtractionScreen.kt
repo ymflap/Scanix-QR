@@ -15,7 +15,6 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,10 +31,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -47,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
@@ -68,9 +66,8 @@ fun TextExtractionScreen(
     var statusMessage by remember { mutableStateOf("") }
     var downloadPercent by remember { mutableIntStateOf(-1) }
     var downloadLanguage by remember { mutableStateOf("") }
-    var imageCapture by remember {
-        mutableStateOf<ImageCapture?>(null)
-    }
+    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+
     var cameraPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -86,7 +83,8 @@ fun TextExtractionScreen(
         ) { granted ->
             cameraPermission = granted
             if (!granted) {
-                statusMessage = "Camera permission was denied."
+                statusMessage =
+                    context.getString(R.string.ocr_camera_permission_denied)
             }
         }
 
@@ -108,12 +106,15 @@ fun TextExtractionScreen(
                         if (bitmap != null) {
                             selectedBitmap = bitmap
                             extractedText = ""
-                            statusMessage = "Image selected."
+                            statusMessage =
+                                context.getString(R.string.ocr_image_selected)
                         } else {
-                            statusMessage = "Could not read this image."
+                            statusMessage =
+                                context.getString(R.string.ocr_image_read_failed)
                         }
                     } catch (_: Exception) {
-                        statusMessage = "Could not open this image."
+                        statusMessage =
+                            context.getString(R.string.ocr_image_open_failed)
                     }
                 }
             }
@@ -127,17 +128,17 @@ fun TextExtractionScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Extract text from document",
+            text = stringResource(R.string.ocr_title),
             style = MaterialTheme.typography.headlineSmall
         )
 
         Text(
-            text = "Choose a language",
+            text = stringResource(R.string.ocr_choose_language),
             style = MaterialTheme.typography.titleMedium
         )
 
         LanguageOption(
-            label = "العربية",
+            label = stringResource(R.string.ocr_language_arabic),
             selected = selectedLanguage == "ara",
             enabled = !isProcessing
         ) {
@@ -145,7 +146,7 @@ fun TextExtractionScreen(
         }
 
         LanguageOption(
-            label = "English",
+            label = stringResource(R.string.ocr_language_english),
             selected = selectedLanguage == "eng",
             enabled = !isProcessing
         ) {
@@ -153,7 +154,7 @@ fun TextExtractionScreen(
         }
 
         LanguageOption(
-            label = "العربية + English",
+            label = stringResource(R.string.ocr_language_both),
             selected = selectedLanguage == "ara+eng",
             enabled = !isProcessing
         ) {
@@ -161,7 +162,7 @@ fun TextExtractionScreen(
         }
 
         Text(
-            text = "Take a document photo",
+            text = stringResource(R.string.ocr_take_photo),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -177,7 +178,8 @@ fun TextExtractionScreen(
                 onClick = {
                     val capture = imageCapture
                     if (capture == null) {
-                        statusMessage = "Camera is not ready."
+                        statusMessage =
+                            context.getString(R.string.ocr_camera_not_ready)
                     } else {
                         takeDocumentPhoto(
                             context = context,
@@ -185,7 +187,8 @@ fun TextExtractionScreen(
                             onSuccess = { bitmap ->
                                 selectedBitmap = bitmap
                                 extractedText = ""
-                                statusMessage = "Photo captured."
+                                statusMessage =
+                                    context.getString(R.string.ocr_photo_captured)
                             },
                             onError = { message ->
                                 statusMessage = message
@@ -196,18 +199,16 @@ fun TextExtractionScreen(
                 enabled = !isProcessing,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Capture document")
+                Text(stringResource(R.string.ocr_capture_document))
             }
         } else {
             Button(
                 onClick = {
-                    permissionLauncher.launch(
-                        Manifest.permission.CAMERA
-                    )
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Allow camera access")
+                Text(stringResource(R.string.ocr_allow_camera))
             }
         }
 
@@ -216,12 +217,12 @@ fun TextExtractionScreen(
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Choose image from phone")
+            Text(stringResource(R.string.ocr_choose_image))
         }
 
         if (selectedBitmap != null) {
             Text(
-                text = "Image ready for text extraction.",
+                text = stringResource(R.string.ocr_image_ready),
                 color = MaterialTheme.colorScheme.primary
             )
         }
@@ -230,7 +231,8 @@ fun TextExtractionScreen(
             onClick = {
                 val bitmap = selectedBitmap
                 if (bitmap == null) {
-                    statusMessage = "Capture or choose an image first."
+                    statusMessage =
+                        context.getString(R.string.ocr_capture_or_choose)
                 } else {
                     scope.launch {
                         isProcessing = true
@@ -247,7 +249,8 @@ fun TextExtractionScreen(
                                 downloadPercent = progress.percent ?: -1
                             }
 
-                            statusMessage = "Recognizing text..."
+                            statusMessage =
+                                context.getString(R.string.ocr_recognizing)
 
                             extractedText = withContext(Dispatchers.IO) {
                                 OcrLanguageManager.recognizeText(
@@ -257,16 +260,19 @@ fun TextExtractionScreen(
                                 )
                             }
 
-                            statusMessage =
-                                if (extractedText.isBlank()) {
-                                    "No text was detected."
-                                } else {
-                                    "Text extraction completed."
-                                }
+                            statusMessage = if (extractedText.isBlank()) {
+                                context.getString(R.string.ocr_no_text)
+                            } else {
+                                context.getString(R.string.ocr_completed)
+                            }
                         } catch (e: Exception) {
-                            statusMessage =
-                                "Text extraction failed: " +
-                                (e.localizedMessage ?: "Unknown error")
+                            val detail = e.localizedMessage
+                                ?: context.getString(R.string.ocr_unknown_error)
+
+                            statusMessage = context.getString(
+                                R.string.ocr_failed,
+                                detail
+                            )
                         } finally {
                             isProcessing = false
                             downloadPercent = -1
@@ -278,12 +284,18 @@ fun TextExtractionScreen(
             enabled = !isProcessing,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Extract text")
+            Text(stringResource(R.string.ocr_extract))
         }
 
         if (isProcessing) {
             if (downloadPercent >= 0) {
-                Text("Downloading language data: $downloadPercent%")
+                Text(
+                    text = stringResource(
+                        R.string.ocr_downloading_progress,
+                        downloadPercent
+                    )
+                )
+
                 LinearProgressIndicator(
                     progress = { downloadPercent / 100f },
                     modifier = Modifier.fillMaxWidth()
@@ -292,11 +304,12 @@ fun TextExtractionScreen(
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+
                 Text(
                     text = if (downloadLanguage.isNotBlank()) {
-                        "Downloading language data..."
+                        stringResource(R.string.ocr_downloading_language)
                     } else {
-                        "Preparing text recognition..."
+                        stringResource(R.string.ocr_preparing)
                     }
                 )
             }
@@ -310,7 +323,7 @@ fun TextExtractionScreen(
         }
 
         Text(
-            text = "Extracted text",
+            text = stringResource(R.string.ocr_extracted_text),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -320,10 +333,13 @@ fun TextExtractionScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp),
-            placeholder = { Text("Extracted text appears here") },
+            placeholder = {
+                Text(stringResource(R.string.ocr_text_placeholder))
+            },
             enabled = !isProcessing
         )
-                Row(
+
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -341,14 +357,15 @@ fun TextExtractionScreen(
                         )
                     )
 
-                    statusMessage = "Text copied."
+                    statusMessage =
+                        context.getString(R.string.ocr_text_copied)
                 },
                 enabled = extractedText.isNotBlank() && !isProcessing,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Copy")
+                Text(stringResource(R.string.ocr_copy))
             }
-
+            
             OutlinedButton(
                 onClick = {
                     if (extractedText.isNotBlank()) {
@@ -366,7 +383,7 @@ fun TextExtractionScreen(
                         context.startActivity(
                             android.content.Intent.createChooser(
                                 sendIntent,
-                                "Share extracted text"
+                                context.getString(R.string.ocr_share_title)
                             )
                         )
                     }
@@ -374,7 +391,7 @@ fun TextExtractionScreen(
                 enabled = extractedText.isNotBlank() && !isProcessing,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Share")
+                Text(stringResource(R.string.ocr_share))
             }
         }
 
@@ -386,7 +403,7 @@ fun TextExtractionScreen(
             enabled = extractedText.isNotBlank() && !isProcessing,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Clear text")
+            Text(stringResource(R.string.ocr_clear_text))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -428,9 +445,12 @@ private fun CameraDocumentPreview(
         mutableStateOf<PreviewView?>(null)
     }
 
-    AndroidCameraPreview(
-        onViewCreated = { view ->
-            previewView = view
+    AndroidViewContainer(
+        factory = {
+            PreviewView(context).apply {
+                scaleType = PreviewView.ScaleType.FILL_CENTER
+                previewView = this
+            }
         }
     )
 
@@ -467,33 +487,19 @@ private fun CameraDocumentPreview(
                 } catch (e: Exception) {
                     onImageCaptureReady(null)
                     onCameraError(
-                        e.localizedMessage ?: "Could not start camera."
+                        e.localizedMessage
+                            ?: context.getString(R.string.ocr_camera_start_failed)
                     )
                 }
             }
         } catch (e: Exception) {
             onImageCaptureReady(null)
             onCameraError(
-                e.localizedMessage ?: "Could not initialize camera."
+                e.localizedMessage
+                    ?: context.getString(R.string.ocr_camera_init_failed)
             )
         }
     }
-}
-
-@Composable
-private fun AndroidCameraPreview(
-    onViewCreated: (PreviewView) -> Unit
-) {
-    val context = LocalContext.current
-
-    AndroidViewContainer(
-        factory = {
-            PreviewView(context).apply {
-                scaleType = PreviewView.ScaleType.FILL_CENTER
-                onViewCreated(this)
-            }
-        }
-    )
 }
 
 @Composable
@@ -537,11 +543,14 @@ private fun takeDocumentPhoto(
                     if (bitmap != null) {
                         onSuccess(bitmap)
                     } else {
-                        onError("Could not decode captured photo.")
+                        onError(
+                            context.getString(R.string.ocr_photo_decode_failed)
+                        )
                     }
                 } catch (e: Exception) {
                     onError(
-                        e.localizedMessage ?: "Could not read captured photo."
+                        e.localizedMessage
+                            ?: context.getString(R.string.ocr_photo_read_failed)
                     )
                 } finally {
                     photoFile.delete()
@@ -551,7 +560,8 @@ private fun takeDocumentPhoto(
             override fun onError(exception: ImageCaptureException) {
                 photoFile.delete()
                 onError(
-                    exception.localizedMessage ?: "Photo capture failed."
+                    exception.localizedMessage
+                        ?: context.getString(R.string.ocr_photo_capture_failed)
                 )
             }
         }
