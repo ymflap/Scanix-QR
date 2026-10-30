@@ -33,7 +33,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import org.json.JSONObject
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -50,6 +52,7 @@ private data class ScanixUpdateInfo(
 @Composable
 fun AppUpdateScreen() {
     val context = LocalContext.current
+    val mainHandler = remember { Handler(Looper.getMainLooper()) }
 
     val currentVersion = remember(context) {
         getInstalledVersion(
@@ -63,13 +66,15 @@ fun AppUpdateScreen() {
     val updateChannel = BuildConfig.UPDATE_CHANNEL
 
     var isChecking by remember { mutableStateOf(false) }
+    var isDownloading by remember { mutableStateOf(false) }
+    var downloadProgress by remember { mutableStateOf(-1) }
     var updateInfo by remember {
         mutableStateOf<ScanixUpdateInfo?>(null)
     }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     fun checkForUpdates() {
-        if (isChecking) return
+        if (isChecking || isDownloading) return
 
         isChecking = true
         errorMessage = null
@@ -148,16 +153,161 @@ fun AppUpdateScreen() {
                     releaseNotes = releaseNotes
                 )
 
-                Handler(Looper.getMainLooper()).post {
+                mainHandler.post {
                     updateInfo = result
                     isChecking = false
                 }
             } catch (_: Exception) {
-                Handler(Looper.getMainLooper()).post {
+                mainHandler.post {
                     errorMessage = context.getString(
                         R.string.update_error
                     )
                     isChecking = false
+                }
+            } finally {
+                connection?.disconnect()
+            }
+        }.start()
+    }
+
+    fun downloadAndInstallUpdate() {
+        val info = updateInfo ?: return
+
+        if (isDownloading || info.updateUrl.isBlank()) return
+
+        val parsedUrl = Uri.parse(info.updateUrl)
+
+        if (
+            parsedUrl.scheme != "https" ||
+            parsedUrl.host.isNullOrBlank()
+        ) {
+            errorMessage = context.getString(R.string.update_error)
+            return
+        }
+
+        isDownloading = true
+        downloadProgress = -1
+        errorMessage = null
+
+        Thread {
+            var connection: HttpURLConnection? = null
+
+            try {
+                val updatesDirectory = File(
+                    context.cacheDir,
+                    "updates"
+                )
+
+                if (
+                    !updatesDirectory.exists() &&
+                    !updatesDirectory.mkdirs()
+                ) {
+                    throw IllegalStateException(
+                        "Cannot create update directory"
+                    )
+                }
+
+                val apkFile = File(
+                    updatesDirectory,
+                    "scanix-update.apk"
+                )
+
+                connection = URL(info.updateUrl)
+                    .openConnection() as HttpURLConnection
+
+                connection.connectTimeout = 15000
+                connection.readTimeout = 30000
+                connection.requestMethod = "GET"
+                connection.instanceFollowRedirects = true
+                connection.setRequestProperty(
+                    "Accept",
+                    "application/vnd.android.package-archive"
+                )
+
+                val responseCode = connection.responseCode
+
+                if (responseCode !in 200..299) {
+                    throw IllegalStateException(
+                        "APK download failed"
+                    )
+                }
+
+                val contentLength = connection.contentLengthLong
+                var downloadedBytes = 0L
+
+                connection.inputStream.use { input ->
+                    apkFile.outputStream().buffered().use { output ->
+                        val buffer = ByteArray(16 * 1024)
+                        var bytesRead: Int
+
+                        while (
+                            input.read(buffer).also {
+                                bytesRead = it
+                            } != -1
+                        ) {
+                            output.write(buffer, 0, bytesRead)
+                            downloadedBytes += bytesRead
+
+                            if (contentLength > 0L) {
+                                val progress = (
+                                    downloadedBytes * 100L /
+                                        contentLength
+                                    ).toInt().coerceIn(0, 100)
+
+                                mainHandler.post {
+                                    downloadProgress = progress
+                                }
+                            }
+                        }
+
+                        output.flush()
+                    }
+                }
+
+                if (!apkFile.isFile || apkFile.length() == 0L) {
+                    throw IllegalStateException(
+                        "Downloaded APK is empty"
+                    )
+                }
+
+                mainHandler.post {
+                    try {
+                        val apkUri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.fileprovider",
+                            apkFile
+                        )
+
+                        val installIntent = Intent(
+                            Intent.ACTION_VIEW
+                        ).apply {
+                            setDataAndType(
+                                apkUri,
+                                "application/vnd.android.package-archive"
+                            )
+                            addFlags(
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            )
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+
+                        context.startActivity(installIntent)
+                        isDownloading = false
+                        downloadProgress = 100
+                    } catch (_: Exception) {
+                        errorMessage = context.getString(
+                            R.string.update_error
+                        )
+                        isDownloading = false
+                    }
+                }
+            } catch (_: Exception) {
+                mainHandler.post {
+                    errorMessage = context.getString(
+                        R.string.update_error
+                    )
+                    isDownloading = false
+                    downloadProgress = -1
                 }
             } finally {
                 connection?.disconnect()
@@ -203,13 +353,33 @@ fun AppUpdateScreen() {
                 )
 
                 Text(
-                    text = currentVersion.second,
+                    text = displayVersion(currentVersion.second),
                     style = MaterialTheme.typography.headlineSmall
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 when {
+                    isDownloading -> {
+                        CircularProgressIndicator(
+                            progress = {
+                                if (downloadProgress >= 0) {
+                                    downloadProgress / 100f
+                                } else {
+                                    0f
+                                }
+                            }
+                        )
+
+                        Text(
+                            text = if (downloadProgress >= 0) {
+                                "${stringResource(R.string.update_checking)} $downloadProgress%"
+                            } else {
+                                stringResource(R.string.update_checking)
+                            }
+                        )
+                    }
+
                     isChecking -> {
                         CircularProgressIndicator()
 
@@ -234,7 +404,7 @@ fun AppUpdateScreen() {
                         )
 
                         Text(
-                            text = updateInfo!!.versionName,
+                            text = displayVersion(updateInfo!!.versionName),
                             style = MaterialTheme.typography.titleMedium
                         )
 
@@ -245,19 +415,9 @@ fun AppUpdateScreen() {
                         if (updateInfo!!.updateUrl.isNotBlank()) {
                             Button(
                                 onClick = {
-                                    try {
-                                        context.startActivity(
-                                            Intent(
-                                                Intent.ACTION_VIEW,
-                                                Uri.parse(updateInfo!!.updateUrl)
-                                            )
-                                        )
-                                    } catch (_: Exception) {
-                                        errorMessage = context.getString(
-                                            R.string.scan_open_link_failed
-                                        )
-                                    }
+                                    downloadAndInstallUpdate()
                                 },
+                                enabled = !isDownloading,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
@@ -281,7 +441,7 @@ fun AppUpdateScreen() {
 
         OutlinedButton(
             onClick = { checkForUpdates() },
-            enabled = !isChecking,
+            enabled = !isChecking && !isDownloading,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -289,6 +449,11 @@ fun AppUpdateScreen() {
             )
         }
     }
+}
+
+private fun displayVersion(versionName: String): String {
+    val cleanVersion = versionName.removePrefix("v").removePrefix("V")
+    return "v$cleanVersion"
 }
 
 @Suppress("DEPRECATION")
