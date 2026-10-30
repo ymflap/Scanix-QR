@@ -55,7 +55,11 @@ private data class ScanixUpdateInfo(
 )
 
 @Composable
-fun AppUpdateScreen() {
+fun AppUpdateScreen(
+    visible: Boolean = true,
+    downloadRequestId: Int = 0,
+    onUpdateAvailable: (String) -> Unit = {}
+) {
     val context = LocalContext.current
     val mainHandler = remember { Handler(Looper.getMainLooper()) }
 
@@ -77,6 +81,8 @@ fun AppUpdateScreen() {
         mutableStateOf<ScanixUpdateInfo?>(null)
     }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var lastHandledDownloadRequest by remember { mutableStateOf(0) }
+    var lastNotifiedVersion by remember { mutableStateOf<String?>(null) }
 
     fun checkForUpdates() {
         if (isChecking || isDownloading) return
@@ -171,8 +177,7 @@ fun AppUpdateScreen() {
                             "Published release APK unavailable"
                         )
                     }
-
-                    val parsedUrl = Uri.parse(apkUrl)
+                                        val parsedUrl = Uri.parse(apkUrl)
 
                     if (
                         parsedUrl.scheme != "https" ||
@@ -290,6 +295,7 @@ fun AppUpdateScreen() {
             }
         }.start()
     }
+
     fun downloadAndInstallUpdate() {
         val info = updateInfo ?: return
 
@@ -416,8 +422,7 @@ fun AppUpdateScreen() {
                         "Downloaded APK is not newer than installed version"
                     )
                 }
-
-                if (
+                                if (
                     info.versionCode == null &&
                     normalizeVersion(downloadedVersion.second) !=
                     normalizeVersion(info.versionName)
@@ -502,6 +507,32 @@ fun AppUpdateScreen() {
         }
     } == true
 
+    LaunchedEffect(updateAvailable, updateInfo?.versionName) {
+        val info = updateInfo
+        if (
+            updateAvailable &&
+            info != null &&
+            lastNotifiedVersion != info.versionName
+        ) {
+            lastNotifiedVersion = info.versionName
+            onUpdateAvailable(info.versionName)
+        }
+    }
+
+    LaunchedEffect(downloadRequestId, updateAvailable, updateInfo?.versionName) {
+        val info = updateInfo
+        if (
+            downloadRequestId > 0 &&
+            downloadRequestId != lastHandledDownloadRequest &&
+            updateAvailable &&
+            info != null
+        ) {
+            lastHandledDownloadRequest = downloadRequestId
+            downloadAndInstallUpdate()
+        }
+    }
+
+    if (visible) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -621,8 +652,7 @@ fun AppUpdateScreen() {
                 }
             }
         }
-
-        OutlinedButton(
+                OutlinedButton(
             onClick = { checkForUpdates() },
             enabled = !isChecking && !isDownloading,
             modifier = Modifier.fillMaxWidth()
@@ -631,6 +661,7 @@ fun AppUpdateScreen() {
                 stringResource(R.string.update_check)
             )
         }
+    }
     }
 }
 
