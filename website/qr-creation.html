@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="تعرّف على ميزة إنشاء رموز QR المخطط لإضافتها إلى Scanix QR، وأنواع البيانات التي يمكن تحويلها إلى رموز قابلة للمسح.">
+  <title>إنشاء رموز QR | Scanix QR</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #101827;
+      --surface: #192538;
+      --surface-light: #22324a;
+      --text: #f3f6fc;
+      --muted: #b7c3d5;
+      --accent: #69a8ff;
+      --border: #30415a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.9;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .container {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    header {
+      padding: 26px 0 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 4px 12px;
+      border: 1px solid #47618a;
+      border-radius: 999px;
+      color: #c9ddff;
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-size: clamp(1.8rem, 6vw, 2.7rem);
+      line-height: 1.4;
+    }
+
+    h2 {
+      margin-top: 34px;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin: 10px 0;
+      color: var(--muted);
+    }
+
+    .intro {
+      padding: 22px 0 12px;
+    }
+
+    .notice {
+      margin: 22px 0;
+      padding: 16px;
+      border: 1px solid #52678b;
+      border-radius: 14px;
+      background: var(--surface);
+      color: #dce8fb;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .item {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+    }
+
+    .item h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .item p {
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: var(--surface-light);
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    ul {
+      padding-right: 22px;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .item {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Scanix <span>QR</span></div>
+      <div class="status">ميزة مخطط لها في تحديث مستقبلي</div>
+      <h1 id="overview">إنشاء رموز QR لمختلف أنواع البيانات</h1>
+      <p>
+        تعرّف على ميزة إنشاء رموز QR التي نخطط لإضافتها إلى
+        Scanix QR، والأنواع المختلفة من المعلومات التي يمكن تحويلها
+        إلى رمز قابل للمسح.
+      </p>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h2>ما هي الميزة؟</h2>
+        <p>
+          ستتيح الميزة المستقبلية تحويل أنواع متعددة من البيانات إلى
+          رموز QR، بحيث يمكن لهاتف آخر مسح الرمز والتعامل مع محتواه
+          وفقًا لنوع البيانات والتطبيقات المتاحة على الجهاز.
+        </p>
+        <div class="notice">
+          <strong>مهم:</strong>
+          إنشاء رموز QR غير متاح حاليًا في الإصدار الحالي من
+          Scanix QR. المعلومات التالية توضح نطاق الميزة المخطط لها،
+          وقد تختلف التفاصيل النهائية عند تنفيذها.
+        </div>
+      </section>
+
+      <section>
+        <h2>أنواع البيانات المخطط دعمها</h2>
+        <div class="grid">
+          <article class="item">
+            <div class="number">١</div>
+            <h3>النصوص والأرقام</h3>
+            <p>
+              تحويل النصوص العادية والملاحظات والأرقام والمعرّفات
+              والأكواد المرجعية إلى رموز QR يمكن مسحها لعرض محتواها.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٢</div>
+            <h3>روابط المواقع والإنترنت</h3>
+            <p>
+              تحويل روابط المواقع وصفحات الويب والروابط المباشرة
+              إلى رموز تسهّل فتح العنوان على الأجهزة المتوافقة.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٣</div>
+            <h3>الخرائط والمواقع الجغرافية</h3>
+            <p>
+              إعداد رموز تتضمن إحداثيات جغرافية أو رابطًا لموقع
+              على الخريطة، لتسهيل الوصول إلى الأماكن المحددة.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٤</div>
+            <h3>شبكات Wi-Fi</h3>
+            <p>
+              تضمين اسم شبكة Wi-Fi وكلمة مرورها ونوع الحماية،
+              بحيث يمكن للأجهزة المتوافقة قراءة بيانات الشبكة
+              والمساعدة في الاتصال بها.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٥</div>
+            <h3>جهات الاتصال</h3>
+            <p>
+              تضمين بيانات مثل الاسم ورقم الهاتف والبريد الإلكتروني
+              ومعلومات الاتصال الأخرى، لتسهيل قراءتها وحفظها.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٦</div>
+            <h3>أرقام الهواتف والرسائل</h3>
+            <p>
+              إعداد رموز تحتوي على أرقام الهواتف أو بيانات رسالة
+              نصية، وفقًا لصيغة الرمز ومدى توافق الجهاز معها.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٧</div>
+            <h3>البريد الإلكتروني</h3>
+            <p>
+              تضمين عنوان بريد إلكتروني، مع إمكانية تضمين عنوان
+              الرسالة ونصها وفقًا للصيغة التي ستُعتمد.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٨</div>
+            <h3>الأحداث والمواعيد</h3>
+            <p>
+              تضمين بيانات موعد أو حدث، مثل العنوان والتاريخ
+              والوقت والموقع، وفقًا للصيغ التي ستدعمها الميزة.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">٩</div>
+            <h3>بيانات أخرى</h3>
+            <p>
+              إمكانية دعم أنواع إضافية من البيانات والاستخدامات
+              مستقبلًا، بحسب الصيغ المطلوبة ومدى توافقها مع
+              معايير رموز QR.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>كيف ستعمل الميزة؟</h2>
+        <p>
+          عند تنفيذها، سيكون الهدف هو إتاحة اختيار نوع البيانات
+          وإدخال المعلومات المطلوبة ثم تحويلها إلى رمز QR مناسب.
+          ويمكن بعد ذلك استخدام الرمز مع الأجهزة والتطبيقات
+          المتوافقة لقراءة البيانات أو تنفيذ الإجراء المرتبط بها.
+        </p>
+        <p>
+          ستعتمد طريقة التعامل مع الرمز على محتواه؛ فقد يعرض نصًا،
+          أو يفتح رابطًا، أو يجهّز بيانات اتصال، أو يساعد على
+          الوصول إلى موقع جغرافي.
+        </p>
+      </section>
+
+      <section>
+        <h2>ملاحظة حول كلمات المرور والبيانات الخاصة</h2>
+        <p>
+          قد يحتوي رمز QR على بيانات يمكن لأي شخص يمسحه قراءتها،
+          بما في ذلك بيانات شبكة Wi-Fi إذا كانت مضمّنة في الرمز.
+          لذلك ينبغي عدم مشاركة الرموز التي تحتوي على معلومات
+          خاصة إلا مع الأشخاص المقصودين.
+        </p>
+      </section>
+
+      <section>
+        <h2>الحالة الحالية</h2>
+        <p>
+          هذه الصفحة مخصصة للتعريف بميزة مستقبلية مخطط لها.
+          لا يعني وجود الأنواع المذكورة هنا أنها مدعومة بالفعل
+          في الإصدار الحالي، وسيتم توضيح التفاصيل عند تنفيذ
+          الميزة واعتماد أنواع البيانات النهائية.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Scanix QR — معلومات عن ميزة مخطط لها.</p>
+      <p>
+        <a href="about.html">حول التطبيق</a>
+        <span aria-hidden="true"> | </span>
+        <a href="privacy.html">سياسة الخصوصية</a>
+      </p>
+    </footer>
+  </div>
+</body>
+  </html>
