@@ -39,7 +39,8 @@ private enum class ScanixPage {
     APPEARANCE,
     SCAN_HISTORY_PRIVACY,
     SUPPORT,
-    UPDATE
+    UPDATE,
+    CREATE_QR
 }
 
 private const val PRIVACY_POLICY_URL_AR =
@@ -151,6 +152,17 @@ fun ScanixNavigation() {
                             ScanixPage.UPDATE.name ->
                                 stringResource(R.string.nav_update)
 
+                            ScanixPage.CREATE_QR.name ->
+                                if (selectedLanguage.equals(
+                                        "ar",
+                                        ignoreCase = true
+                                    )
+                                ) {
+                                    "إنشاء QR"
+                                } else {
+                                    "Create QR"
+                                }
+
                             else ->
                                 stringResource(R.string.app_name)
                         },
@@ -178,6 +190,9 @@ fun ScanixNavigation() {
                         },
                         onOcrClick = {
                             currentPage = ScanixPage.OCR.name
+                        },
+                        onCreateQrClick = {
+                            currentPage = ScanixPage.CREATE_QR.name
                         }
                     )
 
@@ -186,6 +201,8 @@ fun ScanixNavigation() {
                     ScanixPage.HISTORY.name -> HistoryScreen()
 
                     ScanixPage.OCR.name -> TextExtractionScreen()
+
+                    ScanixPage.CREATE_QR.name -> CreateQrScreen()
 
                     ScanixPage.SETTINGS.name -> SettingsScreen(
                         onOpenAppearance = {
