@@ -269,9 +269,9 @@ private fun HistoryEntryCard(
 
     val formattedDate = remember(entry.timestamp) {
         SimpleDateFormat(
-            "yyyy/MM/dd - HH:mm",
-            Locale.getDefault()
-        ).format(Date(entry.timestamp))
+    "yyyy/MM/dd - hh:mm a",
+    Locale.getDefault()
+).format(Date(entry.timestamp))
     }
 
     Card(
