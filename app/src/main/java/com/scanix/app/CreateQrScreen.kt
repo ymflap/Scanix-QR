@@ -1,291 +1,137 @@
 package com.scanix.app
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 
-private enum class QrContentType(
-    val label: String
-) {
-    TEXT("نص"),
-    URL("رابط"),
-    CONTACT("جهة اتصال"),
-    WIFI("Wi-Fi")
-}
+private const val QR_CREATION_URL_AR =
+    "https://scanix-qr.pages.dev/qr-creation.html"
+
+private const val QR_CREATION_URL_EN =
+    "https://scanix-qr.pages.dev/qr-creation-en.html"
 
 @Composable
 fun CreateQrScreen() {
-    var selectedTypeName by rememberSaveable {
-        mutableStateOf(QrContentType.TEXT.name)
-    }
+    val context = LocalContext.current
 
-    var text by rememberSaveable {
-        mutableStateOf("")
-    }
+    val isArabic =
+        LanguageSettingsStore.getLanguage(context).code.equals(
+            "ar",
+            ignoreCase = true
+        )
 
-    var contactName by rememberSaveable {
-        mutableStateOf("")
+    val creationUrl = if (isArabic) {
+        QR_CREATION_URL_AR
+    } else {
+        QR_CREATION_URL_EN
     }
-
-    var phone by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var wifiName by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var wifiPassword by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var wifiSecurity by rememberSaveable {
-        mutableStateOf("WPA")
-    }
-
-    val selectedType = QrContentType.valueOf(selectedTypeName)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "إنشاء QR",
+            text = if (isArabic) "إنشاء QR" else "Create QR",
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
-        Text(
-            text = "أنشئ رمزًا وشاركه بسهولة",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                QrTypeButton(
-                    label = "نص",
-                    selected = selectedType == QrContentType.TEXT,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    selectedTypeName = QrContentType.TEXT.name
-                }
-
-                QrTypeButton(
-                    label = "رابط",
-                    selected = selectedType == QrContentType.URL,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    selectedTypeName = QrContentType.URL.name
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                QrTypeButton(
-                    label = "جهة اتصال",
-                    selected = selectedType == QrContentType.CONTACT,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    selectedTypeName = QrContentType.CONTACT.name
-                }
-
-                QrTypeButton(
-                    label = "شبكة Wi-Fi",
-                    selected = selectedType == QrContentType.WIFI,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    selectedTypeName = QrContentType.WIFI.name
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(22.dp))
-
-        when (selectedType) {
-            QrContentType.TEXT -> {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("النص") },
-                    placeholder = {
-                        Text("اكتب النص الذي تريد تحويله")
+                Text(
+                    text = if (isArabic) {
+                        "حالة الميزة"
+                    } else {
+                        "Feature status"
                     },
-                    minLines = 3,
-                    shape = RoundedCornerShape(16.dp)
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
-            }
-
-            QrContentType.URL -> {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("رابط الموقع") },
-                    placeholder = {
-                        Text("https://example.com")
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-            }
-
-            QrContentType.CONTACT -> {
-                OutlinedTextField(
-                    value = contactName,
-                    onValueChange = { contactName = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("اسم جهة الاتصال") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = { phone = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("رقم الهاتف") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-            }
-
-            QrContentType.WIFI -> {
-                OutlinedTextField(
-                    value = wifiName,
-                    onValueChange = { wifiName = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("اسم الشبكة") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = wifiPassword,
-                    onValueChange = { wifiPassword = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("كلمة مرور الشبكة") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "نوع حماية الشبكة",
-                    style = MaterialTheme.typography.labelLarge
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    listOf("WPA", "WEP", "بدون حماية").forEach { option ->
-                        QrTypeButton(
-                            label = option,
-                            selected = wifiSecurity == option,
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            wifiSecurity = option
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "لن تُحفظ كلمة المرور تلقائيًا في سجل التطبيق.",
-                    style = MaterialTheme.typography.bodySmall,
+                    text = if (isArabic) {
+                        "تحت التطوير 🛠️"
+                    } else {
+                        "Under development 🛠️"
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        Button(
-            onClick = {
-                // سيتم ربط الزر بمولّد QR في ملف مستقل لاحقًا.
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onSurface,
-                contentColor = MaterialTheme.colorScheme.surface
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
             )
         ) {
-            Text(
-                text = "إنشاء الرمز",
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-@Composable
-private fun QrTypeButton(
-    label: String,
-    selected: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    if (selected) {
-        Button(
-            onClick = onClick,
-            modifier = modifier.height(48.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onSurface,
-                contentColor = MaterialTheme.colorScheme.surface
-            )
-        ) {
-            Text(label)
-        }
-    } else {
-        OutlinedButton(
-            onClick = onClick,
-            modifier = modifier.height(48.dp),
-            shape = RoundedCornerShape(14.dp)
-        ) {
-            Text(label)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = if (isArabic) {
+                        "تعرّف على المزيد"
+                    } else {
+                        "Learn more"
+                    },
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(creationUrl)
+                        )
+                        context.startActivity(intent)
+                    }
+                )
+            }
         }
     }
 }
