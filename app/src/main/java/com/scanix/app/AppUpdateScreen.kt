@@ -1,7 +1,9 @@
 package com.scanix.app
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -159,8 +161,10 @@ fun AppUpdateScreen() {
                 }
             } catch (_: Exception) {
                 mainHandler.post {
-                    errorMessage = context.getString(
-                        R.string.update_error
+                    errorMessage = localizedUpdateMessage(
+                        context = context,
+                        arabic = "تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
+                        english = "Unable to check for updates. Check your internet connection and try again."
                     )
                     isChecking = false
                 }
@@ -181,7 +185,11 @@ fun AppUpdateScreen() {
             parsedUrl.scheme != "https" ||
             parsedUrl.host.isNullOrBlank()
         ) {
-            errorMessage = context.getString(R.string.update_error)
+            errorMessage = localizedUpdateMessage(
+                context = context,
+                arabic = "رابط تنزيل التحديث غير صالح.",
+                english = "The update download URL is invalid."
+            )
             return
         }
 
@@ -191,6 +199,7 @@ fun AppUpdateScreen() {
 
         Thread {
             var connection: HttpURLConnection? = null
+            var apkFile: File? = null
 
             try {
                 val updatesDirectory = File(
@@ -207,7 +216,7 @@ fun AppUpdateScreen() {
                     )
                 }
 
-                val apkFile = File(
+                apkFile = File(
                     updatesDirectory,
                     "scanix-update.apk"
                 )
@@ -295,16 +304,22 @@ fun AppUpdateScreen() {
                         isDownloading = false
                         downloadProgress = 100
                     } catch (_: Exception) {
-                        errorMessage = context.getString(
-                            R.string.update_error
+                        errorMessage = localizedUpdateMessage(
+                            context = context,
+                            arabic = "تم تنزيل الملف، لكن تعذر بدء تثبيت التحديث. تحقق من السماح بتثبيت التطبيقات من هذا المصدر.",
+                            english = "The file was downloaded, but installation could not be started. Check whether installing apps from this source is allowed."
                         )
                         isDownloading = false
                     }
                 }
             } catch (_: Exception) {
+                apkFile?.delete()
+
                 mainHandler.post {
-                    errorMessage = context.getString(
-                        R.string.update_error
+                    errorMessage = localizedUpdateMessage(
+                        context = context,
+                        arabic = "تعذر تنزيل ملف التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
+                        english = "Unable to download the update. Check your internet connection and try again."
                     )
                     isDownloading = false
                     downloadProgress = -1
@@ -373,9 +388,17 @@ fun AppUpdateScreen() {
 
                         Text(
                             text = if (downloadProgress >= 0) {
-                                "${stringResource(R.string.update_checking)} $downloadProgress%"
+                                "${localizedUpdateMessage(
+                                    context = context,
+                                    arabic = "جارٍ تنزيل التحديث",
+                                    english = "Downloading update"
+                                )} $downloadProgress%"
                             } else {
-                                stringResource(R.string.update_checking)
+                                localizedUpdateMessage(
+                                    context = context,
+                                    arabic = "جارٍ تنزيل التحديث...",
+                                    english = "Downloading update..."
+                                )
                             }
                         )
                     }
@@ -390,7 +413,7 @@ fun AppUpdateScreen() {
 
                     errorMessage != null -> {
                         Text(
-                            text = errorMessage!!,
+                            text = errorMessage.orEmpty(),
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -448,6 +471,28 @@ fun AppUpdateScreen() {
                 stringResource(R.string.update_check)
             )
         }
+    }
+}
+
+private fun localizedUpdateMessage(
+    context: Context,
+    arabic: String,
+    english: String
+): String {
+    val configuration: Configuration =
+        context.resources.configuration
+
+    val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        configuration.locales[0]?.language.orEmpty()
+    } else {
+        @Suppress("DEPRECATION")
+        configuration.locale?.language.orEmpty()
+    }
+
+    return if (language.startsWith("ar", ignoreCase = true)) {
+        arabic
+    } else {
+        english
     }
 }
 
