@@ -51,7 +51,8 @@ private data class ScanixUpdateInfo(
     val versionCode: Long?,
     val versionName: String,
     val updateUrl: String,
-    val releaseNotes: String
+    val releaseNotes: String,
+    val expectedSizeBytes: Long? = null
 )
 
 @Composable
@@ -155,6 +156,7 @@ fun AppUpdateScreen(
                         )
 
                     var apkUrl = ""
+                    var apkSizeBytes: Long? = null
 
                     for (index in 0 until assets.length()) {
                         val asset = assets.optJSONObject(index)
@@ -168,6 +170,9 @@ fun AppUpdateScreen(
                                 "browser_download_url",
                                 ""
                             )
+
+                            val assetSize = asset.optLong("size", 0L)
+                            apkSizeBytes = assetSize.takeIf { it > 0L }
                             break
                         }
                     }
@@ -177,7 +182,8 @@ fun AppUpdateScreen(
                             "Published release APK unavailable"
                         )
                     }
-                                        val parsedUrl = Uri.parse(apkUrl)
+
+                    val parsedUrl = Uri.parse(apkUrl)
 
                     if (
                         parsedUrl.scheme != "https" ||
@@ -192,7 +198,8 @@ fun AppUpdateScreen(
                         versionCode = null,
                         versionName = versionName,
                         updateUrl = apkUrl,
-                        releaseNotes = ""
+                        releaseNotes = "",
+                        expectedSizeBytes = apkSizeBytes
                     )
                 } else {
                     connection = URL(SCANIX_UPDATE_INFO_URL)
@@ -249,6 +256,10 @@ fun AppUpdateScreen(
                         "releaseNotes",
                         ""
                     )
+                    val expectedSize = channel.optLong(
+                        "sizeBytes",
+                        0L
+                    )
 
                     if (versionCode <= 0L || versionName.isBlank()) {
                         throw IllegalStateException(
@@ -273,7 +284,10 @@ fun AppUpdateScreen(
                         versionCode = versionCode,
                         versionName = versionName,
                         updateUrl = updateUrl,
-                        releaseNotes = releaseNotes
+                        releaseNotes = releaseNotes,
+                        expectedSizeBytes = expectedSize.takeIf {
+                            it > 0L
+                        }
                     )
                 }
 
@@ -364,26 +378,30 @@ fun AppUpdateScreen(
                 }
 
                 val contentLength = connection.contentLengthLong
+                val totalBytes = if (contentLength > 0L) {
+                    contentLength
+                } else {
+                    info.expectedSizeBytes ?: -1L
+                }
+
                 var downloadedBytes = 0L
 
                 connection.inputStream.use { input ->
                     apkFile.outputStream().buffered().use { output ->
                         val buffer = ByteArray(16 * 1024)
-                        var bytesRead: Int
 
-                        while (
-                            input.read(buffer).also {
-                                bytesRead = it
-                            } != -1
-                        ) {
+                        while (true) {
+                            val bytesRead = input.read(buffer)
+                            if (bytesRead == -1) break
+
                             output.write(buffer, 0, bytesRead)
                             downloadedBytes += bytesRead
 
-                            if (contentLength > 0L) {
+                            if (totalBytes > 0L) {
                                 val progress = (
                                     downloadedBytes * 100L /
-                                        contentLength
-                                    ).toInt().coerceIn(0, 100)
+                                        totalBytes
+                                    ).toInt().coerceIn(0, 99)
 
                                 mainHandler.post {
                                     downloadProgress = progress
@@ -398,6 +416,15 @@ fun AppUpdateScreen(
                 if (!apkFile.isFile || apkFile.length() == 0L) {
                     throw IllegalStateException(
                         "Downloaded APK is empty"
+                    )
+                }
+
+                if (
+                    info.expectedSizeBytes != null &&
+                    apkFile.length() != info.expectedSizeBytes
+                ) {
+                    throw IllegalStateException(
+                        "Downloaded APK size does not match release metadata"
                     )
                 }
 
@@ -422,7 +449,8 @@ fun AppUpdateScreen(
                         "Downloaded APK is not newer than installed version"
                     )
                 }
-                                if (
+
+                if (
                     info.versionCode == null &&
                     normalizeVersion(downloadedVersion.second) !=
                     normalizeVersion(info.versionName)
@@ -491,7 +519,7 @@ fun AppUpdateScreen(
             }
         }.start()
     }
-
+    
     LaunchedEffect(updateChannel) {
         checkForUpdates()
     }
@@ -509,6 +537,7 @@ fun AppUpdateScreen(
 
     LaunchedEffect(updateAvailable, updateInfo?.versionName) {
         val info = updateInfo
+
         if (
             updateAvailable &&
             info != null &&
@@ -519,8 +548,13 @@ fun AppUpdateScreen(
         }
     }
 
-    LaunchedEffect(downloadRequestId, updateAvailable, updateInfo?.versionName) {
+    LaunchedEffect(
+        downloadRequestId,
+        updateAvailable,
+        updateInfo?.versionName
+    ) {
         val info = updateInfo
+
         if (
             downloadRequestId > 0 &&
             downloadRequestId != lastHandledDownloadRequest &&
@@ -533,135 +567,144 @@ fun AppUpdateScreen(
     }
 
     if (visible) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.update_title),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(18.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+            Text(
+                text = stringResource(R.string.update_title),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             ) {
-                Text(
-                    text = stringResource(R.string.update_current_version),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    modifier = Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = stringResource(
+                            R.string.update_current_version
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
 
-                Text(
-                    text = displayVersion(currentVersion.second),
-                    style = MaterialTheme.typography.headlineSmall
-                )
+                    Text(
+                        text = displayVersion(currentVersion.second),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                when {
-                    isDownloading -> {
-                        CircularProgressIndicator(
-                            progress = {
-                                if (downloadProgress >= 0) {
-                                    downloadProgress / 100f
+                    when {
+                        isDownloading -> {
+                            CircularProgressIndicator(
+                                progress = {
+                                    if (downloadProgress >= 0) {
+                                        downloadProgress / 100f
+                                    } else {
+                                        0f
+                                    }
+                                }
+                            )
+
+                            Text(
+                                text = if (downloadProgress >= 0) {
+                                    "${localizedUpdateMessage(
+                                        context = context,
+                                        arabic = "جارٍ تنزيل التحديث",
+                                        english = "Downloading update"
+                                    )} $downloadProgress%"
                                 } else {
-                                    0f
+                                    localizedUpdateMessage(
+                                        context = context,
+                                        arabic = "جارٍ تنزيل التحديث...",
+                                        english = "Downloading update..."
+                                    )
+                                }
+                            )
+                        }
+
+                        isChecking -> {
+                            CircularProgressIndicator()
+
+                            Text(
+                                text = stringResource(
+                                    R.string.update_checking
+                                )
+                            )
+                        }
+
+                        errorMessage != null -> {
+                            Text(
+                                text = errorMessage.orEmpty(),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
+                        updateInfo != null && updateAvailable -> {
+                            Text(
+                                text = stringResource(
+                                    R.string.update_available
+                                ),
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Text(
+                                text = displayVersion(
+                                    updateInfo!!.versionName
+                                ),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            if (updateInfo!!.updateUrl.isNotBlank()) {
+                                Button(
+                                    onClick = {
+                                        downloadAndInstallUpdate()
+                                    },
+                                    enabled = !isDownloading,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        stringResource(
+                                            R.string.update_download
+                                        )
+                                    )
                                 }
                             }
-                        )
-
-                        Text(
-                            text = if (downloadProgress >= 0) {
-                                "${localizedUpdateMessage(
-                                    context = context,
-                                    arabic = "جارٍ تنزيل التحديث",
-                                    english = "Downloading update"
-                                )} $downloadProgress%"
-                            } else {
-                                localizedUpdateMessage(
-                                    context = context,
-                                    arabic = "جارٍ تنزيل التحديث...",
-                                    english = "Downloading update..."
-                                )
-                            }
-                        )
-                    }
-
-                    isChecking -> {
-                        CircularProgressIndicator()
-
-                        Text(
-                            text = stringResource(R.string.update_checking)
-                        )
-                    }
-
-                    errorMessage != null -> {
-                        Text(
-                            text = errorMessage.orEmpty(),
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-
-                    updateInfo != null && updateAvailable -> {
-                        Text(
-                            text = stringResource(
-                                R.string.update_available
-                            ),
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = displayVersion(updateInfo!!.versionName),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        if (updateInfo!!.updateUrl.isNotBlank()) {
-                            Button(
-                                onClick = {
-                                    downloadAndInstallUpdate()
-                                },
-                                enabled = !isDownloading,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    stringResource(R.string.update_download)
-                                )
-                            }
                         }
-                    }
 
-                    updateInfo != null -> {
-                        Text(
-                            text = stringResource(
-                                R.string.update_not_available
-                            ),
-                            fontWeight = FontWeight.Medium
-                        )
+                        updateInfo != null -> {
+                            Text(
+                                text = stringResource(
+                                    R.string.update_not_available
+                                ),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
                     }
                 }
             }
+
+            OutlinedButton(
+                onClick = { checkForUpdates() },
+                enabled = !isChecking && !isDownloading,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    stringResource(R.string.update_check)
+                )
+            }
         }
-                OutlinedButton(
-            onClick = { checkForUpdates() },
-            enabled = !isChecking && !isDownloading,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                stringResource(R.string.update_check)
-            )
-        }
-    }
     }
 }
 
