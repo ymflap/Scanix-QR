@@ -34,11 +34,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -267,12 +267,12 @@ private fun HistoryEntryCard(
         format = entry.format
     ).formatName
 
-        val formattedDate = remember(entry.timestamp) {
+    val formattedDate = remember(entry.timestamp) {
         SimpleDateFormat(
             "yyyy/MM/dd - hh:mm a",
-            Locale.getDefault()
+            Locale.US
         ).format(Date(entry.timestamp))
-        }
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
