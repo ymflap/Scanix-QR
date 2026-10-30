@@ -44,8 +44,11 @@ import java.net.URL
 private const val SCANIX_UPDATE_INFO_URL =
     "https://raw.githubusercontent.com/ymflap/Scanix-QR/main/updates/latest.json"
 
+private const val SCANIX_GITHUB_LATEST_RELEASE_URL =
+    "https://api.github.com/repos/ymflap/Scanix-QR/releases/latest"
+
 private data class ScanixUpdateInfo(
-    val versionCode: Long,
+    val versionCode: Long?,
     val versionName: String,
     val updateUrl: String,
     val releaseNotes: String
@@ -86,74 +89,188 @@ fun AppUpdateScreen() {
             var connection: HttpURLConnection? = null
 
             try {
-                connection = URL(SCANIX_UPDATE_INFO_URL)
-                    .openConnection() as HttpURLConnection
+                val result = if (updateChannel == "github") {
+                    connection = URL(SCANIX_GITHUB_LATEST_RELEASE_URL)
+                        .openConnection() as HttpURLConnection
 
-                connection.connectTimeout = 10000
-                connection.readTimeout = 10000
-                connection.requestMethod = "GET"
-                connection.setRequestProperty(
-                    "Accept",
-                    "application/json"
-                )
-                connection.setRequestProperty(
-                    "Cache-Control",
-                    "no-cache"
-                )
-
-                val responseCode = connection.responseCode
-
-                if (responseCode !in 200..299) {
-                    throw IllegalStateException(
-                        "Update information unavailable"
+                    connection.connectTimeout = 10000
+                    connection.readTimeout = 10000
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty(
+                        "Accept",
+                        "application/vnd.github+json"
                     )
-                }
-
-                val response = connection.inputStream
-                    .bufferedReader(Charsets.UTF_8)
-                    .use { it.readText() }
-
-                val root = JSONObject(response)
-                val channels = root.optJSONObject("channels")
-                    ?: throw IllegalStateException(
-                        "Missing update information"
+                    connection.setRequestProperty(
+                        "User-Agent",
+                        "Scanix-QR-Android"
+                    )
+                    connection.setRequestProperty(
+                        "Cache-Control",
+                        "no-cache"
                     )
 
-                val channel = channels.optJSONObject(updateChannel)
-                    ?: throw IllegalStateException(
-                        "Update information unavailable"
-                    )
+                    val responseCode = connection.responseCode
 
-                val versionCode = channel.optLong("versionCode", 0L)
-                val versionName = channel.optString("versionName", "")
-                val updateUrl = channel.optString("updateUrl", "")
-                val releaseNotes = channel.optString("releaseNotes", "")
+                    if (responseCode !in 200..299) {
+                        throw IllegalStateException(
+                            "Published GitHub release unavailable"
+                        )
+                    }
 
-                if (versionCode <= 0L || versionName.isBlank()) {
-                    throw IllegalStateException(
-                        "Invalid update information"
-                    )
-                }
+                    val response = connection.inputStream
+                        .bufferedReader(Charsets.UTF_8)
+                        .use { it.readText() }
 
-                if (updateUrl.isNotBlank()) {
-                    val parsedUrl = Uri.parse(updateUrl)
+                    val release = JSONObject(response)
+
+                    if (
+                        release.optBoolean("draft", true) ||
+                        release.optBoolean("prerelease", true) ||
+                        release.optString("published_at").isBlank()
+                    ) {
+                        throw IllegalStateException(
+                            "No published stable release"
+                        )
+                    }
+
+                    val versionName = release
+                        .optString("tag_name", "")
+                        .trim()
+
+                    if (!isSupportedReleaseVersion(versionName)) {
+                        throw IllegalStateException(
+                            "Invalid published release version"
+                        )
+                    }
+
+                    val assets = release.optJSONArray("assets")
+                        ?: throw IllegalStateException(
+                            "Release APK unavailable"
+                        )
+
+                    var apkUrl = ""
+
+                    for (index in 0 until assets.length()) {
+                        val asset = assets.optJSONObject(index)
+                            ?: continue
+
+                        if (
+                            asset.optString("name") == "app-release.apk" &&
+                            asset.optString("state") == "uploaded"
+                        ) {
+                            apkUrl = asset.optString(
+                                "browser_download_url",
+                                ""
+                            )
+                            break
+                        }
+                    }
+
+                    if (apkUrl.isBlank()) {
+                        throw IllegalStateException(
+                            "Published release APK unavailable"
+                        )
+                    }
+
+                    val parsedUrl = Uri.parse(apkUrl)
 
                     if (
                         parsedUrl.scheme != "https" ||
-                        parsedUrl.host.isNullOrBlank()
+                        parsedUrl.host != "github.com"
                     ) {
                         throw IllegalStateException(
-                            "Invalid update URL"
+                            "Invalid published APK URL"
                         )
                     }
-                }
 
-                val result = ScanixUpdateInfo(
-                    versionCode = versionCode,
-                    versionName = versionName,
-                    updateUrl = updateUrl,
-                    releaseNotes = releaseNotes
-                )
+                    ScanixUpdateInfo(
+                        versionCode = null,
+                        versionName = versionName,
+                        updateUrl = apkUrl,
+                        releaseNotes = ""
+                    )
+                } else {
+                    connection = URL(SCANIX_UPDATE_INFO_URL)
+                        .openConnection() as HttpURLConnection
+
+                    connection.connectTimeout = 10000
+                    connection.readTimeout = 10000
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty(
+                        "Accept",
+                        "application/json"
+                    )
+                    connection.setRequestProperty(
+                        "Cache-Control",
+                        "no-cache"
+                    )
+
+                    val responseCode = connection.responseCode
+
+                    if (responseCode !in 200..299) {
+                        throw IllegalStateException(
+                            "Update information unavailable"
+                        )
+                    }
+
+                    val response = connection.inputStream
+                        .bufferedReader(Charsets.UTF_8)
+                        .use { it.readText() }
+
+                    val root = JSONObject(response)
+                    val channels = root.optJSONObject("channels")
+                        ?: throw IllegalStateException(
+                            "Missing update information"
+                        )
+
+                    val channel = channels.optJSONObject(updateChannel)
+                        ?: throw IllegalStateException(
+                            "Update information unavailable"
+                        )
+
+                    val versionCode = channel.optLong(
+                        "versionCode",
+                        0L
+                    )
+                    val versionName = channel.optString(
+                        "versionName",
+                        ""
+                    )
+                    val updateUrl = channel.optString(
+                        "updateUrl",
+                        ""
+                    )
+                    val releaseNotes = channel.optString(
+                        "releaseNotes",
+                        ""
+                    )
+
+                    if (versionCode <= 0L || versionName.isBlank()) {
+                        throw IllegalStateException(
+                            "Invalid update information"
+                        )
+                    }
+
+                    if (updateUrl.isNotBlank()) {
+                        val parsedUrl = Uri.parse(updateUrl)
+
+                        if (
+                            parsedUrl.scheme != "https" ||
+                            parsedUrl.host.isNullOrBlank()
+                        ) {
+                            throw IllegalStateException(
+                                "Invalid update URL"
+                            )
+                        }
+                    }
+
+                    ScanixUpdateInfo(
+                        versionCode = versionCode,
+                        versionName = versionName,
+                        updateUrl = updateUrl,
+                        releaseNotes = releaseNotes
+                    )
+                }
 
                 mainHandler.post {
                     updateInfo = result
@@ -173,7 +290,6 @@ fun AppUpdateScreen() {
             }
         }.start()
     }
-
     fun downloadAndInstallUpdate() {
         val info = updateInfo ?: return
 
@@ -279,6 +395,47 @@ fun AppUpdateScreen() {
                     )
                 }
 
+                val archiveInfo = context.packageManager
+                    .getPackageArchiveInfo(
+                        apkFile.absolutePath,
+                        0
+                    ) ?: throw IllegalStateException(
+                    "Downloaded file is not a valid APK"
+                )
+
+                val downloadedVersion = getInstalledVersion(archiveInfo)
+
+                if (archiveInfo.packageName != context.packageName) {
+                    throw IllegalStateException(
+                        "Downloaded APK package does not match"
+                    )
+                }
+
+                if (downloadedVersion.first <= currentVersion.first) {
+                    throw IllegalStateException(
+                        "Downloaded APK is not newer than installed version"
+                    )
+                }
+
+                if (
+                    info.versionCode == null &&
+                    normalizeVersion(downloadedVersion.second) !=
+                    normalizeVersion(info.versionName)
+                ) {
+                    throw IllegalStateException(
+                        "Downloaded APK version does not match published release"
+                    )
+                }
+
+                if (
+                    info.versionCode != null &&
+                    downloadedVersion.first != info.versionCode
+                ) {
+                    throw IllegalStateException(
+                        "Downloaded APK version does not match update information"
+                    )
+                }
+
                 mainHandler.post {
                     try {
                         val apkUri = FileProvider.getUriForFile(
@@ -318,8 +475,8 @@ fun AppUpdateScreen() {
                 mainHandler.post {
                     errorMessage = localizedUpdateMessage(
                         context = context,
-                        arabic = "تعذر تنزيل ملف التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
-                        english = "Unable to download the update. Check your internet connection and try again."
+                        arabic = "تعذر تنزيل ملف التحديث أو التحقق منه. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
+                        english = "Unable to download or verify the update. Check your internet connection and try again."
                     )
                     isDownloading = false
                     downloadProgress = -1
@@ -334,8 +491,15 @@ fun AppUpdateScreen() {
         checkForUpdates()
     }
 
-    val updateAvailable = updateInfo?.let {
-        it.versionCode > currentVersion.first
+    val updateAvailable = updateInfo?.let { info ->
+        if (updateChannel == "github") {
+            compareVersions(
+                info.versionName,
+                currentVersion.second
+            ) > 0
+        } else {
+            (info.versionCode ?: 0L) > currentVersion.first
+        }
     } == true
 
     Column(
@@ -431,10 +595,6 @@ fun AppUpdateScreen() {
                             style = MaterialTheme.typography.titleMedium
                         )
 
-                        if (updateInfo!!.releaseNotes.isNotBlank()) {
-                            Text(updateInfo!!.releaseNotes)
-                        }
-
                         if (updateInfo!!.updateUrl.isNotBlank()) {
                             Button(
                                 onClick = {
@@ -499,6 +659,45 @@ private fun localizedUpdateMessage(
 private fun displayVersion(versionName: String): String {
     val cleanVersion = versionName.removePrefix("v").removePrefix("V")
     return "v$cleanVersion"
+}
+
+private fun normalizeVersion(versionName: String): String {
+    return versionName.trim()
+        .removePrefix("v")
+        .removePrefix("V")
+}
+
+private fun isSupportedReleaseVersion(versionName: String): Boolean {
+    return Regex("^[vV]?\\d+(\\.\\d+){3}$")
+        .matches(versionName)
+}
+
+private fun compareVersions(
+    firstVersion: String,
+    secondVersion: String
+): Int {
+    val first = Regex("\\d+")
+        .findAll(normalizeVersion(firstVersion))
+        .mapNotNull { it.value.toIntOrNull() }
+        .toList()
+
+    val second = Regex("\\d+")
+        .findAll(normalizeVersion(secondVersion))
+        .mapNotNull { it.value.toIntOrNull() }
+        .toList()
+
+    val maxParts = maxOf(first.size, second.size)
+
+    for (index in 0 until maxParts) {
+        val firstPart = first.getOrElse(index) { 0 }
+        val secondPart = second.getOrElse(index) { 0 }
+
+        if (firstPart != secondPart) {
+            return firstPart.compareTo(secondPart)
+        }
+    }
+
+    return 0
 }
 
 @Suppress("DEPRECATION")
