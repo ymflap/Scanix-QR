@@ -1,11 +1,10 @@
-
 {
   "channels": {
     "github": {
-      "versionCode": 10400,
-      "versionName": "1.0.4.0",
+      "versionCode": 10403,
+      "versionName": "v1.0.4.3",
       "updateUrl": "https://github.com/ymflap/Scanix-QR/releases/latest/download/app-release.apk",
-      "releaseNotes": ""
+      "releaseNotes": "يتضمن هذا الإصدار تحسينات على نظام تحديث التطبيق، مع تنزيل التحديث من داخل التطبيق وتسهيل تثبيته."
     },
     "uptodown": {
       "versionCode": 10306,
