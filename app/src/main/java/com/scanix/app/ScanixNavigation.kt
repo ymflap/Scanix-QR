@@ -133,7 +133,8 @@ fun ScanixNavigation() {
                             ScanixPage.SETTINGS.name ->
                                 stringResource(R.string.nav_settings)
 
-                            ScanixPage.OCR.name -> "OCR"
+                            ScanixPage.OCR.name ->
+                                stringResource(R.string.home_ocr_title)
 
                             ScanixPage.LANGUAGE.name ->
                                 stringResource(R.string.nav_language)
@@ -150,7 +151,8 @@ fun ScanixNavigation() {
                             ScanixPage.UPDATE.name ->
                                 stringResource(R.string.nav_update)
 
-                            else -> stringResource(R.string.app_name)
+                            else ->
+                                stringResource(R.string.app_name)
                         },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
