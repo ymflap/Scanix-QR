@@ -1,13 +1,14 @@
 package com.scanix.app
 
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
+import android.os.Environment
+import android.webkit.MimeTypeMap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.delay
 import org.json.JSONObject
 import java.io.File
 import java.net.HttpURLConnection
@@ -47,12 +49,26 @@ private const val SCANIX_UPDATE_INFO_URL =
 private const val SCANIX_GITHUB_LATEST_RELEASE_URL =
     "https://api.github.com/repos/ymflap/Scanix-QR/releases/latest"
 
+private const val SCANIX_UPDATE_PREFS = "scanix_update_state"
+private const val PREF_DOWNLOAD_ID = "download_id"
+private const val PREF_DOWNLOAD_URL = "download_url"
+private const val PREF_DOWNLOAD_VERSION = "download_version"
+private const val PREF_DOWNLOAD_VERSION_CODE = "download_version_code"
+private const val PREF_DOWNLOAD_SIZE = "download_expected_size"
+
 private data class ScanixUpdateInfo(
     val versionCode: Long?,
     val versionName: String,
     val updateUrl: String,
     val releaseNotes: String,
     val expectedSizeBytes: Long? = null
+)
+
+private data class ScanixDownloadStatus(
+    val status: Int,
+    val downloadedBytes: Long,
+    val totalBytes: Long,
+    val reason: Int
 )
 
 @Composable
@@ -62,7 +78,7 @@ fun AppUpdateScreen(
     onUpdateAvailable: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
-    val mainHandler = remember { Handler(Looper.getMainLooper()) }
+    val updateChannel = BuildConfig.UPDATE_CHANNEL
 
     val currentVersion = remember(context) {
         getInstalledVersion(
@@ -73,11 +89,24 @@ fun AppUpdateScreen(
         )
     }
 
-    val updateChannel = BuildConfig.UPDATE_CHANNEL
+    val preferences = remember(context) {
+        context.getSharedPreferences(
+            SCANIX_UPDATE_PREFS,
+            Context.MODE_PRIVATE
+        )
+    }
+
+    val downloadManager = remember(context) {
+        context.getSystemService(
+            Context.DOWNLOAD_SERVICE
+        ) as DownloadManager
+    }
 
     var isChecking by remember { mutableStateOf(false) }
     var isDownloading by remember { mutableStateOf(false) }
     var downloadProgress by remember { mutableStateOf(-1) }
+    var completedDownloadId by remember { mutableStateOf<Long?>(null) }
+    var activeDownloadId by remember { mutableStateOf<Long?>(null) }
     var updateInfo by remember {
         mutableStateOf<ScanixUpdateInfo?>(null)
     }
@@ -85,20 +114,84 @@ fun AppUpdateScreen(
     var lastHandledDownloadRequest by remember { mutableStateOf(0) }
     var lastNotifiedVersion by remember { mutableStateOf<String?>(null) }
 
+    fun savedDownloadId(): Long {
+        return preferences.getLong(PREF_DOWNLOAD_ID, -1L)
+    }
+
+    fun clearSavedDownload() {
+        preferences.edit()
+            .remove(PREF_DOWNLOAD_ID)
+            .remove(PREF_DOWNLOAD_URL)
+            .remove(PREF_DOWNLOAD_VERSION)
+            .remove(PREF_DOWNLOAD_VERSION_CODE)
+            .remove(PREF_DOWNLOAD_SIZE)
+            .apply()
+
+        activeDownloadId = null
+        completedDownloadId = null
+        isDownloading = false
+        downloadProgress = -1
+    }
+
+    fun readDownloadStatus(id: Long): ScanixDownloadStatus? {
+        return try {
+            val query = DownloadManager.Query().setFilterById(id)
+
+            downloadManager.query(query)?.use { cursor ->
+                if (!cursor.moveToFirst()) {
+                    return null
+                }
+
+                val statusIndex = cursor.getColumnIndex(
+                    DownloadManager.COLUMN_STATUS
+                )
+                val downloadedIndex = cursor.getColumnIndex(
+                    DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR
+                )
+                val totalIndex = cursor.getColumnIndex(
+                    DownloadManager.COLUMN_TOTAL_SIZE_BYTES
+                )
+                val reasonIndex = cursor.getColumnIndex(
+                    DownloadManager.COLUMN_REASON
+                )
+
+                if (
+                    statusIndex < 0 ||
+                    downloadedIndex < 0 ||
+                    totalIndex < 0 ||
+                    reasonIndex < 0
+                ) {
+                    return null
+                }
+
+                ScanixDownloadStatus(
+                    status = cursor.getInt(statusIndex),
+                    downloadedBytes = cursor.getLong(downloadedIndex),
+                    totalBytes = cursor.getLong(totalIndex),
+                    reason = cursor.getInt(reasonIndex)
+                )
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
     fun checkForUpdates() {
-        if (isChecking || isDownloading) return
+        if (isChecking) return
 
         isChecking = true
         errorMessage = null
-        updateInfo = null
 
         Thread {
             var connection: HttpURLConnection? = null
 
             try {
-                val result = if (updateChannel == "github") {
-                    connection = URL(SCANIX_GITHUB_LATEST_RELEASE_URL)
-                        .openConnection() as HttpURLConnection
+                val result: ScanixUpdateInfo
+
+                if (updateChannel == "github") {
+                    connection = URL(
+                        SCANIX_GITHUB_LATEST_RELEASE_URL
+                    ).openConnection() as HttpURLConnection
 
                     connection.connectTimeout = 10000
                     connection.readTimeout = 10000
@@ -116,9 +209,7 @@ fun AppUpdateScreen(
                         "no-cache"
                     )
 
-                    val responseCode = connection.responseCode
-
-                    if (responseCode !in 200..299) {
+                    if (connection.responseCode !in 200..299) {
                         throw IllegalStateException(
                             "Published GitHub release unavailable"
                         )
@@ -156,7 +247,7 @@ fun AppUpdateScreen(
                         )
 
                     var apkUrl = ""
-                    var apkSizeBytes: Long? = null
+                    var apkSize: Long? = null
 
                     for (index in 0 until assets.length()) {
                         val asset = assets.optJSONObject(index)
@@ -171,39 +262,38 @@ fun AppUpdateScreen(
                                 ""
                             )
 
-                            val assetSize = asset.optLong("size", 0L)
-                            apkSizeBytes = assetSize.takeIf { it > 0L }
+                            apkSize = asset.optLong(
+                                "size",
+                                0L
+                            ).takeIf { it > 0L }
+
                             break
                         }
-                    }
-
-                    if (apkUrl.isBlank()) {
-                        throw IllegalStateException(
-                            "Published release APK unavailable"
-                        )
                     }
 
                     val parsedUrl = Uri.parse(apkUrl)
 
                     if (
+                        apkUrl.isBlank() ||
                         parsedUrl.scheme != "https" ||
                         parsedUrl.host != "github.com"
                     ) {
                         throw IllegalStateException(
-                            "Invalid published APK URL"
+                            "Published release APK unavailable"
                         )
                     }
 
-                    ScanixUpdateInfo(
+                    result = ScanixUpdateInfo(
                         versionCode = null,
                         versionName = versionName,
                         updateUrl = apkUrl,
                         releaseNotes = "",
-                        expectedSizeBytes = apkSizeBytes
+                        expectedSizeBytes = apkSize
                     )
                 } else {
-                    connection = URL(SCANIX_UPDATE_INFO_URL)
-                        .openConnection() as HttpURLConnection
+                    connection = URL(
+                        SCANIX_UPDATE_INFO_URL
+                    ).openConnection() as HttpURLConnection
 
                     connection.connectTimeout = 10000
                     connection.readTimeout = 10000
@@ -217,9 +307,7 @@ fun AppUpdateScreen(
                         "no-cache"
                     )
 
-                    val responseCode = connection.responseCode
-
-                    if (responseCode !in 200..299) {
+                    if (connection.responseCode !in 200..299) {
                         throw IllegalStateException(
                             "Update information unavailable"
                         )
@@ -237,7 +325,7 @@ fun AppUpdateScreen(
 
                     val channel = channels.optJSONObject(updateChannel)
                         ?: throw IllegalStateException(
-                            "Update information unavailable"
+                            "Update channel unavailable"
                         )
 
                     val versionCode = channel.optLong(
@@ -261,26 +349,28 @@ fun AppUpdateScreen(
                         0L
                     )
 
-                    if (versionCode <= 0L || versionName.isBlank()) {
+                    if (
+                        versionCode <= 0L ||
+                        versionName.isBlank() ||
+                        updateUrl.isBlank()
+                    ) {
                         throw IllegalStateException(
                             "Invalid update information"
                         )
                     }
 
-                    if (updateUrl.isNotBlank()) {
-                        val parsedUrl = Uri.parse(updateUrl)
+                    val parsedUrl = Uri.parse(updateUrl)
 
-                        if (
-                            parsedUrl.scheme != "https" ||
-                            parsedUrl.host.isNullOrBlank()
-                        ) {
-                            throw IllegalStateException(
-                                "Invalid update URL"
-                            )
-                        }
+                    if (
+                        parsedUrl.scheme != "https" ||
+                        parsedUrl.host.isNullOrBlank()
+                    ) {
+                        throw IllegalStateException(
+                            "Invalid update URL"
+                        )
                     }
 
-                    ScanixUpdateInfo(
+                    result = ScanixUpdateInfo(
                         versionCode = versionCode,
                         versionName = versionName,
                         updateUrl = updateUrl,
@@ -291,16 +381,20 @@ fun AppUpdateScreen(
                     )
                 }
 
-                mainHandler.post {
+                android.os.Handler(
+                    android.os.Looper.getMainLooper()
+                ).post {
                     updateInfo = result
                     isChecking = false
                 }
             } catch (_: Exception) {
-                mainHandler.post {
+                android.os.Handler(
+                    android.os.Looper.getMainLooper()
+                ).post {
                     errorMessage = localizedUpdateMessage(
-                        context = context,
-                        arabic = "تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
-                        english = "Unable to check for updates. Check your internet connection and try again."
+                        context,
+                        "تعذر التحقق من التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
+                        "Unable to check for updates. Check your internet connection and try again."
                     )
                     isChecking = false
                 }
@@ -309,11 +403,8 @@ fun AppUpdateScreen(
             }
         }.start()
     }
-
-    fun downloadAndInstallUpdate() {
-        val info = updateInfo ?: return
-
-        if (isDownloading || info.updateUrl.isBlank()) return
+        fun startUpdateDownload(info: ScanixUpdateInfo) {
+        if (info.updateUrl.isBlank()) return
 
         val parsedUrl = Uri.parse(info.updateUrl)
 
@@ -322,206 +413,332 @@ fun AppUpdateScreen(
             parsedUrl.host.isNullOrBlank()
         ) {
             errorMessage = localizedUpdateMessage(
-                context = context,
-                arabic = "رابط تنزيل التحديث غير صالح.",
-                english = "The update download URL is invalid."
+                context,
+                "رابط تنزيل التحديث غير صالح.",
+                "The update download URL is invalid."
             )
             return
         }
 
-        isDownloading = true
-        downloadProgress = -1
-        errorMessage = null
+        val oldId = savedDownloadId()
 
-        Thread {
-            var connection: HttpURLConnection? = null
-            var apkFile: File? = null
+        if (oldId > 0L) {
+            val oldStatus = readDownloadStatus(oldId)
 
-            try {
-                val updatesDirectory = File(
-                    context.cacheDir,
-                    "updates"
-                )
+            if (
+                oldStatus?.status == DownloadManager.STATUS_RUNNING ||
+                oldStatus?.status == DownloadManager.STATUS_PENDING ||
+                oldStatus?.status == DownloadManager.STATUS_PAUSED
+            ) {
+                activeDownloadId = oldId
+                isDownloading = true
+                errorMessage = null
+                return
+            }
 
-                if (
-                    !updatesDirectory.exists() &&
-                    !updatesDirectory.mkdirs()
-                ) {
-                    throw IllegalStateException(
-                        "Cannot create update directory"
+            if (oldStatus?.status == DownloadManager.STATUS_SUCCESSFUL) {
+                activeDownloadId = oldId
+                completedDownloadId = oldId
+                isDownloading = false
+                downloadProgress = 100
+                errorMessage = null
+                return
+            }
+
+            clearSavedDownload()
+        }
+
+        try {
+            val request = DownloadManager.Request(parsedUrl).apply {
+                setTitle(
+                    localizedUpdateMessage(
+                        context,
+                        "تحديث Scanix QR",
+                        "Scanix QR update"
                     )
-                }
-
-                apkFile = File(
-                    updatesDirectory,
-                    "scanix-update.apk"
                 )
-
-                connection = URL(info.updateUrl)
-                    .openConnection() as HttpURLConnection
-
-                connection.connectTimeout = 15000
-                connection.readTimeout = 30000
-                connection.requestMethod = "GET"
-                connection.instanceFollowRedirects = true
-                connection.setRequestProperty(
-                    "Accept",
+                setDescription(
+                    localizedUpdateMessage(
+                        context,
+                        "جارٍ تنزيل إصدار التطبيق الجديد",
+                        "Downloading the new app version"
+                    )
+                )
+                setMimeType(
                     "application/vnd.android.package-archive"
                 )
+                setNotificationVisibility(
+                    DownloadManager.Request
+                        .VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+                )
+                setAllowedOverMetered(true)
+                setAllowedOverRoaming(false)
 
-                val responseCode = connection.responseCode
+                setDestinationInExternalFilesDir(
+                    context,
+                    null,
+                    "scanix-update.apk"
+                )
+            }
 
-                if (responseCode !in 200..299) {
-                    throw IllegalStateException(
-                        "APK download failed"
-                    )
-                }
+            val id = downloadManager.enqueue(request)
 
-                val contentLength = connection.contentLengthLong
-                val totalBytes = if (contentLength > 0L) {
-                    contentLength
-                } else {
+            preferences.edit()
+                .putLong(PREF_DOWNLOAD_ID, id)
+                .putString(PREF_DOWNLOAD_URL, info.updateUrl)
+                .putString(
+                    PREF_DOWNLOAD_VERSION,
+                    info.versionName
+                )
+                .putLong(
+                    PREF_DOWNLOAD_VERSION_CODE,
+                    info.versionCode ?: -1L
+                )
+                .putLong(
+                    PREF_DOWNLOAD_SIZE,
                     info.expectedSizeBytes ?: -1L
-                }
+                )
+                .apply()
 
-                var downloadedBytes = 0L
+            activeDownloadId = id
+            completedDownloadId = null
+            isDownloading = true
+            downloadProgress = 0
+            errorMessage = null
+        } catch (_: Exception) {
+            errorMessage = localizedUpdateMessage(
+                context,
+                "تعذر بدء تنزيل التحديث. حاول مرة أخرى.",
+                "Unable to start the update download. Please try again."
+            )
+            isDownloading = false
+        }
+    }
 
-                connection.inputStream.use { input ->
-                    apkFile.outputStream().buffered().use { output ->
-                        val buffer = ByteArray(16 * 1024)
+    fun installDownloadedUpdate(id: Long) {
+        try {
+            val status = readDownloadStatus(id)
 
-                        while (true) {
-                            val bytesRead = input.read(buffer)
-                            if (bytesRead == -1) break
+            if (status?.status != DownloadManager.STATUS_SUCCESSFUL) {
+                errorMessage = localizedUpdateMessage(
+                    context,
+                    "لم يكتمل تنزيل التحديث بعد.",
+                    "The update download has not completed yet."
+                )
+                return
+            }
 
-                            output.write(buffer, 0, bytesRead)
-                            downloadedBytes += bytesRead
-
-                            if (totalBytes > 0L) {
-                                val progress = (
-                                    downloadedBytes * 100L /
-                                        totalBytes
-                                    ).toInt().coerceIn(0, 99)
-
-                                mainHandler.post {
-                                    downloadProgress = progress
-                                }
-                            }
-                        }
-
-                        output.flush()
-                    }
-                }
-
-                if (!apkFile.isFile || apkFile.length() == 0L) {
-                    throw IllegalStateException(
-                        "Downloaded APK is empty"
-                    )
-                }
-
-                if (
-                    info.expectedSizeBytes != null &&
-                    apkFile.length() != info.expectedSizeBytes
-                ) {
-                    throw IllegalStateException(
-                        "Downloaded APK size does not match release metadata"
-                    )
-                }
-
-                val archiveInfo = context.packageManager
-                    .getPackageArchiveInfo(
-                        apkFile.absolutePath,
-                        0
-                    ) ?: throw IllegalStateException(
-                    "Downloaded file is not a valid APK"
+            val downloadUri = downloadManager.getUriForDownloadedFile(id)
+                ?: throw IllegalStateException(
+                    "Downloaded update URI unavailable"
                 )
 
-                val downloadedVersion = getInstalledVersion(archiveInfo)
+            val updatesDirectory = File(context.cacheDir, "updates")
 
-                if (archiveInfo.packageName != context.packageName) {
+            if (!updatesDirectory.exists() && !updatesDirectory.mkdirs()) {
+                throw IllegalStateException(
+                    "Unable to create verification directory"
+                )
+            }
+
+            val apkFile = File(
+                updatesDirectory,
+                "scanix-update.apk"
+            )
+
+            context.contentResolver.openInputStream(downloadUri).use { input ->
+                if (input == null) {
                     throw IllegalStateException(
-                        "Downloaded APK package does not match"
+                        "Unable to read downloaded APK"
                     )
                 }
 
-                if (downloadedVersion.first <= currentVersion.first) {
-                    throw IllegalStateException(
-                        "Downloaded APK is not newer than installed version"
-                    )
+                apkFile.outputStream().buffered().use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            if (!apkFile.isFile || apkFile.length() <= 0L) {
+                throw IllegalStateException(
+                    "Downloaded APK is empty"
+                )
+            }
+
+            val expectedSize = preferences.getLong(
+                PREF_DOWNLOAD_SIZE,
+                -1L
+            )
+
+            if (
+                expectedSize > 0L &&
+                apkFile.length() != expectedSize
+            ) {
+                apkFile.delete()
+                throw IllegalStateException(
+                    "Downloaded APK size verification failed"
+                )
+            }
+
+            val archiveInfo = context.packageManager
+                .getPackageArchiveInfo(
+                    apkFile.absolutePath,
+                    0
+                ) ?: throw IllegalStateException(
+                "Downloaded file is not a valid APK"
+            )
+
+            val downloadedVersion = getInstalledVersion(archiveInfo)
+
+            if (archiveInfo.packageName != context.packageName) {
+                apkFile.delete()
+                throw IllegalStateException(
+                    "Downloaded APK package does not match"
+                )
+            }
+
+            if (downloadedVersion.first <= currentVersion.first) {
+                apkFile.delete()
+                throw IllegalStateException(
+                    "Downloaded APK is not newer"
+                )
+            }
+
+            val expectedVersionCode = preferences.getLong(
+                PREF_DOWNLOAD_VERSION_CODE,
+                -1L
+            )
+
+            if (
+                expectedVersionCode > 0L &&
+                downloadedVersion.first != expectedVersionCode
+            ) {
+                apkFile.delete()
+                throw IllegalStateException(
+                    "Downloaded APK version code does not match"
+                )
+            }
+
+            val expectedVersionName = preferences.getString(
+                PREF_DOWNLOAD_VERSION,
+                null
+            )
+
+            if (
+                expectedVersionCode <= 0L &&
+                !expectedVersionName.isNullOrBlank() &&
+                normalizeVersion(downloadedVersion.second) !=
+                normalizeVersion(expectedVersionName)
+            ) {
+                apkFile.delete()
+                throw IllegalStateException(
+                    "Downloaded APK version name does not match"
+                )
+            }
+
+            val apkUri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                apkFile
+            )
+
+            val installIntent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(
+                    apkUri,
+                    "application/vnd.android.package-archive"
+                )
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+
+            context.startActivity(installIntent)
+        } catch (_: Exception) {
+            errorMessage = localizedUpdateMessage(
+                context,
+                "تعذر التحقق من ملف التحديث أو بدء التثبيت. تأكد من اكتمال التنزيل والسماح بتثبيت التطبيقات من هذا المصدر.",
+                "Unable to verify the update or start installation. Ensure the download is complete and installation from this source is allowed."
+            )
+        }
+    }
+
+    LaunchedEffect(updateChannel) {
+        val savedId = savedDownloadId()
+
+        if (savedId > 0L) {
+            activeDownloadId = savedId
+
+            when (readDownloadStatus(savedId)?.status) {
+                DownloadManager.STATUS_PENDING,
+                DownloadManager.STATUS_RUNNING,
+                DownloadManager.STATUS_PAUSED -> {
+                    isDownloading = true
                 }
 
-                if (
-                    info.versionCode == null &&
-                    normalizeVersion(downloadedVersion.second) !=
-                    normalizeVersion(info.versionName)
-                ) {
-                    throw IllegalStateException(
-                        "Downloaded APK version does not match published release"
-                    )
+                DownloadManager.STATUS_SUCCESSFUL -> {
+                    completedDownloadId = savedId
+                    downloadProgress = 100
+                    isDownloading = false
                 }
 
-                if (
-                    info.versionCode != null &&
-                    downloadedVersion.first != info.versionCode
-                ) {
-                    throw IllegalStateException(
-                        "Downloaded APK version does not match update information"
-                    )
+                else -> {
+                    clearSavedDownload()
                 }
+            }
+        }
 
-                mainHandler.post {
-                    try {
-                        val apkUri = FileProvider.getUriForFile(
-                            context,
-                            "${context.packageName}.fileprovider",
-                            apkFile
-                        )
+        checkForUpdates()
+    }
 
-                        val installIntent = Intent(
-                            Intent.ACTION_VIEW
-                        ).apply {
-                            setDataAndType(
-                                apkUri,
-                                "application/vnd.android.package-archive"
-                            )
-                            addFlags(
-                                Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            )
-                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        }
+    LaunchedEffect(visible, activeDownloadId) {
+        while (visible && activeDownloadId != null) {
+            val id = activeDownloadId ?: break
+            val status = readDownloadStatus(id)
 
-                        context.startActivity(installIntent)
-                        isDownloading = false
-                        downloadProgress = 100
-                    } catch (_: Exception) {
-                        errorMessage = localizedUpdateMessage(
-                            context = context,
-                            arabic = "تم تنزيل الملف، لكن تعذر بدء تثبيت التحديث. تحقق من السماح بتثبيت التطبيقات من هذا المصدر.",
-                            english = "The file was downloaded, but installation could not be started. Check whether installing apps from this source is allowed."
-                        )
-                        isDownloading = false
+            when (status?.status) {
+                DownloadManager.STATUS_PENDING,
+                DownloadManager.STATUS_RUNNING,
+                DownloadManager.STATUS_PAUSED -> {
+                    isDownloading = true
+                    completedDownloadId = null
+
+                    if (
+                        status.totalBytes > 0L &&
+                        status.downloadedBytes >= 0L
+                    ) {
+                        downloadProgress = (
+                            status.downloadedBytes * 100L /
+                                status.totalBytes
+                        ).toInt().coerceIn(0, 99)
+                    } else {
+                        downloadProgress = -1
                     }
                 }
-            } catch (_: Exception) {
-                apkFile?.delete()
 
-                mainHandler.post {
-                    errorMessage = localizedUpdateMessage(
-                        context = context,
-                        arabic = "تعذر تنزيل ملف التحديث أو التحقق منه. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
-                        english = "Unable to download or verify the update. Check your internet connection and try again."
-                    )
+                DownloadManager.STATUS_SUCCESSFUL -> {
                     isDownloading = false
-                    downloadProgress = -1
+                    downloadProgress = 100
+                    completedDownloadId = id
                 }
-            } finally {
-                connection?.disconnect()
+
+                DownloadManager.STATUS_FAILED -> {
+                    isDownloading = false
+                    completedDownloadId = null
+                    downloadProgress = -1
+                    errorMessage = localizedUpdateMessage(
+                        context,
+                        "فشل تنزيل التحديث. يمكنك المحاولة مرة أخرى.",
+                        "The update download failed. You can try again."
+                    )
+                    clearSavedDownload()
+                }
+
+                else -> {
+                    isDownloading = false
+                    completedDownloadId = null
+                }
             }
-        }.start()
-    }
-    
-    LaunchedEffect(updateChannel) {
-        checkForUpdates()
+
+            delay(700)
+        }
     }
 
     val updateAvailable = updateInfo?.let { info ->
@@ -562,11 +779,10 @@ fun AppUpdateScreen(
             info != null
         ) {
             lastHandledDownloadRequest = downloadRequestId
-            downloadAndInstallUpdate()
+            startUpdateDownload(info)
         }
     }
-
-    if (visible) {
+        if (visible) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -607,34 +823,34 @@ fun AppUpdateScreen(
 
                     when {
                         isDownloading -> {
-                            CircularProgressIndicator(
-                                progress = {
-                                    if (downloadProgress >= 0) {
+                            if (downloadProgress >= 0) {
+                                CircularProgressIndicator(
+                                    progress = {
                                         downloadProgress / 100f
-                                    } else {
-                                        0f
                                     }
-                                }
-                            )
+                                )
 
-                            Text(
-                                text = if (downloadProgress >= 0) {
-                                    "${localizedUpdateMessage(
-                                        context = context,
-                                        arabic = "جارٍ تنزيل التحديث",
-                                        english = "Downloading update"
-                                    )} $downloadProgress%"
-                                } else {
-                                    localizedUpdateMessage(
-                                        context = context,
-                                        arabic = "جارٍ تنزيل التحديث...",
-                                        english = "Downloading update..."
+                                Text(
+                                    text = localizedUpdateMessage(
+                                        context,
+                                        "جارٍ تنزيل التحديث: $downloadProgress%",
+                                        "Downloading update: $downloadProgress%"
                                     )
-                                }
-                            )
+                                )
+                            } else {
+                                CircularProgressIndicator()
+
+                                Text(
+                                    text = localizedUpdateMessage(
+                                        context,
+                                        "جارٍ تنزيل التحديث...",
+                                        "Downloading update..."
+                                    )
+                                )
+                            }
                         }
 
-                        isChecking -> {
+                        isChecking && updateInfo == null -> {
                             CircularProgressIndicator()
 
                             Text(
@@ -649,6 +865,34 @@ fun AppUpdateScreen(
                                 text = errorMessage.orEmpty(),
                                 color = MaterialTheme.colorScheme.error
                             )
+                        }
+
+                        completedDownloadId != null -> {
+                            Text(
+                                text = localizedUpdateMessage(
+                                    context,
+                                    "اكتمل تنزيل التحديث وأصبح جاهزًا للتثبيت.",
+                                    "The update has been downloaded and is ready to install."
+                                ),
+                                fontWeight = FontWeight.Medium
+                            )
+
+                            Button(
+                                onClick = {
+                                    completedDownloadId?.let {
+                                        installDownloadedUpdate(it)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    localizedUpdateMessage(
+                                        context,
+                                        "تثبيت التحديث",
+                                        "Install update"
+                                    )
+                                )
+                            }
                         }
 
                         updateInfo != null && updateAvailable -> {
@@ -666,10 +910,17 @@ fun AppUpdateScreen(
                                 style = MaterialTheme.typography.titleMedium
                             )
 
+                            if (updateInfo!!.releaseNotes.isNotBlank()) {
+                                Text(
+                                    text = updateInfo!!.releaseNotes,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+
                             if (updateInfo!!.updateUrl.isNotBlank()) {
                                 Button(
                                     onClick = {
-                                        downloadAndInstallUpdate()
+                                        startUpdateDownload(updateInfo!!)
                                     },
                                     enabled = !isDownloading,
                                     modifier = Modifier.fillMaxWidth()
@@ -697,7 +948,7 @@ fun AppUpdateScreen(
 
             OutlinedButton(
                 onClick = { checkForUpdates() },
-                enabled = !isChecking && !isDownloading,
+                enabled = !isChecking,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
