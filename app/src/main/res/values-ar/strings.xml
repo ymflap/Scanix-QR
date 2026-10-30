@@ -161,13 +161,13 @@
     <string name="ocr_image_ready">الصورة جاهزة للاستخراج</string>
     <string name="ocr_capture_or_choose">التقط صورة أو اختر صورة من جهازك</string>
     <string name="ocr_extract">استخراج النص</string>
-    <string name="ocr_downloading_progress">جارٍ تنزيل بيانات اللغة...</string>
+    <string name="ocr_downloading_progress">جارٍ تنزيل بيانات اللغة: %1$d%%</string>
     <string name="ocr_downloading_language">جارٍ تنزيل بيانات اللغة المطلوبة</string>
     <string name="ocr_preparing">جارٍ تجهيز محرك التعرف على النص...</string>
     <string name="ocr_recognizing">جارٍ التعرف على النص...</string>
     <string name="ocr_no_text">لم يتم العثور على نص في الصورة</string>
     <string name="ocr_completed">اكتمل استخراج النص</string>
-    <string name="ocr_failed">تعذر استخراج النص</string>
+    <string name="ocr_failed">تعذر استخراج النص: %1$s</string>
     <string name="ocr_extracted_text">النص المستخرج</string>
     <string name="ocr_text_placeholder">سيظهر النص المستخرج هنا</string>
     <string name="ocr_copy">نسخ النص</string>
@@ -195,4 +195,4 @@
     <string name="action_cancel">إلغاء</string>
     <string name="error_generic">حدث خطأ. يُرجى المحاولة مرة أخرى.</string>
 </resources>
-        
+    
