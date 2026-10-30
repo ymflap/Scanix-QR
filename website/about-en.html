@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f8fafc">
-  <meta name="description" content="Learn about Scanix QR, its features, and how to contact the developer.">
+  <meta name="description" content="Learn about Scanix QR, its current features, upcoming features, and how to contact the developer.">
   <title>About the App | Scanix QR</title>
   <script>
     (function () {
@@ -131,6 +131,21 @@
       font-weight: 600;
     }
 
+    .coming-soon {
+      border-left: 4px solid var(--accent);
+    }
+
+    .coming-soon-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
     footer {
       color: var(--muted);
       text-align: center;
@@ -163,28 +178,39 @@
     <main>
       <section class="card">
         <h2 class="app-name">Scanix QR</h2>
-        <p class="version">Version 1.0.3.6</p>
+        <p class="version">Version 1.0.4.0</p>
         <p>
-          Scanix QR is an Android app for scanning QR codes and barcodes
-          and creating new QR codes. It lets you scan codes using your
-          camera or images stored on your device, and work with the
-          results directly within the app.
+          Scanix QR is an Android app dedicated to scanning QR codes
+          and barcodes. It lets you scan codes using your phone's camera
+          or images stored on your device, and work with the results
+          directly within the app.
         </p>
       </section>
 
       <section class="card">
-        <h2>App Features</h2>
+        <h2>Current Features</h2>
         <ul>
           <li>Scan QR codes and barcodes using your phone's camera.</li>
           <li>Use the flashlight while scanning when needed and supported.</li>
           <li>Read codes from images you select on your device.</li>
           <li>View, copy, and share scan results.</li>
           <li>Check links before opening them and display warnings for some suspicious links.</li>
-          <li>Create QR codes for text, links, contact details, and Wi-Fi networks.</li>
-          <li>Preview created QR codes and save or share their images.</li>
           <li>Save scan results in local history, search the history, and delete results.</li>
           <li>Customize the appearance and choose Arabic or English in the app settings.</li>
         </ul>
+      </section>
+
+      <section class="card coming-soon" id="qr-plans">
+        <span class="coming-soon-label">Coming Soon</span>
+        <h2>QR Code Creation</h2>
+        <p>
+          QR code creation will be available in a future update,
+          allowing you to create QR codes for text, links, phone numbers,
+          contact details, and other types of information.
+        </p>
+        <p>
+          This feature is not available in the current version.
+        </p>
       </section>
 
       <section class="card">
@@ -226,4 +252,4 @@
     </footer>
   </div>
 </body>
-  </html>
+</html>
