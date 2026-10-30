@@ -1,5 +1,8 @@
 package com.scanix.app
 
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,10 +18,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.QrCode
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -31,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,8 +51,13 @@ fun HomeScreen(
     onScanClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
-    onOcrClick: () -> Unit = {}
+    onOcrClick: () -> Unit = {},
+    updateAvailableVersion: String? = null,
+    onUpdateDownloadClick: () -> Unit = {},
+    onCreateQrClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,8 +75,12 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(
+                    horizontal = 20.dp,
+                    vertical = 18.dp
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Text(
                 text = stringResource(R.string.home_tagline),
@@ -72,10 +89,16 @@ fun HomeScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 28.dp)
+                    .padding(bottom = 8.dp)
             )
 
-            // الصف العلوي: الماسح واستخراج النص
+            if (!updateAvailableVersion.isNullOrBlank()) {
+                UpdateAvailableCard(
+                    version = updateAvailableVersion,
+                    onDownloadClick = onUpdateDownloadClick
+                )
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -103,9 +126,6 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // الصف السفلي: السجل والإعدادات
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -130,6 +150,84 @@ fun HomeScreen(
                     modifier = Modifier.weight(1f)
                 )
             }
+
+            HomeActionCard(
+                title = localizedHomeText(
+                    context,
+                    "إنشاء الباركود",
+                    "Create QR Code"
+                ),
+                description = localizedHomeText(
+                    context,
+                    "إنشاء رموز QR — الميزة قيد التطوير",
+                    "Create QR codes — feature in development"
+                ),
+                icon = Icons.Outlined.QrCode,
+                onClick = onCreateQrClick,
+                isComingSoon = true,
+                comingSoonLabel = localizedHomeText(
+                    context,
+                    "قريبًا",
+                    "COMING SOON"
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+        }
+    }
+}
+@Composable
+private fun UpdateAvailableCard(
+    version: String,
+    onDownloadClick: () -> Unit
+) {
+    val context = LocalContext.current
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = localizedHomeText(
+                    context,
+                    "يتوفر تحديث جديد",
+                    "A new update is available"
+                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+
+            Text(
+                text = localizedHomeText(
+                    context,
+                    "الإصدار $version متاح للتنزيل.",
+                    "Version $version is available to download."
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+
+            Button(
+                onClick = onDownloadClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    localizedHomeText(
+                        context,
+                        "تنزيل التحديث",
+                        "Download update"
+                    )
+                )
+            }
         }
     }
 }
@@ -142,7 +240,9 @@ private fun HomeActionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isNew: Boolean = false,
-    newLabel: String = "NEW"
+    newLabel: String = "NEW",
+    isComingSoon: Boolean = false,
+    comingSoonLabel: String = "COMING SOON"
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -177,23 +277,45 @@ private fun HomeActionCard(
                 style = MaterialTheme.typography.titleSmall
             )
 
-            if (isNew) {
-                Spacer(modifier = Modifier.height(5.dp))
+            when {
+                isComingSoon -> {
+                    Spacer(modifier = Modifier.height(5.dp))
 
-                Surface(
-                    shape = CircleShape,
-                    color = Color(0xFF2E7D32),
-                    contentColor = Color.White
-                ) {
-                    Text(
-                        text = newLabel,
-                        modifier = Modifier.padding(
-                            horizontal = 10.dp,
-                            vertical = 3.dp
-                        ),
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Surface(
+                        shape = CircleShape,
+                        color = Color(0xFFFFD54F),
+                        contentColor = Color(0xFF332600)
+                    ) {
+                        Text(
+                            text = comingSoonLabel,
+                            modifier = Modifier.padding(
+                                horizontal = 10.dp,
+                                vertical = 3.dp
+                            ),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                isNew -> {
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Surface(
+                        shape = CircleShape,
+                        color = Color(0xFF2E7D32),
+                        contentColor = Color.White
+                    ) {
+                        Text(
+                            text = newLabel,
+                            modifier = Modifier.padding(
+                                horizontal = 10.dp,
+                                vertical = 3.dp
+                            ),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
@@ -208,5 +330,27 @@ private fun HomeActionCard(
                 maxLines = 3
             )
         }
+    }
+}
+
+private fun localizedHomeText(
+    context: Context,
+    arabic: String,
+    english: String
+): String {
+    val configuration: Configuration =
+        context.resources.configuration
+
+    val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        configuration.locales[0]?.language.orEmpty()
+    } else {
+        @Suppress("DEPRECATION")
+        configuration.locale?.language.orEmpty()
+    }
+
+    return if (language.startsWith("ar", ignoreCase = true)) {
+        arabic
+    } else {
+        english
     }
 }
