@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Learn about the QR code creation feature planned for Scanix QR and the types of data it may support.">
+  <title>QR Code Creation | Scanix QR</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #101827;
+      --surface: #192538;
+      --surface-light: #22324a;
+      --text: #f3f6fc;
+      --muted: #b7c3d5;
+      --accent: #69a8ff;
+      --border: #30415a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      line-height: 1.9;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .container {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    header {
+      padding: 26px 0 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 4px 12px;
+      border: 1px solid #47618a;
+      border-radius: 999px;
+      color: #c9ddff;
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-size: clamp(1.8rem, 6vw, 2.7rem);
+      line-height: 1.4;
+    }
+
+    h2 {
+      margin-top: 34px;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin: 10px 0;
+      color: var(--muted);
+    }
+
+    .intro {
+      padding: 22px 0 12px;
+    }
+
+    .notice {
+      margin: 22px 0;
+      padding: 16px;
+      border: 1px solid #52678b;
+      border-radius: 14px;
+      background: var(--surface);
+      color: #dce8fb;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .item {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+    }
+
+    .item h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .item p {
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background: var(--surface-light);
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    ul {
+      padding-left: 22px;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .item {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">Scanix <span>QR</span></div>
+      <div class="status">Planned for a future update</div>
+      <h1 id="overview">Create QR Codes for Different Types of Data</h1>
+      <p>
+        Learn about the QR code creation feature planned for
+        Scanix QR and the different types of information that
+        may be converted into scannable QR codes.
+      </p>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h2>What Is This Feature?</h2>
+        <p>
+          The planned feature is intended to convert different
+          types of data into QR codes. Another phone may then
+          scan the code and handle its contents according to
+          the data format and the applications available on
+          that device.
+        </p>
+        <div class="notice">
+          <strong>Important:</strong>
+          QR code creation is not currently available in the
+          existing version of Scanix QR. The information below
+          describes the planned scope of the feature, and the
+          final details may change during implementation.
+        </div>
+      </section>
+
+      <section>
+        <h2>Planned Data Types</h2>
+        <div class="grid">
+          <article class="item">
+            <div class="number">1</div>
+            <h3>Text and Numbers</h3>
+            <p>
+              Convert plain text, notes, numbers, identifiers,
+              and reference codes into QR codes that can be
+              scanned to read their contents.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">2</div>
+            <h3>Website and Internet Links</h3>
+            <p>
+              Convert website addresses, web pages, and direct
+              links into QR codes to make opening them easier
+              on compatible devices.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">3</div>
+            <h3>Maps and Geographic Locations</h3>
+            <p>
+              Create codes containing geographic coordinates
+              or a map link to help people find a specified
+              place.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">4</div>
+            <h3>Wi-Fi Networks</h3>
+            <p>
+              Include a Wi-Fi network name, password, and
+              security type so compatible devices can read
+              the network details and assist with connecting.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">5</div>
+            <h3>Contacts</h3>
+            <p>
+              Include information such as a person's name,
+              phone number, email address, and other contact
+              details to make them easier to read and save.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">6</div>
+            <h3>Phone Numbers and Messages</h3>
+            <p>
+              Create codes containing phone numbers or text
+              message details, depending on the supported
+              format and device compatibility.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">7</div>
+            <h3>Email</h3>
+            <p>
+              Include an email address and potentially a
+              subject and message body, according to the
+              format selected for implementation.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">8</div>
+            <h3>Events and Appointments</h3>
+            <p>
+              Include event or appointment details such as
+              a title, date, time, and location, depending
+              on the formats supported by the feature.
+            </p>
+          </article>
+
+          <article class="item">
+            <div class="number">9</div>
+            <h3>Other Data Types</h3>
+            <p>
+              Additional data types and use cases may be
+              considered in the future based on requirements
+              and QR code format compatibility.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>How Will It Work?</h2>
+        <p>
+          Once implemented, the feature is intended to let
+          users select a data type, enter the required
+          information, and convert it into a suitable QR code.
+          The resulting code could then be scanned by compatible
+          devices and applications.
+        </p>
+        <p>
+          The result will depend on the contents of the code.
+          It may display text, open a link, prepare contact
+          information, or help locate a geographic position.
+        </p>
+      </section>
+
+      <section>
+        <h2>Passwords and Private Information</h2>
+        <p>
+          A QR code may contain information that anyone who
+          scans it can read, including Wi-Fi credentials
+          embedded in the code. Avoid sharing codes containing
+          private information with unintended recipients.
+        </p>
+      </section>
+
+      <section>
+        <h2>Current Status</h2>
+        <p>
+          This page describes a planned future feature.
+          The data types listed here are not necessarily
+          supported in the current version. The final
+          supported formats and details will be clarified
+          when the feature is implemented.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Scanix QR — Information about a planned feature.</p>
+      <p>
+        <a href="about-en.html">About the App</a>
+        <span aria-hidden="true"> | </span>
+        <a href="privacy-en.html">Privacy Policy</a>
+      </p>
+    </footer>
+  </div>
+</body>
+  </html>
