@@ -31,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,9 +45,6 @@ fun HomeScreen(
     onSettingsClick: () -> Unit = {},
     onOcrClick: () -> Unit = {}
 ) {
-    val isArabic =
-        LocalConfiguration.current.locales[0].language == "ar"
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,7 +75,7 @@ fun HomeScreen(
                     .padding(bottom = 28.dp)
             )
 
-            // الصف العلوي: الماسح و OCR
+            // الصف العلوي: الماسح واستخراج النص
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -95,16 +91,14 @@ fun HomeScreen(
                 )
 
                 HomeActionCard(
-                    title = "OCR",
-                    description = if (isArabic) {
-                        "استخراج النص من الصور والمستندات"
-                    } else {
-                        "Extract text from images and documents"
-                    },
+                    title = stringResource(R.string.home_ocr_title),
+                    description = stringResource(
+                        R.string.home_ocr_description
+                    ),
                     icon = Icons.Outlined.TextFields,
                     onClick = onOcrClick,
                     isNew = true,
-                    newLabel = if (isArabic) "جديد" else "NEW",
+                    newLabel = stringResource(R.string.home_new),
                     modifier = Modifier.weight(1f)
                 )
             }
