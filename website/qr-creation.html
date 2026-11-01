@@ -144,7 +144,8 @@
       transform: translateX(-105%);
     }
 
-    .drawer.open {
+    body[dir="ltr"] .drawer.open,
+    body[dir="rtl"] .drawer.open {
       transform: translateX(0);
       visibility: visible;
     }
