@@ -2,19 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101827">
-  <meta name="description" content="تعرّف على ميزة إنشاء رموز QR المخطط لإضافتها إلى Scanix QR، وأنواع البيانات التي يمكن تحويلها إلى رموز قابلة للمسح.">
-  <title>إنشاء رموز QR | Scanix QR</title>
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="تعرّف على ميزة إنشاء رموز QR المخطط إضافتها مستقبلًا إلى Scanix QR، وأنواع البيانات التي يمكن تحويلها إلى رموز قابلة للمسح.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Scanix QR">
+  <meta property="og:title" content="إنشاء رموز QR | Scanix QR">
+  <meta property="og:description" content="تعرّف على أنواع البيانات المخطط دعمها في ميزة إنشاء رموز QR مستقبلًا.">
+  <link rel="canonical" href="https://scanix-qr.pages.dev/qr-creation.html">
+  <link rel="alternate" hreflang="ar" href="https://scanix-qr.pages.dev/qr-creation.html?lang=ar">
+  <link rel="alternate" hreflang="en" href="https://scanix-qr.pages.dev/qr-creation.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://scanix-qr.pages.dev/qr-creation.html">
+  <title>إنشاء رموز QR قريبًا | Scanix QR</title>
+
   <style>
     :root {
       color-scheme: dark;
-      --background: #101827;
+      --bg: #101827;
       --surface: #192538;
-      --surface-light: #22324a;
+      --surface2: #22324a;
       --text: #f3f6fc;
       --muted: #b7c3d5;
-      --accent: #69a8ff;
+      --accent: #a3e635;
       --border: #30415a;
     }
 
@@ -22,87 +32,251 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      background: var(--background);
+      background: var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-      line-height: 1.9;
+      font-family: system-ui, -apple-system, "Segoe UI",
+        Tahoma, Arial, sans-serif;
+      line-height: 1.8;
+    }
+
+    body[dir="ltr"] {
+      text-align: left;
     }
 
     a {
-      color: var(--accent);
+      color: inherit;
     }
 
-    .container {
-      width: min(920px, 100%);
-      margin: 0 auto;
-      padding: 24px 18px 48px;
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
     }
 
-    header {
-      padding: 26px 0 22px;
+    button {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #101827ee;
       border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
     .brand {
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.3px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 850;
+      letter-spacing: .2px;
     }
 
     .brand span {
       color: var(--accent);
     }
 
+    .menu-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .menu-button:focus-visible,
+    .language-button:focus-visible,
+    .drawer nav a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(100% - 32px, 980px);
+      margin: 0 auto;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 19;
+      background: #0009;
+    }
+
+    .drawer {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: min(320px, 86vw);
+      overflow-y: auto;
+      padding: 22px 18px;
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      transform: translateX(105%);
+      visibility: hidden;
+      transition: transform .22s ease, visibility .22s;
+    }
+
+    body[dir="ltr"] .drawer {
+      right: auto;
+      left: 0;
+      border-left: 0;
+      border-right: 1px solid var(--border);
+      transform: translateX(-105%);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .drawer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer nav {
+      display: grid;
+      gap: 6px;
+      padding-top: 16px;
+    }
+
+    .drawer nav a,
+    .language-button {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 13px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      text-align: start;
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .drawer nav a:hover,
+    .language-button:hover {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .drawer-label {
+      margin: 20px 12px 4px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .hero {
+      padding: 54px 0 34px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 5px 13px;
+      border: 1px solid #49602b;
+      border-radius: 999px;
+      color: var(--accent);
+      font-size: .9rem;
+    }
+
     .status {
       display: inline-block;
-      margin-top: 22px;
-      padding: 4px 12px;
-      border: 1px solid #47618a;
+      margin-inline-start: 6px;
+      padding: 5px 13px;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      color: #c9ddff;
-      font-size: 0.88rem;
+      color: var(--muted);
+      font-size: .9rem;
     }
 
     h1 {
-      margin: 12px 0;
-      font-size: clamp(1.8rem, 6vw, 2.7rem);
-      line-height: 1.4;
+      max-width: 800px;
+      margin: 20px 0 14px;
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      line-height: 1.35;
     }
 
     h2 {
-      margin-top: 34px;
-      margin-bottom: 10px;
-      font-size: 1.4rem;
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 4.5vw, 1.8rem);
+      line-height: 1.45;
+    }
+
+    h3 {
+      line-height: 1.5;
     }
 
     p {
-      margin: 10px 0;
       color: var(--muted);
     }
 
-    .intro {
-      padding: 22px 0 12px;
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1.04rem;
+    }
+
+    .section {
+      padding: 34px 0;
+    }
+
+    .section-intro {
+      margin: 0 0 20px;
     }
 
     .notice {
-      margin: 22px 0;
-      padding: 16px;
+      margin-top: 22px;
+      padding: 18px;
       border: 1px solid #52678b;
-      border-radius: 14px;
+      border-radius: 16px;
       background: var(--surface);
-      color: #dce8fb;
+      color: var(--text);
+    }
+
+    .notice p {
+      margin: 8px 0 0;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
     .item {
+      min-width: 0;
       padding: 18px;
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -116,216 +290,561 @@
 
     .item p {
       margin: 0;
-      font-size: 0.96rem;
+      font-size: .96rem;
     }
 
     .number {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       margin-bottom: 10px;
       border-radius: 10px;
-      background: var(--surface-light);
+      background: var(--surface2);
       color: var(--accent);
       font-weight: 800;
     }
 
-    ul {
-      padding-right: 22px;
-      color: var(--muted);
+    .info-panel {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
     }
 
-    li {
-      margin: 7px 0;
+    .info-panel p {
+      margin-bottom: 0;
     }
 
-    footer {
-      margin-top: 40px;
-      padding-top: 20px;
+    .footer {
+      margin-top: 20px;
+      padding: 24px 0 34px;
       border-top: 1px solid var(--border);
       color: var(--muted);
-      font-size: 0.9rem;
+      text-align: center;
+      font-size: .9rem;
     }
 
-    footer a {
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
       text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (min-width: 700px) {
+      .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 480px) {
       .container {
-        padding-right: 14px;
-        padding-left: 14px;
+        width: calc(100% - 24px);
+      }
+
+      .topbar {
+        padding: 10px 12px;
+      }
+
+      .hero {
+        padding-top: 38px;
+      }
+
+      .grid {
+        gap: 10px;
       }
 
       .item {
-        padding: 15px;
+        padding: 14px;
+      }
+
+      .notice,
+      .info-panel {
+        padding: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">Scanix <span>QR</span></div>
-      <div class="status">ميزة مخطط لها في تحديث مستقبلي</div>
-      <h1 id="overview">إنشاء رموز QR لمختلف أنواع البيانات</h1>
-      <p>
-        تعرّف على ميزة إنشاء رموز QR التي نخطط لإضافتها إلى
-        Scanix QR، والأنواع المختلفة من المعلومات التي يمكن تحويلها
-        إلى رمز قابل للمسح.
-      </p>
-    </header>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Scanix QR">
+      Scanix <span>QR</span>
+    </a>
 
-    <main>
-      <section class="intro">
-        <h2>ما هي الميزة؟</h2>
-        <p>
-          ستتيح الميزة المستقبلية تحويل أنواع متعددة من البيانات إلى
-          رموز QR، بحيث يمكن لهاتف آخر مسح الرمز والتعامل مع محتواه
-          وفقًا لنوع البيانات والتطبيقات المتاحة على الجهاز.
+    <button class="menu-button" id="menuButton"
+      type="button" aria-label="فتح القائمة"
+      aria-controls="sideMenu" aria-expanded="false">
+      <span aria-hidden="true">☰</span>
+    </button>
+  </header>
+
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="drawer" id="sideMenu"
+    aria-label="القائمة الرئيسية" aria-hidden="true" inert>
+    <div class="drawer-head">
+      <a class="brand" href="index.html">
+        Scanix <span>QR</span>
+      </a>
+
+      <button class="menu-button" id="closeMenu"
+        type="button" aria-label="إغلاق القائمة">
+        ×
+      </button>
+    </div>
+
+    <nav>
+      <a href="index.html" data-i18n="navHome">الرئيسية</a>
+      <a href="download.html" data-i18n="navDownload">تنزيل التطبيق</a>
+      <a href="about.html" data-i18n="navAbout">حول التطبيق</a>
+      <a href="qr-creation.html" aria-current="page"
+        data-i18n="navQR">إنشاء رموز QR — قريبًا</a>
+      <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+
+      <p class="drawer-label" data-i18n="languageLabel">اللغة</p>
+      <button class="language-button" id="languageButton" type="button">
+        English
+      </button>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow" data-i18n="eyebrow">
+          ميزة مخطط لها
+        </span>
+
+        <span class="status" data-i18n="status">
+          غير متاحة حاليًا
+        </span>
+
+        <h1 data-i18n="pageTitle">
+          إنشاء رموز QR لمختلف أنواع البيانات
+        </h1>
+
+        <p data-i18n="intro">
+          تعرّف على ميزة إنشاء رموز QR التي نخطط لإضافتها إلى
+          Scanix QR، وأنواع المعلومات التي يمكن تحويلها إلى رموز قابلة للمسح.
         </p>
-        <div class="notice">
-          <strong>مهم:</strong>
-          إنشاء رموز QR غير متاح حاليًا في الإصدار الحالي من
-          Scanix QR. المعلومات التالية توضح نطاق الميزة المخطط لها،
-          وقد تختلف التفاصيل النهائية عند تنفيذها.
-        </div>
-      </section>
+      </div>
+    </section>
 
-      <section>
-        <h2>أنواع البيانات المخطط دعمها</h2>
+    <section class="section">
+      <div class="container">
+        <h2 data-i18n="whatTitle">ما هي الميزة؟</h2>
+
+        <p data-i18n="whatText">
+          ستتيح الميزة المستقبلية تحويل أنواع متعددة من البيانات
+          إلى رموز QR، بحيث يمكن لهاتف آخر مسح الرمز والتعامل مع
+          محتواه وفقًا لنوع البيانات والتطبيقات المتاحة على الجهاز.
+        </p>
+
+        <div class="notice">
+          <strong data-i18n="noticeTitle">مهم:</strong>
+          <p data-i18n="noticeText">
+            إنشاء رموز QR غير متاح حاليًا في الإصدار الحالي من
+            Scanix QR. المعلومات التالية توضح نطاق الميزة المخطط لها،
+            وقد تختلف التفاصيل النهائية عند تنفيذها.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 data-i18n="typesTitle">أنواع البيانات المخطط دعمها</h2>
+
+        <p class="section-intro" data-i18n="typesIntro">
+          أمثلة لأنواع البيانات التي قد تدعمها الميزة مستقبلًا.
+        </p>
+
         <div class="grid">
           <article class="item">
-            <div class="number">١</div>
-            <h3>النصوص والأرقام</h3>
-            <p>
+            <div class="number" aria-hidden="true">١</div>
+            <h3 data-i18n="type1Title">النصوص والأرقام</h3>
+            <p data-i18n="type1Text">
               تحويل النصوص العادية والملاحظات والأرقام والمعرّفات
               والأكواد المرجعية إلى رموز QR يمكن مسحها لعرض محتواها.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٢</div>
-            <h3>روابط المواقع والإنترنت</h3>
-            <p>
-              تحويل روابط المواقع وصفحات الويب والروابط المباشرة
-              إلى رموز تسهّل فتح العنوان على الأجهزة المتوافقة.
+            <div class="number" aria-hidden="true">٢</div>
+            <h3 data-i18n="type2Title">روابط المواقع والإنترنت</h3>
+            <p data-i18n="type2Text">
+              تحويل روابط المواقع وصفحات الويب إلى رموز تسهّل فتح
+              العنوان على الأجهزة المتوافقة.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٣</div>
-            <h3>الخرائط والمواقع الجغرافية</h3>
-            <p>
+            <div class="number" aria-hidden="true">٣</div>
+            <h3 data-i18n="type3Title">الخرائط والمواقع الجغرافية</h3>
+            <p data-i18n="type3Text">
               إعداد رموز تتضمن إحداثيات جغرافية أو رابطًا لموقع
-              على الخريطة، لتسهيل الوصول إلى الأماكن المحددة.
+              على الخريطة لتسهيل الوصول إلى الأماكن المحددة.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٤</div>
-            <h3>شبكات Wi-Fi</h3>
-            <p>
+            <div class="number" aria-hidden="true">٤</div>
+            <h3 data-i18n="type4Title">شبكات Wi-Fi</h3>
+            <p data-i18n="type4Text">
               تضمين اسم شبكة Wi-Fi وكلمة مرورها ونوع الحماية،
-              بحيث يمكن للأجهزة المتوافقة قراءة بيانات الشبكة
-              والمساعدة في الاتصال بها.
+              لتتمكن الأجهزة المتوافقة من قراءة بيانات الشبكة.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٥</div>
-            <h3>جهات الاتصال</h3>
-            <p>
+            <div class="number" aria-hidden="true">٥</div>
+            <h3 data-i18n="type5Title">جهات الاتصال</h3>
+            <p data-i18n="type5Text">
               تضمين بيانات مثل الاسم ورقم الهاتف والبريد الإلكتروني
-              ومعلومات الاتصال الأخرى، لتسهيل قراءتها وحفظها.
+              ومعلومات الاتصال الأخرى لتسهيل قراءتها وحفظها.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٦</div>
-            <h3>أرقام الهواتف والرسائل</h3>
-            <p>
+            <div class="number" aria-hidden="true">٦</div>
+            <h3 data-i18n="type6Title">أرقام الهواتف والرسائل</h3>
+            <p data-i18n="type6Text">
               إعداد رموز تحتوي على أرقام الهواتف أو بيانات رسالة
-              نصية، وفقًا لصيغة الرمز ومدى توافق الجهاز معها.
+              نصية، وفقًا للصيغة المعتمدة ومدى توافق الجهاز معها.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٧</div>
-            <h3>البريد الإلكتروني</h3>
-            <p>
+            <div class="number" aria-hidden="true">٧</div>
+            <h3 data-i18n="type7Title">البريد الإلكتروني</h3>
+            <p data-i18n="type7Text">
               تضمين عنوان بريد إلكتروني، مع إمكانية تضمين عنوان
               الرسالة ونصها وفقًا للصيغة التي ستُعتمد.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٨</div>
-            <h3>الأحداث والمواعيد</h3>
-            <p>
+            <div class="number" aria-hidden="true">٨</div>
+            <h3 data-i18n="type8Title">الأحداث والمواعيد</h3>
+            <p data-i18n="type8Text">
               تضمين بيانات موعد أو حدث، مثل العنوان والتاريخ
               والوقت والموقع، وفقًا للصيغ التي ستدعمها الميزة.
             </p>
           </article>
 
           <article class="item">
-            <div class="number">٩</div>
-            <h3>بيانات أخرى</h3>
-            <p>
+            <div class="number" aria-hidden="true">٩</div>
+            <h3 data-i18n="type9Title">أنواع بيانات أخرى</h3>
+            <p data-i18n="type9Text">
               إمكانية دعم أنواع إضافية من البيانات والاستخدامات
-              مستقبلًا، بحسب الصيغ المطلوبة ومدى توافقها مع
-              معايير رموز QR.
+              مستقبلًا، بحسب الصيغ المطلوبة ومعايير رموز QR.
             </p>
           </article>
         </div>
-      </section>
+      </div>
+          </section>
+              <section class="section">
+      <div class="container">
+        <h2 data-i18n="howTitle">كيف ستعمل الميزة؟</h2>
 
-      <section>
-        <h2>كيف ستعمل الميزة؟</h2>
-        <p>
+        <p data-i18n="howText1">
           عند تنفيذها، سيكون الهدف هو إتاحة اختيار نوع البيانات
           وإدخال المعلومات المطلوبة ثم تحويلها إلى رمز QR مناسب.
           ويمكن بعد ذلك استخدام الرمز مع الأجهزة والتطبيقات
           المتوافقة لقراءة البيانات أو تنفيذ الإجراء المرتبط بها.
         </p>
-        <p>
+
+        <p data-i18n="howText2">
           ستعتمد طريقة التعامل مع الرمز على محتواه؛ فقد يعرض نصًا،
           أو يفتح رابطًا، أو يجهّز بيانات اتصال، أو يساعد على
           الوصول إلى موقع جغرافي.
         </p>
-      </section>
+      </div>
+    </section>
 
-      <section>
-        <h2>ملاحظة حول كلمات المرور والبيانات الخاصة</h2>
-        <p>
-          قد يحتوي رمز QR على بيانات يمكن لأي شخص يمسحه قراءتها،
-          بما في ذلك بيانات شبكة Wi-Fi إذا كانت مضمّنة في الرمز.
-          لذلك ينبغي عدم مشاركة الرموز التي تحتوي على معلومات
-          خاصة إلا مع الأشخاص المقصودين.
-        </p>
-      </section>
+    <section class="section">
+      <div class="container">
+        <div class="info-panel">
+          <h2 data-i18n="privacyTitle">
+            كلمات المرور والبيانات الخاصة
+          </h2>
 
-      <section>
-        <h2>الحالة الحالية</h2>
-        <p>
+          <p data-i18n="privacyText">
+            قد يحتوي رمز QR على بيانات يمكن لأي شخص يمسحه قراءتها،
+            بما في ذلك بيانات شبكة Wi-Fi إذا كانت مضمّنة في الرمز.
+            لذلك ينبغي عدم مشاركة الرموز التي تحتوي على معلومات
+            خاصة إلا مع الأشخاص المقصودين.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 data-i18n="currentTitle">الحالة الحالية</h2>
+
+        <p data-i18n="currentText">
           هذه الصفحة مخصصة للتعريف بميزة مستقبلية مخطط لها.
           لا يعني وجود الأنواع المذكورة هنا أنها مدعومة بالفعل
           في الإصدار الحالي، وسيتم توضيح التفاصيل عند تنفيذ
           الميزة واعتماد أنواع البيانات النهائية.
         </p>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <footer>
-      <p>Scanix QR — معلومات عن ميزة مخطط لها.</p>
-      <p>
-        <a href="about.html">حول التطبيق</a>
-        <span aria-hidden="true"> | </span>
-        <a href="privacy.html">سياسة الخصوصية</a>
+  <footer class="footer">
+    <div class="container">
+      <nav class="footer-links" aria-label="روابط الموقع">
+        <a href="index.html" data-i18n="navHome">الرئيسية</a>
+        <a href="download.html" data-i18n="navDownload">تنزيل التطبيق</a>
+        <a href="about.html" data-i18n="navAbout">حول التطبيق</a>
+        <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+      </nav>
+
+      <p data-i18n="footerText">
+        Scanix QR · معلومات عن ميزة مخطط لها
       </p>
-    </footer>
-  </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var languageKey = "scanix-site-language";
+
+      var translations = {
+        ar: {
+          direction: "rtl",
+          description: "تعرّف على ميزة إنشاء رموز QR المخطط إضافتها مستقبلًا إلى Scanix QR، وأنواع البيانات التي يمكن تحويلها إلى رموز قابلة للمسح.",
+          title: "إنشاء رموز QR قريبًا | Scanix QR",
+          menuOpen: "فتح القائمة",
+          menuClose: "إغلاق القائمة",
+          menuLabel: "القائمة الرئيسية",
+          navHome: "الرئيسية",
+          navDownload: "تنزيل التطبيق",
+          navAbout: "حول التطبيق",
+          navQR: "إنشاء رموز QR — قريبًا",
+          navPrivacy: "سياسة الخصوصية",
+          languageLabel: "اللغة",
+          eyebrow: "ميزة مخطط لها",
+          status: "غير متاحة حاليًا",
+          pageTitle: "إنشاء رموز QR لمختلف أنواع البيانات",
+          intro: "تعرّف على ميزة إنشاء رموز QR التي نخطط لإضافتها إلى Scanix QR، وأنواع المعلومات التي يمكن تحويلها إلى رموز قابلة للمسح.",
+          whatTitle: "ما هي الميزة؟",
+          whatText: "ستتيح الميزة المستقبلية تحويل أنواع متعددة من البيانات إلى رموز QR، بحيث يمكن لهاتف آخر مسح الرمز والتعامل مع محتواه وفقًا لنوع البيانات والتطبيقات المتاحة على الجهاز.",
+          noticeTitle: "مهم:",
+          noticeText: "إنشاء رموز QR غير متاح حاليًا في الإصدار الحالي من Scanix QR. المعلومات التالية توضح نطاق الميزة المخطط لها، وقد تختلف التفاصيل النهائية عند تنفيذها.",
+          typesTitle: "أنواع البيانات المخطط دعمها",
+          typesIntro: "أمثلة لأنواع البيانات التي قد تدعمها الميزة مستقبلًا.",
+          type1Title: "النصوص والأرقام",
+          type1Text: "تحويل النصوص العادية والملاحظات والأرقام والمعرّفات والأكواد المرجعية إلى رموز QR يمكن مسحها لعرض محتواها.",
+          type2Title: "روابط المواقع والإنترنت",
+          type2Text: "تحويل روابط المواقع وصفحات الويب إلى رموز تسهّل فتح العنوان على الأجهزة المتوافقة.",
+          type3Title: "الخرائط والمواقع الجغرافية",
+          type3Text: "إعداد رموز تتضمن إحداثيات جغرافية أو رابطًا لموقع على الخريطة لتسهيل الوصول إلى الأماكن المحددة.",
+          type4Title: "شبكات Wi-Fi",
+          type4Text: "تضمين اسم شبكة Wi-Fi وكلمة مرورها ونوع الحماية، لتتمكن الأجهزة المتوافقة من قراءة بيانات الشبكة.",
+          type5Title: "جهات الاتصال",
+          type5Text: "تضمين بيانات مثل الاسم ورقم الهاتف والبريد الإلكتروني ومعلومات الاتصال الأخرى لتسهيل قراءتها وحفظها.",
+          type6Title: "أرقام الهواتف والرسائل",
+          type6Text: "إعداد رموز تحتوي على أرقام الهواتف أو بيانات رسالة نصية، وفقًا للصيغة المعتمدة ومدى توافق الجهاز معها.",
+          type7Title: "البريد الإلكتروني",
+          type7Text: "تضمين عنوان بريد إلكتروني، مع إمكانية تضمين عنوان الرسالة ونصها وفقًا للصيغة التي ستُعتمد.",
+          type8Title: "الأحداث والمواعيد",
+          type8Text: "تضمين بيانات موعد أو حدث، مثل العنوان والتاريخ والوقت والموقع، وفقًا للصيغ التي ستدعمها الميزة.",
+          type9Title: "أنواع بيانات أخرى",
+          type9Text: "إمكانية دعم أنواع إضافية من البيانات والاستخدامات مستقبلًا، بحسب الصيغ المطلوبة ومعايير رموز QR.",
+          howTitle: "كيف ستعمل الميزة؟",
+          howText1: "عند تنفيذها، سيكون الهدف هو إتاحة اختيار نوع البيانات وإدخال المعلومات المطلوبة ثم تحويلها إلى رمز QR مناسب. ويمكن بعد ذلك استخدام الرمز مع الأجهزة والتطبيقات المتوافقة لقراءة البيانات أو تنفيذ الإجراء المرتبط بها.",
+          howText2: "ستعتمد طريقة التعامل مع الرمز على محتواه؛ فقد يعرض نصًا، أو يفتح رابطًا، أو يجهّز بيانات اتصال، أو يساعد على الوصول إلى موقع جغرافي.",
+          privacyTitle: "كلمات المرور والبيانات الخاصة",
+          privacyText: "قد يحتوي رمز QR على بيانات يمكن لأي شخص يمسحه قراءتها، بما في ذلك بيانات شبكة Wi-Fi إذا كانت مضمّنة في الرمز. لذلك ينبغي عدم مشاركة الرموز التي تحتوي على معلومات خاصة إلا مع الأشخاص المقصودين.",
+          currentTitle: "الحالة الحالية",
+          currentText: "هذه الصفحة مخصصة للتعريف بميزة مستقبلية مخطط لها. لا يعني وجود الأنواع المذكورة هنا أنها مدعومة بالفعل في الإصدار الحالي، وسيتم توضيح التفاصيل عند تنفيذ الميزة واعتماد أنواع البيانات النهائية.",
+          footerText: "Scanix QR · معلومات عن ميزة مخطط لها"
+        },
+
+        en: {
+          direction: "ltr",
+          description: "Learn about QR code creation planned for Scanix QR and the types of data that may be converted into scannable codes in a future release.",
+          title: "QR Code Creation Coming Soon | Scanix QR",
+          menuOpen: "Open menu",
+          menuClose: "Close menu",
+          menuLabel: "Main menu",
+          navHome: "Home",
+          navDownload: "Download",
+          navAbout: "About the App",
+          navQR: "QR Code Creation — Coming Soon",
+          navPrivacy: "Privacy Policy",
+          languageLabel: "Language",
+          eyebrow: "Planned Feature",
+          status: "Not currently available",
+          pageTitle: "Create QR Codes for Different Types of Data",
+          intro: "Learn about QR code creation planned for Scanix QR and the types of information that may be converted into scannable codes.",
+          whatTitle: "What Is This Feature?",
+          whatText: "This planned feature is intended to convert different types of data into QR codes. Another phone may scan a code and handle its contents according to the data type and the apps available on that device.",
+          noticeTitle: "Important:",
+          noticeText: "QR code creation is not currently available in the existing Scanix QR release. The information below describes the planned scope, and the final details may change during implementation.",
+          typesTitle: "Planned Data Types",
+          typesIntro: "Examples of data types that may be supported in the future.",
+          type1Title: "Text and Numbers",
+          type1Text: "Convert plain text, notes, numbers, identifiers, and reference codes into QR codes that can be scanned to display their contents.",
+          type2Title: "Website and Internet Links",
+          type2Text: "Convert website addresses and web page links into codes that make opening the address easier on compatible devices.",
+          type3Title: "Maps and Geographic Locations",
+          type3Text: "Create codes containing geographic coordinates or a map location link to make specified places easier to find.",
+          type4Title: "Wi-Fi Networks",
+          type4Text: "Include a Wi-Fi network name, password, and security type so compatible devices can read the network details.",
+          type5Title: "Contacts",
+          type5Text: "Include details such as a name, phone number, email address, and other contact information for easier reading and saving.",
+          type6Title: "Phone Numbers and Messages",
+          type6Text: "Create codes containing phone numbers or text message details, depending on the supported format and device compatibility.",
+          type7Title: "Email",
+          type7Text: "Include an email address and potentially a subject and message body, depending on the format adopted.",
+          type8Title: "Events and Appointments",
+          type8Text: "Include event details such as a title, date, time, and location, depending on the formats supported by the feature.",
+          type9Title: "Other Data Types",
+          type9Text: "Additional data types and use cases may be considered in the future, depending on requirements and QR code standards.",
+          howTitle: "How Will It Work?",
+          howText1: "When implemented, the feature is intended to let users select a data type, enter the required information, and convert it into a suitable QR code. Compatible devices and apps may then read the data or perform the associated action.",
+          howText2: "How a code is handled depends on its contents. It may display text, open a link, prepare contact details, or help users reach a geographic location.",
+          privacyTitle: "Passwords and Private Information",
+          privacyText: "A QR code may contain data that anyone scanning it can read, including Wi-Fi credentials if they are embedded in the code. Avoid sharing codes containing private information except with intended recipients.",
+          currentTitle: "Current Status",
+          currentText: "This page describes a planned future feature. The data types listed here are not necessarily supported in the current release. Details will be clarified when the feature is implemented and its supported data types are finalized.",
+          footerText: "Scanix QR · Information about a planned feature"
+        }
+      };
+
+      var menu = document.getElementById("sideMenu");
+      var openButton = document.getElementById("menuButton");
+      var closeButton = document.getElementById("closeMenu");
+      var overlay = document.getElementById("overlay");
+      var languageButton = document.getElementById("languageButton");
+      var currentLanguage = "ar";
+
+      function getLanguage() {
+        var params = new URLSearchParams(window.location.search);
+        var queryLanguage = params.get("lang");
+
+        if (queryLanguage === "ar" || queryLanguage === "en") {
+          return queryLanguage;
+        }
+
+        try {
+          var saved = localStorage.getItem(languageKey);
+          if (saved === "ar" || saved === "en") {
+            return saved;
+          }
+        } catch (error) {}
+
+        var browserLanguage = navigator.language || "en";
+        return /^ar(?:-|$)/i.test(browserLanguage) ? "ar" : "en";
+      }
+
+      function setLanguage(language, save) {
+        currentLanguage = language === "en" ? "en" : "ar";
+
+        var dictionary = translations[currentLanguage];
+
+        document.documentElement.lang = currentLanguage;
+        document.documentElement.dir = dictionary.direction;
+        document.body.dir = dictionary.direction;
+        document.title = dictionary.title;
+
+        var description = document.querySelector(
+          'meta[name="description"]'
+        );
+
+        if (description) {
+          description.setAttribute("content", dictionary.description);
+        }
+
+        document.querySelectorAll("[data-i18n]").forEach(function (element) {
+          var key = element.getAttribute("data-i18n");
+
+          if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
+            element.textContent = dictionary[key];
+          }
+        });
+
+        openButton.setAttribute("aria-label", dictionary.menuOpen);
+        closeButton.setAttribute("aria-label", dictionary.menuClose);
+        menu.setAttribute("aria-label", dictionary.menuLabel);
+
+        languageButton.textContent =
+          currentLanguage === "ar" ? "English" : "العربية";
+
+        if (save) {
+          try {
+            localStorage.setItem(languageKey, currentLanguage);
+          } catch (error) {}
+        }
+      }
+
+      function openMenu() {
+        menu.classList.add("open");
+        menu.removeAttribute("inert");
+        menu.setAttribute("aria-hidden", "false");
+        overlay.hidden = false;
+        openButton.setAttribute("aria-expanded", "true");
+        closeButton.focus();
+      }
+
+      function closeMenu() {
+        menu.classList.remove("open");
+        menu.setAttribute("inert", "");
+        menu.setAttribute("aria-hidden", "true");
+        overlay.hidden = true;
+        openButton.setAttribute("aria-expanded", "false");
+      }
+
+      openButton.addEventListener("click", openMenu);
+      closeButton.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeMenu();
+        }
+      });
+
+      languageButton.addEventListener("click", function () {
+        var nextLanguage = currentLanguage === "ar" ? "en" : "ar";
+
+        setLanguage(nextLanguage, true);
+
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", nextLanguage);
+        window.history.replaceState({}, "", url);
+      });
+
+      setLanguage(getLanguage(), false);
+    })();
+  </script>
 </body>
-  </html>
+</html>
