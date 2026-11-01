@@ -203,9 +203,24 @@
       font-weight: 700;
     }
 
-    .drawer .language-button {
+        .drawer .language-button {
+      display: block;
       width: 100%;
+      min-height: auto;
+      padding: 11px 13px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
       text-align: start;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .drawer .language-button:hover {
+      background: var(--surface-2);
+      border-color: var(--border);
     }
 
     .container {
