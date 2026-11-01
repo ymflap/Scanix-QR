@@ -2,95 +2,247 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f8fafc">
-  <meta name="description" content="سياسة الخصوصية لتطبيق Scanix QR، بما في ذلك الكاميرا والصور ونتائج المسح والتخزين المحلي والاتصال بالإنترنت.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="سياسة الخصوصية لتطبيق Scanix QR. تعرف على كيفية التعامل مع الكاميرا والصور ونتائج المسح والتحديثات والبيانات.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://scanix-qr.pages.dev/privacy.html">
+  <link rel="alternate" hreflang="ar" href="https://scanix-qr.pages.dev/privacy.html?lang=ar">
+  <link rel="alternate" hreflang="en" href="https://scanix-qr.pages.dev/privacy.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://scanix-qr.pages.dev/privacy.html">
   <title>سياسة الخصوصية | Scanix QR</title>
-  <script>
-    (function () {
-      var language = navigator.language ||
-        (navigator.languages && navigator.languages[0]) || "";
-      var prefersArabic = /^ar(?:-|$)/i.test(language);
 
-      if (!prefersArabic) {
-        window.location.replace(
-          "privacy-en.html" + window.location.search + window.location.hash
-        );
-      }
-    })();
-  </script>
   <style>
     :root {
-      color-scheme: light;
-      --background: #f8fafc;
-      --surface: #ffffff;
-      --text: #172033;
-      --muted: #64748b;
-      --accent: #2563eb;
-      --border: #e2e8f0;
+      color-scheme: dark;
+      --bg: #0b1220;
+      --surface: #111c2e;
+      --surface-2: #17243a;
+      --text: #f1f5f9;
+      --muted: #a7b4c8;
+      --accent: #60a5fa;
+      --border: #293950;
+      --shadow: 0 18px 45px rgb(0 0 0 / 22%);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
     body {
       margin: 0;
-      background: var(--background);
+      background: var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI",
+        Tahoma, Arial, sans-serif;
       font-size: 16px;
-      line-height: 1.9;
+      line-height: 1.85;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 68px;
+      padding: 12px max(16px, calc((100% - 1000px) / 2));
+      background: rgb(11 18 32 / 94%);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      color: var(--text);
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-button,
+    .language-button {
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      padding: 8px 12px;
+    }
+
+    .icon-button {
+      width: 44px;
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+    }
+
+    .language-button {
+      font-weight: 700;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 29;
+      background: rgb(0 0 0 / 60%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer {
+      position: fixed;
+      z-index: 30;
+      top: 0;
+      bottom: 0;
+      width: min(300px, 86vw);
+      overflow-y: auto;
+      padding: 24px 18px;
+      background: var(--surface);
+      border-color: var(--border);
+      border-style: solid;
+      border-width: 0;
+      box-shadow: var(--shadow);
+      visibility: hidden;
+      transition: transform .22s ease, visibility .22s ease;
+    }
+
+    html[dir="rtl"] .drawer {
+      right: 0;
+      border-left-width: 1px;
+      transform: translateX(105%);
+    }
+
+    html[dir="ltr"] .drawer {
+      left: 0;
+      border-right-width: 1px;
+      transform: translateX(-105%);
+    }
+
+    html[dir="rtl"] .drawer.open,
+    html[dir="ltr"] .drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .drawer-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .drawer-heading strong {
+      font-size: 1.15rem;
+    }
+
+    .drawer nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .drawer nav a {
+      display: block;
+      padding: 11px 13px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .drawer nav a:hover,
+    .drawer nav a[aria-current="page"] {
+      background: var(--surface-2);
+      border-color: var(--border);
     }
 
     .container {
       width: min(100% - 32px, 820px);
       margin: 0 auto;
-      padding: 32px 0 48px;
+      padding: 34px 0 48px;
     }
 
-    header {
+    header.page-header {
       margin-bottom: 24px;
     }
 
-    .brand {
-      display: inline-block;
+    .eyebrow {
       color: var(--accent);
-      font-size: 1.1rem;
       font-weight: 800;
-      letter-spacing: 0.2px;
-      margin-bottom: 12px;
+      font-size: .9rem;
+      margin: 0 0 8px;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
-      line-height: 1.4;
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      line-height: 1.35;
+      margin: 0 0 10px;
     }
 
     .updated {
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: .9rem;
       margin: 0;
     }
 
     main {
+      padding: clamp(18px, 5vw, 32px);
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: clamp(18px, 5vw, 32px);
+      box-shadow: var(--shadow);
     }
 
     section + section {
-      border-top: 1px solid var(--border);
       margin-top: 24px;
-      padding-top: 20px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
     }
 
     h2 {
       font-size: 1.15rem;
       line-height: 1.6;
-      margin: 0 0 8px;
+      margin: 0 0 10px;
     }
 
     p {
@@ -102,7 +254,7 @@
     }
 
     ul {
-      padding-right: 22px;
+      padding-inline-start: 24px;
       margin: 8px 0 0;
     }
 
@@ -110,191 +262,609 @@
       margin-top: 6px;
     }
 
-    a {
-      color: var(--accent);
-      overflow-wrap: anywhere;
-    }
-
     .notice {
-      background: #eff6ff;
-      border-right: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-top: 20px;
+      margin-top: 26px;
+      padding: 15px 17px;
+      border: 1px solid #31527c;
+      border-inline-start: 4px solid var(--accent);
+      border-radius: 12px;
+      background: #10213a;
     }
 
     footer {
-      color: var(--muted);
+      margin-top: 28px;
       text-align: center;
-      font-size: 0.85rem;
-      margin-top: 24px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    footer nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 18px;
+      margin-bottom: 12px;
+    }
+
+    footer nav a {
+      text-decoration: none;
+    }
+
+    [hidden] {
+      display: none !important;
     }
 
     @media (max-width: 480px) {
+      .topbar {
+        min-height: 60px;
+        padding: 9px 12px;
+      }
+
       .container {
         width: min(100% - 20px, 820px);
-        padding-top: 20px;
+        padding-top: 24px;
       }
 
       main {
         border-radius: 14px;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <a class="brand" href="index.html" aria-label="Scanix QR">Scanix QR</a>
+
+    <div class="top-actions">
+      <button
+        class="language-button"
+        id="languageButton"
+        type="button"
+        aria-label="Switch language"
+      >English</button>
+
+      <button
+        class="icon-button"
+        id="menuButton"
+        type="button"
+        aria-label="فتح القائمة"
+        aria-controls="siteDrawer"
+        aria-expanded="false"
+      >☰</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="drawerOverlay" hidden></div>
+
+  <aside
+    class="drawer"
+    id="siteDrawer"
+    aria-label="القائمة الرئيسية"
+    aria-hidden="true"
+    inert
+  >
+    <div class="drawer-heading">
+      <strong data-i18n="menuTitle">القائمة</strong>
+      <button
+        class="icon-button"
+        id="closeMenuButton"
+        type="button"
+        aria-label="إغلاق القائمة"
+      >×</button>
+    </div>
+
+    <nav aria-label="روابط الموقع" id="drawerNavigation">
+      <a href="index.html" data-i18n="home">الرئيسية</a>
+      <a href="download.html" data-i18n="download">تحميل التطبيق</a>
+      <a href="qr-creation.html" data-i18n="creation">إنشاء رموز QR</a>
+      <a href="about.html" data-i18n="about">حول التطبيق</a>
+      <a href="privacy.html" aria-current="page" data-i18n="privacy">سياسة الخصوصية</a>
+    </nav>
+  </aside>
+
   <div class="container">
-    <header>
-      <div class="brand">Scanix QR</div>
-      <h1>سياسة الخصوصية</h1>
-      <p class="updated">آخر تحديث: 21 أكتوبر 2026</p>
+    <header class="page-header">
+      <p class="eyebrow">Scanix QR</p>
+      <h1 data-i18n="pageTitle">سياسة الخصوصية</h1>
+      <p class="updated">
+        <span data-i18n="lastUpdated">آخر تحديث:</span>
+        <time datetime="2026-10-21" data-i18n="updateDate">21 أكتوبر 2026</time>
+      </p>
     </header>
 
     <main>
-      <section>
-        <h2>1. مقدمة</h2>
-        <p>
-          توضح هذه السياسة كيفية تعامل تطبيق Scanix QR مع المعلومات
-          عند استخدام ميزات قراءة رموز QR والباركود. نهدف إلى توضيح
-          الصلاحيات المستخدمة، وكيفية حفظ نتائج المسح، ومتى يمكن أن
-          تنتقل المعلومات إلى جهات أخرى.
-        </p>
-      </section>
+      <div lang="ar" data-content="ar">
+        <section>
+          <h2>1. مقدمة</h2>
+          <p>
+            توضح هذه السياسة كيفية تعامل تطبيق Scanix QR مع المعلومات
+            عند استخدام ميزات قراءة رموز QR والباركود. وتهدف إلى توضيح
+            الصلاحيات المستخدمة، وكيفية حفظ نتائج المسح، ومتى قد تنتقل
+            المعلومات إلى تطبيقات أو جهات أخرى.
+          </p>
+        </section>
 
-      <section>
-        <h2>2. الكاميرا والصور</h2>
-        <p>
-          يطلب التطبيق إذن الكاميرا عند استخدام المسح المباشر.
-          كما يمكنك اختيار صورة من جهازك لقراءة رمز موجود فيها.
-          تُستخدم الكاميرا والصورة المختارة لتنفيذ عملية قراءة الرمز.
-        </p>
-        <p>
-          لا يعني منح إذن الكاميرا أن التطبيق يحتاج إلى إنشاء حساب.
-          ويمكنك إدارة إذن الكاميرا من إعدادات أندرويد.
-        </p>
-      </section>
+        <section>
+          <h2>2. الكاميرا والصور</h2>
+          <p>
+            يطلب التطبيق إذن الكاميرا عند استخدام المسح المباشر.
+            ويمكنك أيضًا اختيار صورة من جهازك لقراءة رمز موجود فيها.
+            تُستخدم الكاميرا والصورة المختارة لتنفيذ عملية قراءة الرمز.
+          </p>
+          <p>
+            لا يتطلب استخدام الكاميرا إنشاء حساب. ويمكنك إدارة إذن
+            الكاميرا من إعدادات أندرويد.
+          </p>
+        </section>
 
-      <section>
-        <h2>3. نتائج المسح والتخزين المحلي</h2>
-        <p>
-          يدعم التطبيق حفظ نتائج المسح في سجل محلي داخل مساحة
-          التطبيق على جهازك. يعتمد حفظ النتائج على إعداد حفظ السجل،
-          ويمكنك مراجعة النتائج المحفوظة وحذفها من داخل التطبيق.
-        </p>
-        <p>
-          يحتفظ السجل بما يصل إلى 200 نتيجة وفق آلية التخزين الحالية.
-          ولا يتطلب استخدام التطبيق إنشاء حساب مستخدم.
-        </p>
-        <p>
-          قد تبقى النتائج المحفوظة سابقًا على الجهاز حتى تحذفها،
-          أو تمسح بيانات التطبيق أو تزيله وفق سلوك نظام أندرويد.
-        </p>
-      </section>
+        <section>
+          <h2>3. نتائج المسح والتخزين المحلي</h2>
+          <p>
+            يدعم التطبيق حفظ نتائج المسح في سجل محلي داخل مساحة التطبيق
+            على جهازك. يمكنك مراجعة النتائج المحفوظة وحذف نتيجة محددة
+            أو مسح السجل من داخل التطبيق وفق الوظائف المتاحة.
+          </p>
+          <p>
+            قد تبقى النتائج المحفوظة على جهازك حتى تحذفها، أو تمسح
+            بيانات التطبيق، أو تزيل التطبيق وفق سلوك نظام أندرويد.
+          </p>
+        </section>
 
-      <section>
-        <h2>4. الاتصال بالإنترنت والتحديثات</h2>
-        <p>
-          يستخدم التطبيق الاتصال بالإنترنت للتحقق من معلومات
-          التحديثات المتاحة.
-        </p>
-        <p>
-          عند إجراء طلب للتحقق من التحديثات، قد تتلقى خدمة
-          الاستضافة بيانات الاتصال المعتادة اللازمة لمعالجة الطلب
-          وإرسال الاستجابة، وفقًا لسياساتها الخاصة.
-        </p>
-        <p>
-          لا يعني الاتصال بالإنترنت للتحقق من التحديثات بحد ذاته
-          إرسال سجل المسح إلى خادم. وبحسب مسارات الكود التي تمت
-          مراجعتها، لم يظهر خادم مخصص لاستقبال نتائج المسح.
-        </p>
-      </section>
+        <section>
+          <h2>4. الاتصال بالإنترنت والتحديثات</h2>
+          <p>
+            قد يستخدم التطبيق الإنترنت للتحقق من معلومات التحديثات
+            وتنزيل الملفات اللازمة للوظائف التي تتطلب تنزيلًا عند الطلب.
+          </p>
+          <p>
+            عند الاتصال بخدمة خارجية، قد تتلقى تلك الخدمة بيانات اتصال
+            تقنية لازمة لتقديم الاستجابة، وفق سياساتها وإعداداتها.
+          </p>
+          <p>
+            لا يعني التحقق من التحديثات وحده أن سجل المسح يُرسل إلى
+            الخادم. ينبغي أن تتوافق أي معالجة فعلية للبيانات مع السلوك
+            الحالي للتطبيق وسياسة الخدمة المستخدمة.
+          </p>
+        </section>
 
-      <section>
-        <h2>5. نسخ النتائج ومشاركتها وفتح الروابط</h2>
-        <p>
-          يمكنك نسخ نتائج المسح أو مشاركتها أو فتح الروابط التي
-          تتضمنها. عند اختيار إحدى هذه الوظائف، قد تنتقل المعلومات
-          إلى تطبيق آخر أو موقع ويب بحسب اختيارك.
-        </p>
-        <p>
-          تخضع المعلومات التي تقدمها إلى التطبيقات والمواقع الأخرى
-          لسياسات الخصوصية وشروط الجهات التي تديرها. ننصح بمراجعة
-          وجهة الرابط قبل فتحه وعدم مشاركة معلومات حساسة مع جهات
-          غير موثوقة.
-        </p>
-      </section>
+        <section>
+          <h2>5. نسخ النتائج ومشاركتها وفتح الروابط</h2>
+          <p>
+            يمكنك نسخ نتائج المسح أو مشاركتها أو فتح الروابط التي تتضمنها.
+            عند اختيار إحدى هذه الوظائف، قد تُنقل المعلومات إلى تطبيق
+            آخر أو موقع ويب وفقًا لاختيارك.
+          </p>
+          <p>
+            تخضع المعلومات التي تقدمها إلى التطبيقات والمواقع الأخرى
+            لسياسات الجهات التي تديرها. راجع وجهة الرابط قبل فتحه،
+            وتجنب مشاركة معلومات حساسة مع جهات غير موثوقة.
+          </p>
+        </section>
 
-      <section>
-        <h2>6. الخدمات الخارجية والبيانات التقنية</h2>
-        <p>
-          يستخدم التطبيق مكتبات لمعالجة رموز QR والباركود،
-          ويعمل ضمن نظام أندرويد. قد تخضع البيانات التقنية أو
-          التشخيصية التي يجمعها النظام أو أي خدمة خارجية مستخدمة
-          لسياسات الجهة المقدمة لتلك الخدمة.
-        </p>
-        <p>
-          لا نؤكد أن جميع مكونات النظام والخدمات الخارجية تمتنع
-          عن جمع البيانات التقنية؛ إذ يخضع ذلك لسلوكها وسياساتها
-          المستقلة.
-        </p>
-      </section>
+        <section>
+          <h2>6. الخدمات الخارجية والبيانات التقنية</h2>
+          <p>
+            يعتمد التطبيق على مكتبات برمجية ونظام أندرويد لمعالجة الرموز
+            وتشغيل الوظائف. وقد تخضع البيانات التقنية أو التشخيصية التي
+            تجمعها مكونات النظام أو الخدمات الخارجية لسياسات الجهات
+            المقدمة لها.
+          </p>
+          <p>
+            لا يمكن ضمان أن جميع مكونات النظام والخدمات الخارجية لا تجمع
+            أي بيانات تقنية؛ إذ يعتمد ذلك على سلوك كل مكوّن وسياساته.
+          </p>
+        </section>
 
-      <section>
-        <h2>7. حماية المعلومات</h2>
-        <p>
-          تُحفظ نتائج السجل في مساحة التخزين الخاصة بالتطبيق.
-          ننصح بالحفاظ على أمان جهازك، واستخدام وسائل قفل الشاشة،
-          وحذف النتائج التي لم تعد بحاجة إليها.
-        </p>
-        <p>
-          لا توجد وسيلة إلكترونية تضمن الحماية المطلقة في جميع
-          الظروف.
-        </p>
-      </section>
+        <section>
+          <h2>7. حماية المعلومات</h2>
+          <p>
+            ننصح بالحفاظ على أمان جهازك، واستخدام قفل الشاشة، وحذف
+            النتائج التي لم تعد بحاجة إليها. ولا توجد وسيلة إلكترونية
+            تضمن الحماية المطلقة في جميع الظروف.
+          </p>
+        </section>
 
-      <section>
-        <h2>8. خصوصية الأطفال</h2>
-        <p>
-          Scanix QR أداة لقراءة الرموز، ولم يُصمم لجمع المعلومات
-          الشخصية من الأطفال عبر نظام حسابات خاص بالتطبيق.
-        </p>
-      </section>
+        <section>
+          <h2>8. خصوصية الأطفال</h2>
+          <p>
+            صُمم Scanix QR بوصفه أداة لقراءة الرموز، وليس نظام حسابات
+            مخصصًا لجمع المعلومات الشخصية من الأطفال. إذا طرأ تغيير
+            على وظائف التطبيق، فستتم مراجعة هذه السياسة وفقًا لذلك.
+          </p>
+        </section>
 
-      <section>
-        <h2>9. التغييرات على سياسة الخصوصية</h2>
-        <p>
-          قد نحدّث هذه السياسة إذا تغيرت وظائف التطبيق أو طريقة
-          تعامله مع المعلومات. سنعدّل تاريخ آخر تحديث عند إجراء
-          تغييرات مناسبة على هذه الصفحة.
-        </p>
-      </section>
+        <section>
+          <h2>9. التغييرات على سياسة الخصوصية</h2>
+          <p>
+            قد نحدّث هذه السياسة عند تغير وظائف التطبيق أو طريقة تعامله
+            مع المعلومات. سنعدّل تاريخ آخر تحديث عند إجراء تغييرات
+            مناسبة على هذه الصفحة.
+          </p>
+        </section>
 
-      <section>
-        <h2>10. التواصل</h2>
-        <p>
-          إذا كانت لديك أسئلة حول هذه السياسة أو طريقة تعامل
-          Scanix QR مع المعلومات، يمكنك التواصل مع المطور عبر
-          البريد الإلكتروني التالي:
-        </p>
-        <p>
-          <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Privacy">
-            dhmlpy@gmail.com
-          </a>
-        </p>
-      </section>
+        <section>
+          <h2>10. التواصل</h2>
+          <p>
+            إذا كانت لديك أسئلة حول هذه السياسة أو طريقة تعامل
+            Scanix QR مع المعلومات، يمكنك التواصل مع المطور عبر البريد:
+          </p>
+          <p>
+            <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Privacy">
+              dhmlpy@gmail.com
+            </a>
+          </p>
+        </section>
+  </div>
+  
+      <div lang="en" data-content="en" hidden>
+        <section>
+          <h2>1. Introduction</h2>
+          <p>
+            This policy explains how Scanix QR handles information when
+            you use its QR code and barcode scanning features. It describes
+            the permissions involved, local scan history, and circumstances
+            in which information may be shared with other apps or services.
+          </p>
+        </section>
+
+        <section>
+          <h2>2. Camera and Images</h2>
+          <p>
+            The app requests camera permission when you use live scanning.
+            You may also select an image from your device to read a code
+            contained in it. The camera and selected image are used to
+            perform the scanning operation.
+          </p>
+          <p>
+            Using the camera does not require an account. You can manage
+            camera permission in your Android settings.
+          </p>
+        </section>
+
+        <section>
+          <h2>3. Scan Results and Local Storage</h2>
+          <p>
+            The app supports storing scan results in a local history
+            within the app's storage on your device. You can review saved
+            results and delete individual entries or clear the history
+            using the features available in the app.
+          </p>
+          <p>
+            Saved results may remain on your device until you delete them,
+            clear the app's data, or uninstall the app, depending on
+            Android's behavior.
+          </p>
+        </section>
+
+        <section>
+          <h2>4. Internet Access and Updates</h2>
+          <p>
+            The app may use the internet to check update information and
+            download files needed by features that support on-demand
+            downloads.
+          </p>
+          <p>
+            When the app contacts an external service, that service may
+            receive technical connection data needed to provide a response,
+            according to its own policies and configuration.
+          </p>
+          <p>
+            Checking for updates alone does not mean scan history is sent
+            to a server. Any actual data processing should be consistent
+            with the app's current behavior and the policies of the
+            services it uses.
+          </p>
+        </section>
+
+        <section>
+          <h2>5. Copying, Sharing, and Opening Links</h2>
+          <p>
+            You can copy scan results, share them, or open links they
+            contain. When you choose one of these actions, information
+            may be transferred to another app or website according to
+            your selection.
+          </p>
+          <p>
+            Information you provide to other apps and websites is subject
+            to the policies of their operators. Check a link's destination
+            before opening it and avoid sharing sensitive information
+            with untrusted parties.
+          </p>
+        </section>
+
+        <section>
+          <h2>6. External Services and Technical Data</h2>
+          <p>
+            The app relies on software libraries and Android to process
+            codes and run its features. Technical or diagnostic data
+            collected by system components or external services may be
+            subject to the policies of their respective providers.
+          </p>
+          <p>
+            We cannot guarantee that every system component or external
+            service collects no technical data; this depends on each
+            component's behavior and policies.
+          </p>
+        </section>
+
+        <section>
+          <h2>7. Information Security</h2>
+          <p>
+            We recommend keeping your device secure, using a screen lock,
+            and deleting results you no longer need. No electronic method
+            can guarantee absolute security in every circumstance.
+          </p>
+        </section>
+
+        <section>
+          <h2>8. Children's Privacy</h2>
+          <p>
+            Scanix QR is designed as a code-scanning tool, not as an
+            account system intended to collect children's personal
+            information. If the app's features change, this policy will
+            be reviewed accordingly.
+          </p>
+        </section>
+
+        <section>
+          <h2>9. Changes to This Privacy Policy</h2>
+          <p>
+            We may update this policy when the app's features or
+            information-handling practices change. The last-updated date
+            on this page will be revised when appropriate changes are made.
+          </p>
+        </section>
+
+        <section>
+          <h2>10. Contact</h2>
+          <p>
+            If you have questions about this policy or how Scanix QR
+            handles information, you can contact the developer by email:
+          </p>
+          <p>
+            <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Privacy">
+              dhmlpy@gmail.com
+            </a>
+          </p>
+        </section>
+      </div>
 
       <div class="notice">
-        <strong>ملاحظة:</strong>
-        تتعلق هذه السياسة بسلوك التطبيق الذي تمت مراجعته.
-        إذا أضيفت لاحقًا وظائف جديدة تتعامل مع البيانات أو
-        تتصل بخدمات أخرى، فيجب مراجعة هذه السياسة وتحديثها
-        بما يتوافق مع السلوك الفعلي.
+        <strong data-i18n="noticeTitle">ملاحظة:</strong>
+        <span data-i18n="noticeText">
+          يجب أن تعكس هذه السياسة السلوك الفعلي للتطبيق والخدمات التي يستخدمها.
+        </span>
       </div>
     </main>
 
     <footer>
-      Scanix QR · سياسة الخصوصية
+      <nav aria-label="روابط التذييل" data-i18n-aria="footerNavLabel">
+        <a href="index.html" data-i18n="home">الرئيسية</a>
+        <a href="download.html" data-i18n="download">تحميل التطبيق</a>
+        <a href="about.html" data-i18n="about">حول التطبيق</a>
+        <a href="privacy.html" aria-current="page" data-i18n="privacy">سياسة الخصوصية</a>
+      </nav>
+      <span data-i18n="footerText">Scanix QR · سياسة الخصوصية</span>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var translations = {
+        ar: {
+          pageTitle: "سياسة الخصوصية",
+          lastUpdated: "آخر تحديث:",
+          updateDate: "21 أكتوبر 2026",
+          menuTitle: "القائمة",
+          home: "الرئيسية",
+          download: "تحميل التطبيق",
+          creation: "إنشاء رموز QR",
+          about: "حول التطبيق",
+          privacy: "سياسة الخصوصية",
+          noticeTitle: "ملاحظة:",
+          noticeText: "يجب أن تعكس هذه السياسة السلوك الفعلي للتطبيق والخدمات التي يستخدمها.",
+          footerNavLabel: "روابط التذييل",
+          footerText: "Scanix QR · سياسة الخصوصية",
+          menuOpen: "فتح القائمة",
+          menuClose: "إغلاق القائمة",
+          switchLanguage: "تغيير اللغة"
+        },
+        en: {
+          pageTitle: "Privacy Policy",
+          lastUpdated: "Last updated:",
+          updateDate: "October 21, 2026",
+          menuTitle: "Menu",
+          home: "Home",
+          download: "Download",
+          creation: "QR Code Creation",
+          about: "About",
+          privacy: "Privacy Policy",
+          noticeTitle: "Note:",
+          noticeText: "This policy should reflect the app's actual behavior and the services it uses.",
+          footerNavLabel: "Footer links",
+          footerText: "Scanix QR · Privacy Policy",
+          menuOpen: "Open menu",
+          menuClose: "Close menu",
+          switchLanguage: "Switch language"
+        }
+      };
+
+      var languageButton = document.getElementById("languageButton");
+      var menuButton = document.getElementById("menuButton");
+      var closeMenuButton = document.getElementById("closeMenuButton");
+      var drawer = document.getElementById("siteDrawer");
+      var overlay = document.getElementById("drawerOverlay");
+      var navigation = document.getElementById("drawerNavigation");
+      var currentLanguage = "ar";
+
+      function getLanguage() {
+        var params = new URLSearchParams(window.location.search);
+        var requested = params.get("lang");
+
+        if (requested === "ar" || requested === "en") {
+          return requested;
+        }
+
+        try {
+          var saved = localStorage.getItem("scanix-site-language");
+          if (saved === "ar" || saved === "en") {
+            return saved;
+          }
+        } catch (error) {
+          // Continue using the browser language when storage is unavailable.
+        }
+
+        var browserLanguage = navigator.language ||
+          (navigator.languages && navigator.languages[0]) || "";
+
+        return /^ar(?:-|$)/i.test(browserLanguage) ? "ar" : "en";
+      }
+
+      function setLanguage(language) {
+        currentLanguage = language === "en" ? "en" : "ar";
+
+        var isArabic = currentLanguage === "ar";
+        var dictionary = translations[currentLanguage];
+
+        document.documentElement.lang = currentLanguage;
+        document.documentElement.dir = isArabic ? "rtl" : "ltr";
+        document.title = dictionary.pageTitle + " | Scanix QR";
+
+        var description = isArabic
+          ? "سياسة الخصوصية لتطبيق Scanix QR، بما في ذلك الكاميرا والصور ونتائج المسح والتحديثات."
+          : "Read the Scanix QR privacy policy covering camera access, images, scan results, updates, and information handling.";
+
+        var descriptionTag = document.querySelector('meta[name="description"]');
+        if (descriptionTag) {
+          descriptionTag.setAttribute("content", description);
+        }
+
+        document.querySelectorAll("[data-i18n]").forEach(function (element) {
+          var key = element.getAttribute("data-i18n");
+          if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
+            element.textContent = dictionary[key];
+          }
+        });
+
+        document.querySelectorAll("[data-i18n-aria]").forEach(function (element) {
+          var key = element.getAttribute("data-i18n-aria");
+          if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
+            element.setAttribute("aria-label", dictionary[key]);
+          }
+        });
+
+        document.querySelectorAll("[data-content]").forEach(function (element) {
+          element.hidden = element.getAttribute("data-content") !== currentLanguage;
+        });
+
+        languageButton.textContent = isArabic ? "English" : "العربية";
+        languageButton.setAttribute("aria-label", dictionary.switchLanguage);
+
+        menuButton.setAttribute("aria-label", dictionary.menuOpen);
+        closeMenuButton.setAttribute("aria-label", dictionary.menuClose);
+        drawer.setAttribute("aria-label", dictionary.menuTitle);
+
+        navigation.setAttribute("aria-label", dictionary.menuTitle);
+
+        try {
+          localStorage.setItem("scanix-site-language", currentLanguage);
+        } catch (error) {
+          // Language switching still works if storage is unavailable.
+        }
+
+        var params = new URLSearchParams(window.location.search);
+        params.set("lang", currentLanguage);
+
+        var query = params.toString();
+        var newUrl = window.location.pathname +
+          (query ? "?" + query : "") +
+          window.location.hash;
+
+        window.history.replaceState(null, "", newUrl);
+      }
+
+      function openDrawer() {
+        drawer.classList.add("open");
+        overlay.hidden = false;
+
+        window.requestAnimationFrame(function () {
+          overlay.classList.add("open");
+        });
+
+        drawer.removeAttribute("inert");
+        drawer.setAttribute("aria-hidden", "false");
+        menuButton.setAttribute("aria-expanded", "true");
+        menuButton.setAttribute(
+          "aria-label",
+          translations[currentLanguage].menuClose
+        );
+        document.body.classList.add("drawer-open");
+        closeMenuButton.focus();
+      }
+
+      function closeDrawer(returnFocus) {
+        drawer.classList.remove("open");
+        overlay.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true");
+        drawer.setAttribute("inert", "");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute(
+          "aria-label",
+          translations[currentLanguage].menuOpen
+        );
+        document.body.classList.remove("drawer-open");
+
+        window.setTimeout(function () {
+          if (!drawer.classList.contains("open")) {
+            overlay.hidden = true;
+          }
+        }, 230);
+
+        if (returnFocus) {
+          menuButton.focus();
+        }
+      }
+
+      languageButton.addEventListener("click", function () {
+        setLanguage(currentLanguage === "ar" ? "en" : "ar");
+      });
+
+      menuButton.addEventListener("click", openDrawer);
+
+      closeMenuButton.addEventListener("click", function () {
+        closeDrawer(true);
+      });
+
+      overlay.addEventListener("click", function () {
+        closeDrawer(true);
+      });
+
+      navigation.addEventListener("click", function (event) {
+        if (event.target.closest("a")) {
+          closeDrawer(false);
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && drawer.classList.contains("open")) {
+          closeDrawer(true);
+        }
+      });
+
+      setLanguage(getLanguage());
+    })();
+  </script>
 </body>
-</html>
+  </html>
+  
