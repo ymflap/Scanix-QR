@@ -7,7 +7,7 @@
   <meta name="description" content="اكتشف Scanix QR، تطبيق أندرويد لمسح رموز QR والباركود واستخراج النصوص من الصور وإدارة سجل المسح.">
   <meta name="robots" content="index, follow">
   <title>Scanix QR | ماسح QR والباركود لأندرويد</title>
-  <link rel="alternate" hreflang="ar" href="index.html">
+  <link rel="alternate" hreflang="ar" href="index.html?lang=ar">
   <link rel="alternate" hreflang="en" href="index.html?lang=en">
   <link rel="alternate" hreflang="x-default" href="index.html">
 
@@ -231,7 +231,8 @@
       transform: translateX(-105%);
     }
 
-    .drawer.open {
+    html[dir="rtl"] .drawer.open,
+    html[dir="ltr"] .drawer.open {
       transform: translateX(0);
       visibility: visible;
     }
@@ -361,49 +362,37 @@
           <article class="card">
             <span class="card-icon" aria-hidden="true">▦</span>
             <h3 data-i18n="featureScan">مسح QR والباركود</h3>
-            <p data-i18n="featureScanText">
-              اقرأ الرموز باستخدام كاميرا الهاتف.
-            </p>
+            <p data-i18n="featureScanText">اقرأ الرموز باستخدام كاميرا الهاتف.</p>
           </article>
 
           <article class="card">
             <span class="card-icon" aria-hidden="true">▧</span>
             <h3 data-i18n="featureImage">المسح من الصور</h3>
-            <p data-i18n="featureImageText">
-              اختر صورة من جهازك لمحاولة قراءة الرمز الموجود فيها.
-            </p>
+            <p data-i18n="featureImageText">اختر صورة من جهازك لمحاولة قراءة الرمز الموجود فيها.</p>
           </article>
 
           <article class="card">
             <span class="card-icon" aria-hidden="true">⌕</span>
             <h3 data-i18n="featureOCR">استخراج النصوص</h3>
-            <p data-i18n="featureOCRText">
-              استخرج النصوص من الصور باستخدام ميزة OCR.
-            </p>
+            <p data-i18n="featureOCRText">استخرج النصوص من الصور باستخدام ميزة OCR.</p>
           </article>
 
           <article class="card">
             <span class="card-icon" aria-hidden="true">◷</span>
             <h3 data-i18n="featureHistory">سجل المسح</h3>
-            <p data-i18n="featureHistoryText">
-              راجع النتائج السابقة وابحث فيها وأدرها من داخل التطبيق.
-            </p>
+            <p data-i18n="featureHistoryText">راجع النتائج السابقة وابحث فيها وأدرها من داخل التطبيق.</p>
           </article>
 
           <article class="card">
             <span class="card-icon" aria-hidden="true">↗</span>
             <h3 data-i18n="featureResults">إدارة النتائج</h3>
-            <p data-i18n="featureResultsText">
-              انسخ النتائج أو شاركها أو افتح الروابط بعد مراجعتها.
-            </p>
+            <p data-i18n="featureResultsText">انسخ النتائج أو شاركها أو افتح الروابط بعد مراجعتها.</p>
           </article>
 
           <article class="card">
             <span class="card-icon" aria-hidden="true">◎</span>
             <h3 data-i18n="featureLanguage">العربية والإنجليزية</h3>
-            <p data-i18n="featureLanguageText">
-              واجهة تدعم اللغتين مع إعدادات للمظهر والتخصيص.
-            </p>
+            <p data-i18n="featureLanguageText">واجهة تدعم اللغتين مع إعدادات للمظهر والتخصيص.</p>
           </article>
         </div>
       </div>
@@ -412,9 +401,7 @@
     <section class="section">
       <div class="container">
         <div class="info-panel">
-          <h2 class="section-title" data-i18n="downloadTitle">
-            تنزيل Scanix QR
-          </h2>
+          <h2 class="section-title" data-i18n="downloadTitle">تنزيل Scanix QR</h2>
           <p data-i18n="downloadText">
             انتقل إلى صفحة التنزيل للاطلاع على إصدارات التطبيق المنشورة،
             وأحجام ملفات APK، وروابط التنزيل المباشر وملاحظات كل إصدار.
@@ -445,6 +432,7 @@
       var translations = {
         ar: {
           direction: "rtl",
+          description: "اكتشف Scanix QR، تطبيق أندرويد لمسح رموز QR والباركود واستخراج النصوص من الصور وإدارة سجل المسح.",
           menuOpen: "فتح القائمة",
           menuClose: "إغلاق القائمة",
           navHome: "الرئيسية",
@@ -479,6 +467,7 @@
         },
         en: {
           direction: "ltr",
+          description: "Discover Scanix QR, an Android app for scanning QR codes and barcodes, extracting text from images, and managing scan history.",
           menuOpen: "Open menu",
           menuClose: "Close menu",
           navHome: "Home",
@@ -519,52 +508,53 @@
       var closeButton = document.getElementById("closeMenu");
       var overlay = document.getElementById("overlay");
       var languageButton = document.getElementById("languageButton");
-      var language = new URLSearchParams(location.search).get("lang");
+      var descriptionMeta = document.querySelector('meta[name="description"]');
+      var queryLanguage = new URLSearchParams(location.search).get("lang");
       var savedLanguage = null;
+      var language = "ar";
 
       try {
-        savedLanguage = sessionStorage.getItem("scanix-site-language");
+        savedLanguage = localStorage.getItem("scanix-site-language");
       } catch (error) {}
 
-      if (language !== "ar" && language !== "en") {
-        language = savedLanguage ||
-          (/^ar(?:-|$)/i.test(navigator.language || "") ? "ar" : "en");
+      if (queryLanguage === "ar" || queryLanguage === "en") {
+        language = queryLanguage;
+      } else if (savedLanguage === "ar" || savedLanguage === "en") {
+        language = savedLanguage;
+      } else {
+        language = /^ar(?:-|$)/i.test(navigator.language || "") ? "ar" : "en";
       }
 
       function setLanguage(nextLanguage) {
-        language = nextLanguage;
+        language = nextLanguage === "en" ? "en" : "ar";
         var t = translations[language];
 
         document.documentElement.lang = language;
         document.documentElement.dir = t.direction;
         body.dir = t.direction;
+
         document.title = language === "ar"
           ? "Scanix QR | ماسح QR والباركود لأندرويد"
           : "Scanix QR | QR and Barcode Scanner for Android";
 
+        if (descriptionMeta) {
+          descriptionMeta.setAttribute("content", t.description);
+        }
+
         document.querySelectorAll("[data-i18n]").forEach(function (element) {
           var key = element.getAttribute("data-i18n");
-          if (t[key]) element.textContent = t[key];
+          if (Object.prototype.hasOwnProperty.call(t, key)) {
+            element.textContent = t[key];
+          }
         });
 
         openButton.setAttribute("aria-label", t.menuOpen);
         closeButton.setAttribute("aria-label", t.menuClose);
+        menu.setAttribute("aria-label", t.navHome);
         languageButton.textContent = language === "ar" ? "English" : "العربية";
 
-        document.querySelectorAll('a[href="about.html"], a[href="privacy.html"], a[href="qr-creation.html"]').forEach(function (link) {
-          if (language === "en") {
-            if (link.getAttribute("href") === "about.html") link.href = "about-en.html";
-            if (link.getAttribute("href") === "privacy.html") link.href = "privacy-en.html";
-            if (link.getAttribute("href") === "qr-creation.html") link.href = "qr-creation-en.html";
-          } else {
-            if (link.getAttribute("href") === "about-en.html") link.href = "about.html";
-            if (link.getAttribute("href") === "privacy-en.html") link.href = "privacy.html";
-            if (link.getAttribute("href") === "qr-creation-en.html") link.href = "qr-creation.html";
-          }
-        });
-
         try {
-          sessionStorage.setItem("scanix-site-language", language);
+          localStorage.setItem("scanix-site-language", language);
         } catch (error) {}
       }
 
@@ -590,6 +580,16 @@
       closeButton.addEventListener("click", closeMenu);
       overlay.addEventListener("click", closeMenu);
 
+      menu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          menu.classList.remove("open");
+          menu.setAttribute("inert", "");
+          menu.setAttribute("aria-hidden", "true");
+          openButton.setAttribute("aria-expanded", "false");
+          overlay.hidden = true;
+        });
+      });
+
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && menu.classList.contains("open")) {
           closeMenu();
@@ -597,9 +597,12 @@
       });
 
       languageButton.addEventListener("click", function () {
-        var next = language === "ar" ? "en" : "ar";
-        setLanguage(next);
-        history.replaceState(null, "", next === "en" ? "?lang=en" : location.pathname);
+        var nextLanguage = language === "ar" ? "en" : "ar";
+        setLanguage(nextLanguage);
+
+        var url = new URL(window.location.href);
+        url.searchParams.set("lang", nextLanguage);
+        history.replaceState(null, "", url.pathname + url.search + url.hash);
       });
 
       setLanguage(language);
@@ -607,4 +610,4 @@
   </script>
 </body>
   </html>
-        
+  
