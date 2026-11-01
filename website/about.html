@@ -2,242 +2,382 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f8fafc">
-  <meta name="description" content="تعرف على تطبيق Scanix QR وميزاته الحالية والميزات القادمة وطرق التواصل مع المطور.">
-  <title>حول التطبيق | Scanix QR</title>
-  <script>
-    (function () {
-      var language = navigator.language ||
-        (navigator.languages && navigator.languages[0]) || "";
-      var prefersArabic = /^ar(?:-|$)/i.test(language);
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="تعرف على Scanix QR، تطبيق أندرويد لمسح رموز QR والباركود، واستخراج النصوص من الصور وإدارة سجل المسح.">
+  <meta name="robots" content="index, follow">
+  <title>حول Scanix QR | تطبيق مسح QR والباركود</title>
+  <link rel="canonical" href="https://scanix-qr.pages.dev/about.html">
+  <link rel="alternate" hreflang="ar" href="https://scanix-qr.pages.dev/about.html?lang=ar">
+  <link rel="alternate" hreflang="en" href="https://scanix-qr.pages.dev/about.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://scanix-qr.pages.dev/about.html">
 
-      if (!prefersArabic) {
-        window.location.replace(
-          "about-en.html" + window.location.search + window.location.hash
-        );
-      }
-    })();
-  </script>
   <style>
     :root {
-      color-scheme: light;
-      --background: #f8fafc;
-      --surface: #ffffff;
-      --text: #172033;
-      --muted: #64748b;
-      --accent: #2563eb;
-      --border: #e2e8f0;
+      color-scheme: dark;
+      --bg: #101827;
+      --surface: #192538;
+      --surface2: #22324a;
+      --text: #f3f6fc;
+      --muted: #b7c3d5;
+      --accent: #a3e635;
+      --border: #30415a;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: var(--background);
+      background: var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.9;
+      font-family: system-ui, -apple-system, "Segoe UI",
+        Tahoma, Arial, sans-serif;
+      line-height: 1.85;
     }
 
-    .container {
-      width: min(100% - 32px, 820px);
-      margin: 0 auto;
-      padding: 32px 0 48px;
-    }
+    a { color: var(--accent); }
+    button, a { -webkit-tap-highlight-color: transparent; }
 
-    header {
-      margin-bottom: 24px;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #101827ee;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
     .brand {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 850;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .menu-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(100% - 32px, 900px);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 48px 0 24px;
+      text-align: center;
+    }
+
+    .eyebrow {
       display: inline-block;
+      padding: 4px 12px;
+      border: 1px solid #49602b;
+      border-radius: 999px;
       color: var(--accent);
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      margin-bottom: 12px;
+      font-size: .9rem;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
-      line-height: 1.4;
+      margin: 16px 0 10px;
+      font-size: clamp(2rem, 7vw, 3rem);
+      line-height: 1.35;
     }
 
-    .subtitle {
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto;
       color: var(--muted);
-      margin: 0;
     }
 
-    main {
+    main { padding-bottom: 38px; }
+
+    .content {
       display: grid;
       gap: 16px;
+      padding-bottom: 30px;
     }
 
     .card {
-      background: var(--surface);
+      padding: clamp(18px, 4vw, 26px);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: clamp(18px, 5vw, 28px);
+      border-radius: 18px;
+      background: var(--surface);
     }
 
-    .app-name {
-      margin: 0 0 8px;
-      font-size: 1.5rem;
-      line-height: 1.5;
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
     }
+
+    .card p { margin: 0 0 12px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .card ul {
+      margin: 8px 0 0;
+      padding-inline-start: 24px;
+    }
+
+    .card li + li { margin-top: 8px; }
 
     .version {
       color: var(--muted);
-      font-size: 0.9rem;
-      margin: 0 0 12px;
-    }
-
-    h2 {
-      font-size: 1.15rem;
-      line-height: 1.6;
-      margin: 0 0 10px;
-    }
-
-    p {
-      margin: 0 0 12px;
-    }
-
-    p:last-child {
-      margin-bottom: 0;
-    }
-
-    ul {
-      padding-right: 22px;
-      margin: 8px 0 0;
-    }
-
-    li + li {
-      margin-top: 8px;
-    }
-
-    a {
-      color: var(--accent);
-      overflow-wrap: anywhere;
-    }
-
-    .link {
-      display: inline-block;
-      margin-top: 8px;
-      font-weight: 600;
+      font-size: .9rem;
     }
 
     .coming-soon {
-      border-right: 4px solid var(--accent);
+      border-inline-start: 4px solid var(--accent);
     }
 
-    .coming-soon-label {
+    .badge {
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       padding: 3px 10px;
       border-radius: 999px;
-      background: #dbeafe;
-      color: #1d4ed8;
-      font-size: 0.85rem;
-      font-weight: 700;
+      background: #33451e;
+      color: var(--accent);
+      font-size: .85rem;
+      font-weight: 750;
     }
 
-    footer {
+    .inline-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-weight: 700;
+      text-underline-offset: 4px;
+    }
+
+    .footer {
+      padding: 24px 0 34px;
+      border-top: 1px solid var(--border);
       color: var(--muted);
       text-align: center;
-      font-size: 0.85rem;
-      margin-top: 24px;
+      font-size: .9rem;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        width: min(100% - 20px, 820px);
-        padding-top: 20px;
-      }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-bottom: 12px;
+    }
 
-      .card {
-        border-radius: 14px;
+    .footer-links a { color: var(--muted); }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 19;
+      background: #0009;
+    }
+
+    .drawer {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      bottom: 0;
+      inset-inline-start: 0;
+      width: min(320px, 86vw);
+      overflow-y: auto;
+      padding: 22px 18px;
+      background: var(--bg);
+      border-inline-end: 1px solid var(--border);
+      transform: translateX(-105%);
+      visibility: hidden;
+      transition: transform .22s ease, visibility .22s;
+    }
+
+    html[dir="rtl"] .drawer {
+      transform: translateX(105%);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer nav {
+      display: grid;
+      gap: 6px;
+      padding-top: 16px;
+    }
+
+    .drawer nav a,
+    .language-button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      text-align: start;
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .drawer nav a:hover,
+    .language-button:hover {
+      background: var(--surface);
+    }
+
+    .drawer-label {
+      margin: 20px 12px 4px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 520px) {
+      .container { width: calc(100% - 24px); }
+      .hero { padding-top: 36px; }
+      .card { border-radius: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <div class="brand">Scanix QR</div>
-      <h1>حول التطبيق</h1>
-      <p class="subtitle">
-        معلومات عن التطبيق وميزاته والمطور.
-      </p>
-    </header>
 
-    <main>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Scanix QR">
+      Scanix <span>QR</span>
+    </a>
+
+    <button class="menu-button" id="menuButton" type="button"
+      aria-label="فتح القائمة" aria-controls="sideMenu"
+      aria-expanded="false">
+      <span aria-hidden="true">☰</span>
+    </button>
+  </header>
+
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="drawer" id="sideMenu"
+    aria-label="القائمة الرئيسية" aria-hidden="true" inert>
+    <div class="drawer-head">
+      <a class="brand" href="index.html">Scanix <span>QR</span></a>
+      <button class="menu-button" id="closeMenu" type="button"
+        aria-label="إغلاق القائمة">×</button>
+    </div>
+
+    <nav>
+      <a href="index.html" data-i18n="navHome">الرئيسية</a>
+      <a href="download.html" data-i18n="navDownload">تنزيل التطبيق</a>
+      <a href="about.html" data-i18n="navAbout">حول التطبيق</a>
+      <a href="qr-creation.html" data-i18n="navQR">إنشاء رموز QR — قريبًا</a>
+      <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+
+      <p class="drawer-label" data-i18n="languageLabel">اللغة</p>
+      <button class="language-button" id="languageButton"
+        type="button">English</button>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow" data-i18n="eyebrow">عن التطبيق</span>
+        <h1 data-i18n="pageTitle">حول Scanix QR</h1>
+        <p data-i18n="intro">
+          تعرف على التطبيق وميزاته الحالية والميزات المخطط لها
+          وطرق التواصل مع المطور.
+        </p>
+      </div>
+    </section>
+
+    <div class="container content">
       <section class="card">
-        <h2 class="app-name">Scanix QR</h2>
-        <p class="version">الإصدار 1.0.4.0</p>
-        <p>
+        <h2 data-i18n="appHeading">Scanix QR</h2>
+        <p class="version" data-i18n="version">الإصدار 1.0.4.0</p>
+        <p data-i18n="appDescription">
           Scanix QR هو تطبيق أندرويد لقراءة رموز QR والباركود.
-          يتيح لك مسح الرموز باستخدام كاميرا الهاتف أو من الصور
-          الموجودة على جهازك، والتعامل مع النتائج مباشرة من داخل التطبيق.
+          يمكنك مسح الرموز بكاميرا الهاتف أو من الصور الموجودة
+          على جهازك، والتعامل مع النتائج مباشرة داخل التطبيق.
         </p>
       </section>
 
       <section class="card">
-        <h2>ميزات التطبيق الحالية</h2>
+        <h2 data-i18n="featuresHeading">ميزات التطبيق الحالية</h2>
         <ul>
-          <li>مسح رموز QR والباركود باستخدام كاميرا الهاتف.</li>
-          <li>تشغيل المصباح أثناء المسح عند الحاجة، إذا كان مدعومًا.</li>
-          <li>قراءة الرموز من الصور التي تختارها من جهازك.</li>
-          <li>عرض نتائج المسح ونسخها أو مشاركتها.</li>
-          <li>فحص الروابط قبل فتحها وعرض تحذيرات لبعض الروابط المشبوهة.</li>
-          <li>حفظ نتائج المسح في سجل محلي والبحث فيه وحذف النتائج.</li>
-          <li>تخصيص المظهر واختيار العربية أو الإنجليزية من إعدادات التطبيق.</li>
+          <li data-i18n="feature1">مسح رموز QR والباركود باستخدام كاميرا الهاتف.</li>
+          <li data-i18n="feature2">تشغيل المصباح أثناء المسح عند الحاجة، إذا كان مدعومًا.</li>
+          <li data-i18n="feature3">قراءة الرموز من الصور التي تختارها من جهازك.</li>
+          <li data-i18n="feature4">عرض نتائج المسح ونسخها أو مشاركتها.</li>
+          <li data-i18n="feature5">فحص الروابط قبل فتحها وعرض تحذيرات لبعض الروابط المشبوهة.</li>
+          <li data-i18n="feature6">حفظ نتائج المسح محليًا والبحث فيها وحذفها.</li>
+          <li data-i18n="feature7">استخراج النصوص من الصور باستخدام ميزة OCR.</li>
+          <li data-i18n="feature8">واجهة تدعم العربية والإنجليزية والمظهر الفاتح والداكن.</li>
         </ul>
       </section>
 
-      <section class="card coming-soon" id="qr-plans">
-        <span class="coming-soon-label">قريبًا</span>
-        <h2>إنشاء رموز QR</h2>
-        <p>
-          ستتوفر ميزة إنشاء رموز QR في تحديث قادم، مع إمكانية
-          إنشاء رموز للنصوص والروابط وأرقام الهواتف وبيانات الاتصال
-          وغيرها من أنواع المعلومات.
+      <section class="card coming-soon">
+        <span class="badge" data-i18n="comingBadge">قريبًا</span>
+        <h2 data-i18n="qrHeading">إنشاء رموز QR</h2>
+        <p data-i18n="qrDescription">
+          يجري التخطيط لميزة إنشاء رموز QR لأنواع مختلفة من البيانات،
+          مثل النصوص والروابط وأرقام الهواتف وبيانات الاتصال وشبكات Wi-Fi.
         </p>
-        <p>
+        <p data-i18n="qrUnavailable">
           هذه الميزة غير متاحة في الإصدار الحالي.
         </p>
-        <a class="link" href="qr-creation.html#overview">تعرّف على المزيد عن ميزة إنشاء QR</a>
+        <a class="inline-link" href="qr-creation.html"
+          data-i18n="qrLink">تعرف على ميزة إنشاء QR</a>
       </section>
 
       <section class="card">
-        <h2>الخصوصية</h2>
-        <p>
-          صُمم التطبيق لمعالجة الرموز على جهازك وحفظ نتائج السجل
-          محليًا عند تفعيل خيار الحفظ. لا يتطلب استخدامه إنشاء حساب.
-          عند نسخ النتائج أو مشاركتها أو فتح رابط، قد تنتقل المعلومات
-          إلى التطبيق أو الموقع الذي تختاره.
+        <h2 data-i18n="privacyHeading">الخصوصية</h2>
+        <p data-i18n="privacyDescription">
+          لا يتطلب التطبيق إنشاء حساب. تُحفظ نتائج سجل المسح محليًا
+          على الجهاز. عند مشاركة النتائج أو فتح رابط، قد تنتقل
+          المعلومات إلى التطبيق أو الموقع الذي تختاره.
         </p>
-        <p>
-          لمعرفة مزيد من التفاصيل حول الأذونات والتخزين والاتصال
-          بالإنترنت، يرجى مراجعة سياسة الخصوصية.
-        </p>
-        <a class="link" href="privacy.html">قراءة سياسة الخصوصية</a>
+        <a class="inline-link" href="privacy.html"
+          data-i18n="privacyLink">قراءة سياسة الخصوصية</a>
       </section>
 
       <section class="card">
-        <h2>المطور</h2>
+        <h2 data-i18n="developerHeading">المطور</h2>
         <p>Mohammed Nasser</p>
       </section>
 
       <section class="card">
-        <h2>التواصل والدعم</h2>
-        <p>
-          إذا واجهت مشكلة في التطبيق أو كانت لديك أسئلة أو اقتراحات،
-          يمكنك التواصل مع المطور عبر البريد الإلكتروني.
+        <h2 data-i18n="supportHeading">التواصل والدعم</h2>
+        <p data-i18n="supportDescription">
+          للأسئلة أو الاقتراحات أو الإبلاغ عن مشكلة، يمكنك التواصل
+          مع المطور عبر البريد الإلكتروني.
         </p>
         <p>
           <a href="mailto:dhmlpy@gmail.com?subject=Scanix%20QR%20Support">
@@ -245,11 +385,208 @@
           </a>
         </p>
       </section>
-    </main>
+    </div>
+  </main>
 
-    <footer>
-      Scanix QR · حول التطبيق
-    </footer>
-  </div>
+  <footer class="footer">
+    <div class="container">
+      <nav class="footer-links" aria-label="روابط إضافية">
+        <a href="index.html" data-i18n="navHome">الرئيسية</a>
+        <a href="download.html" data-i18n="navDownload">تنزيل التطبيق</a>
+        <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+        <a href="qr-creation.html" data-i18n="navQR">إنشاء رموز QR — قريبًا</a>
+      </nav>
+      <p data-i18n="footerText">Scanix QR · حول التطبيق</p>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      ar: {
+        description: "تعرف على Scanix QR، تطبيق أندرويد لمسح رموز QR والباركود، واستخراج النصوص من الصور وإدارة سجل المسح.",
+        title: "حول Scanix QR | تطبيق مسح QR والباركود",
+        menuOpen: "فتح القائمة",
+        menuClose: "إغلاق القائمة",
+        menuLabel: "القائمة الرئيسية",
+        navHome: "الرئيسية",
+        navDownload: "تنزيل التطبيق",
+        navAbout: "حول التطبيق",
+        navQR: "إنشاء رموز QR — قريبًا",
+        navPrivacy: "سياسة الخصوصية",
+        languageLabel: "اللغة",
+        languageButton: "English",
+        eyebrow: "عن التطبيق",
+        pageTitle: "حول Scanix QR",
+        intro: "تعرف على التطبيق وميزاته الحالية والميزات المخطط لها وطرق التواصل مع المطور.",
+        appHeading: "Scanix QR",
+        version: "الإصدار 1.0.4.0",
+        appDescription: "Scanix QR هو تطبيق أندرويد لقراءة رموز QR والباركود. يمكنك مسح الرموز بكاميرا الهاتف أو من الصور الموجودة على جهازك، والتعامل مع النتائج مباشرة داخل التطبيق.",
+        featuresHeading: "ميزات التطبيق الحالية",
+        feature1: "مسح رموز QR والباركود باستخدام كاميرا الهاتف.",
+        feature2: "تشغيل المصباح أثناء المسح عند الحاجة، إذا كان مدعومًا.",
+        feature3: "قراءة الرموز من الصور التي تختارها من جهازك.",
+        feature4: "عرض نتائج المسح ونسخها أو مشاركتها.",
+        feature5: "فحص الروابط قبل فتحها وعرض تحذيرات لبعض الروابط المشبوهة.",
+        feature6: "حفظ نتائج المسح محليًا والبحث فيها وحذفها.",
+        feature7: "استخراج النصوص من الصور باستخدام ميزة OCR.",
+        feature8: "واجهة تدعم العربية والإنجليزية والمظهر الفاتح والداكن.",
+        comingBadge: "قريبًا",
+        qrHeading: "إنشاء رموز QR",
+        qrDescription: "يجري التخطيط لميزة إنشاء رموز QR لأنواع مختلفة من البيانات، مثل النصوص والروابط وأرقام الهواتف وبيانات الاتصال وشبكات Wi-Fi.",
+        qrUnavailable: "هذه الميزة غير متاحة في الإصدار الحالي.",
+        qrLink: "تعرف على ميزة إنشاء QR",
+        privacyHeading: "الخصوصية",
+        privacyDescription: "لا يتطلب التطبيق إنشاء حساب. تُحفظ نتائج سجل المسح محليًا على الجهاز. عند مشاركة النتائج أو فتح رابط، قد تنتقل المعلومات إلى التطبيق أو الموقع الذي تختاره.",
+        privacyLink: "قراءة سياسة الخصوصية",
+        developerHeading: "المطور",
+        supportHeading: "التواصل والدعم",
+        supportDescription: "للأسئلة أو الاقتراحات أو الإبلاغ عن مشكلة، يمكنك التواصل مع المطور عبر البريد الإلكتروني.",
+        footerText: "Scanix QR · حول التطبيق"
+      },
+      en: {
+        description: "Learn about Scanix QR, an Android app for scanning QR codes and barcodes, extracting text from images, and managing scan history.",
+        title: "About Scanix QR | QR and Barcode Scanner",
+        menuOpen: "Open menu",
+        menuClose: "Close menu",
+        menuLabel: "Main menu",
+        navHome: "Home",
+        navDownload: "Download",
+        navAbout: "About",
+        navQR: "QR Code Creation — Coming Soon",
+        navPrivacy: "Privacy Policy",
+        languageLabel: "Language",
+        languageButton: "العربية",
+        eyebrow: "About the app",
+        pageTitle: "About Scanix QR",
+        intro: "Learn about the app, its current features, planned features, and how to contact the developer.",
+        appHeading: "Scanix QR",
+        version: "Version 1.0.4.0",
+        appDescription: "Scanix QR is an Android app for scanning QR codes and barcodes. Scan codes using your phone's camera or images stored on your device, then work with the results directly in the app.",
+        featuresHeading: "Current features",
+        feature1: "Scan QR codes and barcodes using your phone's camera.",
+        feature2: "Use the flashlight while scanning when supported and needed.",
+        feature3: "Scan codes from images selected on your device.",
+        feature4: "View, copy, and share scan results.",
+        feature5: "Check links before opening them and show warnings for some suspicious links.",
+        feature6: "Save scan results locally, search the history, and delete entries.",
+        feature7: "Extract text from images using OCR.",
+        feature8: "An interface supporting Arabic, English, light mode, and dark mode.",
+        comingBadge: "Coming soon",
+        qrHeading: "QR Code Creation",
+        qrDescription: "QR code creation is planned for different types of data, including text, links, phone numbers, contact details, and Wi-Fi networks.",
+        qrUnavailable: "This feature is not available in the current version.",
+        qrLink: "Learn about QR code creation",
+        privacyHeading: "Privacy",
+        privacyDescription: "The app does not require an account. Scan history is stored locally on your device. When you share results or open a link, information may be sent to the app or website you choose.",
+        privacyLink: "Read the Privacy Policy",
+        developerHeading: "Developer",
+        supportHeading: "Contact and support",
+        supportDescription: "For questions, suggestions, or to report an issue, contact the developer by email.",
+        footerText: "Scanix QR · About the app"
+      }
+    };
+
+    const languageKey = "scanix-site-language";
+    const supportedLanguages = ["ar", "en"];
+
+    function getLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const queryLanguage = params.get("lang");
+
+      if (supportedLanguages.includes(queryLanguage)) {
+        return queryLanguage;
+      }
+
+      try {
+        const savedLanguage = localStorage.getItem(languageKey);
+        if (supportedLanguages.includes(savedLanguage)) {
+          return savedLanguage;
+        }
+      } catch (_) {}
+
+      const browserLanguage = navigator.language ||
+        (navigator.languages && navigator.languages[0]) || "en";
+
+      return /^ar(?:-|$)/i.test(browserLanguage) ? "ar" : "en";
+    }
+
+    function setLanguage(language, save = true) {
+      const lang = supportedLanguages.includes(language) ? language : "en";
+      const dictionary = translations[lang];
+
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.title = dictionary.title;
+
+      const description = document.querySelector('meta[name="description"]');
+      if (description) description.content = dictionary.description;
+
+      document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.dataset.i18n;
+        if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
+          element.textContent = dictionary[key];
+        }
+      });
+
+      const menuButton = document.getElementById("menuButton");
+      const closeButton = document.getElementById("closeMenu");
+      const sideMenu = document.getElementById("sideMenu");
+
+      menuButton.setAttribute("aria-label", dictionary.menuOpen);
+      closeButton.setAttribute("aria-label", dictionary.menuClose);
+      sideMenu.setAttribute("aria-label", dictionary.menuLabel);
+
+      if (save) {
+        try {
+          localStorage.setItem(languageKey, lang);
+        } catch (_) {}
+      }
+    }
+
+    const menuButton = document.getElementById("menuButton");
+    const closeButton = document.getElementById("closeMenu");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("overlay");
+    const languageButton = document.getElementById("languageButton");
+
+    function openMenu() {
+      sideMenu.classList.add("open");
+      overlay.hidden = false;
+      sideMenu.removeAttribute("inert");
+      sideMenu.setAttribute("aria-hidden", "false");
+      menuButton.setAttribute("aria-expanded", "true");
+      closeButton.focus();
+    }
+
+    function closeMenu() {
+      sideMenu.classList.remove("open");
+      overlay.hidden = true;
+      sideMenu.setAttribute("inert", "");
+      sideMenu.setAttribute("aria-hidden", "true");
+      menuButton.setAttribute("aria-expanded", "false");
+    }
+
+    menuButton.addEventListener("click", openMenu);
+    closeButton.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMenu();
+    });
+
+    languageButton.addEventListener("click", () => {
+      const nextLanguage =
+        document.documentElement.lang === "ar" ? "en" : "ar";
+
+      setLanguage(nextLanguage);
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", nextLanguage);
+      window.history.replaceState({}, "", url);
+    });
+
+    setLanguage(getLanguage(), false);
+  </script>
 </body>
-</html>
+          </html>
+  
