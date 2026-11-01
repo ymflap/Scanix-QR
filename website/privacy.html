@@ -196,6 +196,18 @@
       border-color: var(--border);
     }
 
+    .drawer-label {
+      margin: 20px 0 8px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .drawer .language-button {
+      width: 100%;
+      text-align: start;
+    }
+
     .container {
       width: min(100% - 32px, 820px);
       margin: 0 auto;
@@ -326,13 +338,6 @@
 
     <div class="top-actions">
       <button
-        class="language-button"
-        id="languageButton"
-        type="button"
-        aria-label="Switch language"
-      >English</button>
-
-      <button
         class="icon-button"
         id="menuButton"
         type="button"
@@ -368,6 +373,14 @@
       <a href="qr-creation.html" data-i18n="creation">إنشاء رموز QR</a>
       <a href="about.html" data-i18n="about">حول التطبيق</a>
       <a href="privacy.html" aria-current="page" data-i18n="privacy">سياسة الخصوصية</a>
+
+      <p class="drawer-label" data-i18n="languageLabel">اللغة</p>
+      <button
+        class="language-button"
+        id="languageButton"
+        type="button"
+        aria-label="تغيير اللغة"
+      >English</button>
     </nav>
   </aside>
 
@@ -503,8 +516,8 @@
             </a>
           </p>
         </section>
-  </div>
-  
+      </div>
+
       <div lang="en" data-content="en" hidden>
         <section>
           <h2>1. Introduction</h2>
@@ -656,8 +669,7 @@
       <span data-i18n="footerText">Scanix QR · سياسة الخصوصية</span>
     </footer>
   </div>
-
-  <script>
+    <script>
     (function () {
       "use strict";
 
@@ -667,6 +679,7 @@
           lastUpdated: "آخر تحديث:",
           updateDate: "21 أكتوبر 2026",
           menuTitle: "القائمة",
+          languageLabel: "اللغة",
           home: "الرئيسية",
           download: "تحميل التطبيق",
           creation: "إنشاء رموز QR",
@@ -685,6 +698,7 @@
           lastUpdated: "Last updated:",
           updateDate: "October 21, 2026",
           menuTitle: "Menu",
+          languageLabel: "Language",
           home: "Home",
           download: "Download",
           creation: "QR Code Creation",
@@ -752,6 +766,7 @@
 
         document.querySelectorAll("[data-i18n]").forEach(function (element) {
           var key = element.getAttribute("data-i18n");
+
           if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
             element.textContent = dictionary[key];
           }
@@ -759,13 +774,15 @@
 
         document.querySelectorAll("[data-i18n-aria]").forEach(function (element) {
           var key = element.getAttribute("data-i18n-aria");
+
           if (Object.prototype.hasOwnProperty.call(dictionary, key)) {
             element.setAttribute("aria-label", dictionary[key]);
           }
         });
 
         document.querySelectorAll("[data-content]").forEach(function (element) {
-          element.hidden = element.getAttribute("data-content") !== currentLanguage;
+          element.hidden =
+            element.getAttribute("data-content") !== currentLanguage;
         });
 
         languageButton.textContent = isArabic ? "English" : "العربية";
@@ -774,7 +791,6 @@
         menuButton.setAttribute("aria-label", dictionary.menuOpen);
         closeMenuButton.setAttribute("aria-label", dictionary.menuClose);
         drawer.setAttribute("aria-label", dictionary.menuTitle);
-
         navigation.setAttribute("aria-label", dictionary.menuTitle);
 
         try {
@@ -809,6 +825,7 @@
           "aria-label",
           translations[currentLanguage].menuClose
         );
+
         document.body.classList.add("drawer-open");
         closeMenuButton.focus();
       }
@@ -823,6 +840,7 @@
           "aria-label",
           translations[currentLanguage].menuOpen
         );
+
         document.body.classList.remove("drawer-open");
 
         window.setTimeout(function () {
@@ -866,5 +884,4 @@
     })();
   </script>
 </body>
-  </html>
-  
+</html>
