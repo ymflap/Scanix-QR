@@ -330,10 +330,11 @@
       transform: translateX(-105%);
     }
 
-    .drawer.open {
-      transform: translateX(0);
-      visibility: visible;
-    }
+    .drawer.open,
+body[dir="ltr"] .drawer.open {
+  transform: translateX(0);
+  visibility: visible;
+}
 
     .drawer-head {
       display: flex;
@@ -538,7 +539,7 @@
       var language = new URLSearchParams(location.search).get("lang");
       if (language !== "ar" && language !== "en") {
         try {
-          language = sessionStorage.getItem("scanix-site-language");
+          language = localStorage.getItem("scanix-site-language");
         } catch (error) {}
       }
       if (language !== "ar" && language !== "en") {
@@ -582,7 +583,7 @@
         languageButton.textContent = language === "ar" ? "English" : "العربية";
 
         try {
-          sessionStorage.setItem("scanix-site-language", language);
+          localStorage.setItem("scanix-site-language", language);
         } catch (error) {}
 
         if (lastGoodReleases) renderReleases(lastGoodReleases);
