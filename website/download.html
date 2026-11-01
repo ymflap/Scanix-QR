@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="حمّل Scanix QR لأندرويد. استعرض إصدارات التطبيق المنشورة وأحجام ملفات APK وروابط التنزيل وملاحظات الإصدارات.">
+  <meta name="robots" content="index, follow">
+  <title>تنزيل Scanix QR | جميع الإصدارات</title>
+  <link rel="canonical" href="https://scanix-qr.pages.dev/download.html">
+  <link rel="alternate" hreflang="ar" href="https://scanix-qr.pages.dev/download.html">
+  <link rel="alternate" hreflang="en" href="https://scanix-qr.pages.dev/download.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://scanix-qr.pages.dev/download.html">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101827;
+      --surface: #192538;
+      --surface2: #22324a;
+      --text: #f3f6fc;
+      --muted: #b7c3d5;
+      --accent: #a3e635;
+      --border: #30415a;
+      --danger: #fca5a5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.8;
+    }
+
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #101827ee;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 850;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .menu-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(100% - 32px, 900px);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 48px 0 26px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 4px 12px;
+      border: 1px solid #49602b;
+      border-radius: 999px;
+      color: var(--accent);
+      font-size: .9rem;
+    }
+
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(2rem, 7vw, 3rem);
+      line-height: 1.3;
+    }
+
+    .hero p {
+      max-width: 690px;
+      margin: 0 auto;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .refresh-button {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .refresh-button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .notice {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .notice.error {
+      border-color: #854747;
+      color: var(--danger);
+    }
+
+    .release-list {
+      display: grid;
+      gap: 16px;
+      padding: 10px 0 46px;
+    }
+
+    .release {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .release.latest {
+      border-color: #698d35;
+    }
+
+    .release-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .release h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      overflow-wrap: anywhere;
+    }
+
+    .release-date {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: .8rem;
+      white-space: nowrap;
+    }
+
+    .badge.latest-badge {
+      background: var(--accent);
+      color: #17220a;
+      font-weight: 800;
+    }
+
+    .release-description {
+      margin: 16px 0;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .asset-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .asset {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #101827;
+    }
+
+    .asset-name {
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .asset-size {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 750;
+    }
+
+    .button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #17220a;
+    }
+
+    .button.secondary { background: var(--surface2); }
+
+    .release-notes {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--accent);
+      text-underline-offset: 4px;
+    }
+
+    .empty {
+      padding: 28px 16px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer {
+      padding: 24px 0 34px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a { color: var(--muted); }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 19;
+      background: #0009;
+    }
+
+    .drawer {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: min(320px, 86vw);
+      overflow-y: auto;
+      padding: 22px 18px;
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      transform: translateX(105%);
+      visibility: hidden;
+      transition: transform .22s ease, visibility .22s;
+    }
+
+    body[dir="ltr"] .drawer {
+      right: auto;
+      left: 0;
+      border-left: 0;
+      border-right: 1px solid var(--border);
+      transform: translateX(-105%);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer nav { display: grid; gap: 6px; padding-top: 16px; }
+
+    .drawer nav a,
+    .language-button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      text-align: start;
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .drawer nav a:hover,
+    .language-button:hover { background: var(--surface); }
+
+    .drawer-label {
+      margin: 20px 12px 4px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 520px) {
+      .container { width: calc(100% - 24px); }
+      .release { padding: 15px; }
+      .asset { align-items: flex-start; }
+      .actions { width: 100%; }
+      .actions .button { flex: 1 1 auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">Scanix <span>QR</span></a>
+    <button class="menu-button" id="menuButton" type="button"
+      aria-label="فتح القائمة" aria-controls="sideMenu" aria-expanded="false">
+      <span aria-hidden="true">☰</span>
+    </button>
+  </header>
+
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="drawer" id="sideMenu" aria-label="القائمة الرئيسية"
+    aria-hidden="true" inert>
+    <div class="drawer-head">
+      <a class="brand" href="index.html">Scanix <span>QR</span></a>
+      <button class="menu-button" id="closeMenu" type="button"
+        aria-label="إغلاق القائمة">×</button>
+    </div>
+    <nav>
+      <a href="index.html" data-i18n="navHome">الرئيسية</a>
+      <a href="download.html" data-i18n="navDownload">تنزيل التطبيق</a>
+      <a href="about.html" data-i18n="navAbout">حول التطبيق</a>
+      <a href="qr-creation.html" data-i18n="navQR">إنشاء رموز QR — قريبًا</a>
+      <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+      <p class="drawer-label" data-i18n="languageLabel">اللغة</p>
+      <button class="language-button" id="languageButton" type="button">English</button>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow" data-i18n="eyebrow">إصدارات التطبيق</span>
+        <h1 data-i18n="pageTitle">تنزيل Scanix QR</h1>
+        <p data-i18n="intro">
+          استعرض إصدارات التطبيق المنشورة، وحمّل ملف APK مباشرة من GitHub.
+          حجم كل ملف مأخوذ من بيانات الإصدار المنشور.
+        </p>
+      </div>
+    </section>
+
+    <section class="container" aria-label="إصدارات التطبيق">
+      <div class="toolbar">
+        <span class="status" id="status" role="status" aria-live="polite">
+          جارٍ تحميل الإصدارات...
+        </span>
+        <button class="refresh-button" id="refreshButton" type="button">
+          تحديث القائمة
+        </button>
+      </div>
+      <div id="message" class="notice" hidden></div>
+      <div id="releaseList" class="release-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <nav class="footer-links" aria-label="روابط الموقع">
+        <a href="index.html" data-i18n="navHome">الرئيسية</a>
+        <a href="about.html" data-i18n="navAbout">حول التطبيق</a>
+        <a href="privacy.html" data-i18n="navPrivacy">سياسة الخصوصية</a>
+        <a href="qr-creation.html" data-i18n="navQR">إنشاء رموز QR — قريبًا</a>
+      </nav>
+      <p data-i18n="footerText">Scanix QR · الموقع الرسمي للتطبيق</p>
+    </div>
+  </footer>
+  
+  <script>
+    (function () {
+      "use strict";
+
+      var API_URL =
+        "https://api.github.com/repos/ymflap/Scanix-QR/releases?per_page=100";
+      var REFRESH_INTERVAL = 5 * 60 * 1000;
+
+      var text = {
+        ar: {
+          direction: "rtl",
+          menuOpen: "فتح القائمة",
+          menuClose: "إغلاق القائمة",
+          navHome: "الرئيسية",
+          navDownload: "تنزيل التطبيق",
+          navAbout: "حول التطبيق",
+          navQR: "إنشاء رموز QR — قريبًا",
+          navPrivacy: "سياسة الخصوصية",
+          languageLabel: "اللغة",
+          eyebrow: "إصدارات التطبيق",
+          pageTitle: "تنزيل Scanix QR",
+          intro: "استعرض إصدارات التطبيق المنشورة، وحمّل ملف APK مباشرة من GitHub. حجم كل ملف مأخوذ من بيانات الإصدار المنشور.",
+          loading: "جارٍ تحميل الإصدارات...",
+          refreshing: "جارٍ تحديث الإصدارات...",
+          refresh: "تحديث القائمة",
+          updated: "تم تحديث القائمة.",
+          updatedAt: "آخر تحديث: ",
+          latest: "أحدث إصدار",
+          prerelease: "إصدار تجريبي",
+          draft: "مسودة",
+          release: "إصدار",
+          published: "تاريخ النشر: ",
+          apk: "ملف APK",
+          download: "تنزيل APK",
+          notes: "ملاحظات الإصدار على GitHub",
+          noAssets: "لا يوجد ملف APK مرفق بهذا الإصدار. يمكنك الاطلاع على ملاحظاته.",
+          noReleases: "لا توجد إصدارات منشورة متاحة حاليًا.",
+          failed: "تعذر تحميل الإصدارات من GitHub. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
+          stale: "تعذر تحديث القائمة؛ نعرض البيانات التي تم تحميلها سابقًا.",
+          fileSize: "حجم الملف: ",
+          footerText: "Scanix QR · الموقع الرسمي للتطبيق",
+          bytes: ["بايت", "ك.ب", "م.ب", "ج.ب"]
+        },
+        en: {
+          direction: "ltr",
+          menuOpen: "Open menu",
+          menuClose: "Close menu",
+          navHome: "Home",
+          navDownload: "Download",
+          navAbout: "About the App",
+          navQR: "QR Creation — Coming Soon",
+          navPrivacy: "Privacy Policy",
+          languageLabel: "Language",
+          eyebrow: "App Releases",
+          pageTitle: "Download Scanix QR",
+          intro: "Browse published app versions and download APK files directly from GitHub. Each file size comes from the published release data.",
+          loading: "Loading releases...",
+          refreshing: "Refreshing releases...",
+          refresh: "Refresh list",
+          updated: "Release list updated.",
+          updatedAt: "Last updated: ",
+          latest: "Latest release",
+          prerelease: "Pre-release",
+          draft: "Draft",
+          release: "Release",
+          published: "Published: ",
+          apk: "APK file",
+          download: "Download APK",
+          notes: "Release notes on GitHub",
+          noAssets: "No APK file is attached to this release. You can still view its release notes.",
+          noReleases: "No published releases are currently available.",
+          failed: "Could not load releases from GitHub. Check your internet connection and try again.",
+          stale: "Could not refresh the list; showing previously loaded data.",
+          fileSize: "File size: ",
+          footerText: "Scanix QR · Official App Website",
+          bytes: ["B", "KB", "MB", "GB"]
+        }
+      };
+
+      var language = new URLSearchParams(location.search).get("lang");
+      if (language !== "ar" && language !== "en") {
+        try {
+          language = sessionStorage.getItem("scanix-site-language");
+        } catch (error) {}
+      }
+      if (language !== "ar" && language !== "en") {
+        language = /^ar(?:-|$)/i.test(navigator.language || "") ? "ar" : "en";
+      }
+
+      var list = document.getElementById("releaseList");
+      var status = document.getElementById("status");
+      var message = document.getElementById("message");
+      var refreshButton = document.getElementById("refreshButton");
+      var menu = document.getElementById("sideMenu");
+      var openButton = document.getElementById("menuButton");
+      var closeButton = document.getElementById("closeMenu");
+      var overlay = document.getElementById("overlay");
+      var languageButton = document.getElementById("languageButton");
+      var lastGoodReleases = null;
+      var isLoading = false;
+
+      function tr(key) {
+        return text[language][key];
+      }
+
+      function setLanguage(next) {
+        language = next;
+        var t = text[language];
+
+        document.documentElement.lang = language;
+        document.documentElement.dir = t.direction;
+        document.body.dir = t.direction;
+        document.title = language === "ar"
+          ? "تنزيل Scanix QR | جميع الإصدارات"
+          : "Download Scanix QR | All Releases";
+
+        document.querySelectorAll("[data-i18n]").forEach(function (element) {
+          var key = element.getAttribute("data-i18n");
+          if (t[key]) element.textContent = t[key];
+        });
+
+        openButton.setAttribute("aria-label", t.menuOpen);
+        closeButton.setAttribute("aria-label", t.menuClose);
+        languageButton.textContent = language === "ar" ? "English" : "العربية";
+
+        try {
+          sessionStorage.setItem("scanix-site-language", language);
+        } catch (error) {}
+
+        if (lastGoodReleases) renderReleases(lastGoodReleases);
+      }
+
+      function openMenu() {
+        menu.classList.add("open");
+        menu.removeAttribute("inert");
+        menu.setAttribute("aria-hidden", "false");
+        openButton.setAttribute("aria-expanded", "true");
+        overlay.hidden = false;
+        closeButton.focus();
+      }
+
+      function closeMenu() {
+        menu.classList.remove("open");
+        menu.setAttribute("inert", "");
+        menu.setAttribute("aria-hidden", "true");
+        openButton.setAttribute("aria-expanded", "false");
+        overlay.hidden = true;
+        openButton.focus();
+      }
+
+      function safeExternalLink(url) {
+        try {
+          var parsed = new URL(url);
+          if (parsed.protocol === "https:" &&
+              (parsed.hostname === "github.com" ||
+               parsed.hostname === "objects.githubusercontent.com" ||
+               parsed.hostname.endsWith(".githubusercontent.com"))) {
+            return parsed.href;
+          }
+        } catch (error) {}
+        return "";
+      }
+
+      function formatSize(bytes) {
+        if (!Number.isFinite(bytes) || bytes < 0) return "—";
+        var units = tr("bytes");
+        var size = bytes;
+        var index = 0;
+
+        while (size >= 1024 && index < units.length - 1) {
+          size /= 1024;
+          index++;
+        }
+
+        var digits = index === 0 ? 0 : 2;
+        return size.toLocaleString(language === "ar" ? "ar-EG" : "en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: digits
+        }) + " " + units[index];
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+        var date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return date.toLocaleDateString(
+          language === "ar" ? "ar-EG" : "en-GB",
+          { year: "numeric", month: "short", day: "numeric" }
+        );
+      }
+
+      function makeLink(label, url, className) {
+        var safeUrl = safeExternalLink(url);
+        if (!safeUrl) return null;
+
+        var anchor = document.createElement("a");
+        anchor.className = className || "button secondary";
+        anchor.href = safeUrl;
+        anchor.textContent = label;
+        anchor.target = "_blank";
+        anchor.rel = "noopener noreferrer";
+        return anchor;
+      }
+
+      function renderReleases(releases) {
+        list.replaceChildren();
+
+        var published = releases.filter(function (release) {
+          return !release.draft && Boolean(release.published_at);
+        });
+
+        published.sort(function (a, b) {
+          return new Date(b.published_at) - new Date(a.published_at);
+        });
+
+        var stable = published.filter(function (release) {
+          return !release.prerelease;
+        });
+        var latestId = stable.length ? stable[0].id : null;
+
+        if (!published.length) {
+          var empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = tr("noReleases");
+          list.appendChild(empty);
+          return;
+        }
+
+        published.forEach(function (release) {
+          var card = document.createElement("article");
+          card.className = "release" +
+            (release.id === latestId ? " latest" : "");
+
+          var head = document.createElement("div");
+          head.className = "release-head";
+
+          var headingGroup = document.createElement("div");
+          var heading = document.createElement("h2");
+          heading.textContent = release.name || (tr("release") + " " + release.tag_name);
+          headingGroup.appendChild(heading);
+
+          var date = document.createElement("div");
+          date.className = "release-date";
+          date.textContent = tr("published") + formatDate(release.published_at);
+          headingGroup.appendChild(date);
+          head.appendChild(headingGroup);
+
+          var badges = document.createElement("div");
+          badges.className = "badges";
+
+          if (release.id === latestId) {
+            var latestBadge = document.createElement("span");
+            latestBadge.className = "badge latest-badge";
+            latestBadge.textContent = tr("latest");
+            badges.appendChild(latestBadge);
+          }
+
+          if (release.prerelease) {
+            var preBadge = document.createElement("span");
+            preBadge.className = "badge";
+            preBadge.textContent = tr("prerelease");
+            badges.appendChild(preBadge);
+          }
+
+          var versionBadge = document.createElement("span");
+          versionBadge.className = "badge";
+          versionBadge.textContent = release.tag_name || tr("release");
+          badges.appendChild(versionBadge);
+
+          head.appendChild(badges);
+          card.appendChild(head);
+
+          var description = document.createElement("p");
+          description.className = "release-description";
+          description.textContent = release.body
+            ? release.body.replace(/<[^>]*>/g, "").trim()
+            : "";
+          if (description.textContent) card.appendChild(description);
+
+          var assets = Array.isArray(release.assets) ? release.assets : [];
+          var apkAssets = assets.filter(function (asset) {
+            return /\.apk$/i.test(asset.name || "");
+          });
+
+          if (apkAssets.length) {
+            var assetList = document.createElement("div");
+            assetList.className = "asset-list";
+
+            apkAssets.forEach(function (asset) {
+              var assetBox = document.createElement("div");
+              assetBox.className = "asset";
+
+              var info = document.createElement("div");
+              var name = document.createElement("div");
+              name.className = "asset-name";
+              name.textContent = asset.name || tr("apk");
+              info.appendChild(name);
+
+              var size = document.createElement("div");
+              size.className = "asset-size";
+              size.textContent = tr("fileSize") + formatSize(asset.size);
+              info.appendChild(size);
+              assetBox.appendChild(info);
+
+              var actions = document.createElement("div");
+              actions.className = "actions";
+              var downloadLink = makeLink(
+                tr("download"),
+                asset.browser_download_url,
+                "button primary"
+              );
+              if (downloadLink) actions.appendChild(downloadLink);
+              assetBox.appendChild(actions);
+              assetList.appendChild(assetBox);
+            });
+
+            card.appendChild(assetList);
+          } else {
+            var noAsset = document.createElement("p");
+            noAsset.className = "notice";
+            noAsset.textContent = tr("noAssets");
+            card.appendChild(noAsset);
+          }
+
+          var notes = makeLink(
+            tr("notes"),
+            release.html_url,
+            "release-notes"
+          );
+          if (notes) card.appendChild(notes);
+
+          list.appendChild(card);
+        });
+      }
+
+      async function loadReleases(manual) {
+        if (isLoading) return;
+        isLoading = true;
+        refreshButton.disabled = true;
+        status.textContent = manual ? tr("refreshing") : tr("loading");
+        message.hidden = true;
+        message.className = "notice";
+
+        try {
+          var response = await fetch(API_URL, {
+            method: "GET",
+            headers: { "Accept": "application/vnd.github+json" },
+            cache: "no-store"
+          });
+
+          if (!response.ok) {
+            throw new Error("GitHub API returned " + response.status);
+          }
+
+          var data = await response.json();
+          if (!Array.isArray(data)) {
+            throw new Error("Unexpected GitHub response");
+          }
+
+          lastGoodReleases = data;
+          renderReleases(data);
+          status.textContent = tr("updatedAt") +
+            new Date().toLocaleTimeString(
+              language === "ar" ? "ar-EG" : "en-GB",
+              { hour: "2-digit", minute: "2-digit" }
+            );
+        } catch (error) {
+          if (lastGoodReleases) {
+            renderReleases(lastGoodReleases);
+            message.textContent = tr("stale");
+            status.textContent = tr("updated");
+          } else {
+            message.textContent = tr("failed");
+            status.textContent = tr("failed");
+            list.replaceChildren();
+          }
+          message.className = "notice error";
+          message.hidden = false;
+        } finally {
+          isLoading = false;
+          refreshButton.disabled = false;
+        }
+      }
+
+      openButton.addEventListener("click", openMenu);
+      closeButton.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && menu.classList.contains("open")) {
+          closeMenu();
+        }
+      });
+
+      languageButton.addEventListener("click", function () {
+        var next = language === "ar" ? "en" : "ar";
+        setLanguage(next);
+
+        var url = new URL(location.href);
+        if (next === "en") url.searchParams.set("lang", "en");
+        else url.searchParams.delete("lang");
+        history.replaceState(null, "", url.pathname + url.search + url.hash);
+      });
+
+      refreshButton.addEventListener("click", function () {
+        loadReleases(true);
+      });
+
+      setLanguage(language);
+      loadReleases(false);
+      window.setInterval(function () {
+        if (document.visibilityState === "visible") {
+          loadReleases(false);
+        }
+      }, REFRESH_INTERVAL);
+    })();
+  </script>
+</body>
+  </html>
+  
