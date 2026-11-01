@@ -1,0 +1,25 @@
+# Scanix QR
+
+> Scanix QR is an Android application for scanning QR codes and barcodes, with local scan history, link safety checks, and text extraction from images using OCR.
+
+## Official Website
+
+- Homepage: https://scanix-qr.pages.dev/
+- About the app: https://scanix-qr.pages.dev/about.html
+- Privacy policy: https://scanix-qr.pages.dev/privacy.html
+- Download information: https://scanix-qr.pages.dev/download.html
+- QR creation feature: https://scanix-qr.pages.dev/qr-creation.html
+
+## About the Application
+
+Scanix QR helps users scan QR codes and barcodes using their Android devices. It includes scan history, options to copy and share results, link safety checks, and OCR-based text extraction.
+
+The application supports Arabic and English. Scanning history is stored locally on the device. Some features, such as checking for updates, require an internet connection.
+
+## Privacy
+
+Consult the official privacy policy for information about the application's data handling and privacy practices.
+
+## Languages
+
+The website and application provide Arabic and English content where available.
